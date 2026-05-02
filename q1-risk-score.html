@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Questionnaire Q1</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="q-body">
+
+  <div class="q-screen">
+    <div class="q-bg-gradient"></div>
+    <div class="q-bg-illustration"></div>
+
+    <header class="q-header">
+      <div class="q-top-bar">
+        <button class="q-back-btn" onclick="location.href='dashboard.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div class="q-title-group">
+          <h1>Gestosis Risk Score</h1>
+          <p>Assessing your preeclampsia risk level</p>
+        </div>
+      </div>
+
+      <div class="q-progress-section">
+        <span class="q-step-label">STEP 1 OF 12</span>
+        <div class="q-progress-track">
+          <div class="q-progress-fill" style="width: 8.33%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="q-main">
+      <div class="q-card">
+        <div class="q-card-header">
+          <div class="q-badge">
+            <span class="q-badge-text">Q1 OF 12</span>
+            <div class="q-badge-line"></div>
+          </div>
+          <button class="q-info-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </button>
+        </div>
+
+        <h2 class="q-question">How old are you?</h2>
+
+        <div class="q-input-container">
+          <input type="number" placeholder="00" min="10" max="80" id="q1-age-input">
+          <span class="q-input-unit">Years</span>
+        </div>
+
+        <div class="q-helper-box">
+          <div class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a5 5 0 0 0-5 5c0 2 1.5 3.5 2 5 .5 1.5 1 2.5 1 4h4c0-1.5.5-2.5 1-4 .5-1.5 2-3 2-5a5 5 0 0 0-5-5z"></path>
+            </svg>
+          </div>
+          <p>Age below 20 or above 35 increases preeclampsia risk. This helps us tailor your health journey.</p>
+        </div>
+      </div>
+
+      <div class="q-actions">
+        <button id="q1-next-btn" class="q-btn-primary" disabled onclick="location.href='q2-risk-score.html'">Next</button>
+        <button class="q-btn-secondary" onclick="location.href='dashboard.html'">Save and Exit</button>
+      </div>
+    </main>
+  </div>
+
+<script src='script.js'></script>
+<script>
+  // Q1-specific validation
+  const inp = document.getElementById('q1-age-input');
+  const btn = document.getElementById('q1-next-btn');
+  inp.addEventListener('input', () => {
+    const v = parseInt(inp.value);
+    const valid = v >= 10 && v <= 80;
+    btn.style.opacity = valid ? '1' : '0.5';
+    btn.style.pointerEvents = valid ? 'auto' : 'none';
+    if (valid) {
+      const a = GG.get('gg_q_answers', {});
+      a.q1 = String(v);
+      GG.set('gg_q_answers', a);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.log
+.gemini/
+optimize_meta.js
+fix.js
+fix_style.js

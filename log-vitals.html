@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Log Vital Data</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="log-vitals-body">
+
+  <div class="log-vitals-screen">
+    
+    <!-- Top App Bar -->
+    <header class="log-header">
+      <button class="icon-btn back-btn" onclick="history.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <h1 class="header-title">The Maternal Sanctuary</h1>
+      <button class="icon-btn profile-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <main class="log-main">
+      
+      <!-- Page Titles -->
+      <section class="page-intro">
+        <h2 class="page-title">Log Vital Data</h2>
+        <p class="page-subtitle">Honoring your rhythm, day by day.</p>
+      </section>
+
+      <!-- Vitals Form -->
+      <form class="vitals-form">
+        
+        <!-- Weight Card -->
+        <div class="vital-log-card">
+          <div class="card-top-row">
+            <div class="icon-circle">
+              <!-- Scale Icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+                <path d="M14 9h-4"></path>
+              </svg>
+            </div>
+            <span class="card-tag">BODY METRIC</span>
+          </div>
+          <div class="input-group">
+            <label>Current Weight (kg)</label>
+            <input type="number" id="vital-weight" step="0.1" placeholder="00.0">
+          </div>
+        </div>
+
+        <!-- Sleep Card -->
+        <div class="vital-log-card">
+          <div class="card-top-row">
+            <div class="icon-circle">
+              <!-- Moon Icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </div>
+            <span class="card-tag">RESTORATIVE</span>
+          </div>
+          <div class="input-group">
+            <label>Sleep (hours)</label>
+            <input type="number" id="vital-sleep" step="0.5" placeholder="8.0">
+          </div>
+        </div>
+
+        <!-- Stress Level Card (Custom Slider) -->
+        <div class="vital-log-card stress-card">
+          <div class="card-top-row justify-start">
+            <div class="icon-circle">
+              <!-- Mind/Stress Icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a4 4 0 0 0-4 4v1H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4z"></path>
+                <circle cx="12" cy="13" r="2"></circle>
+                <path d="M12 11v-2"></path>
+              </svg>
+            </div>
+            <h3 class="stress-title">Stress Level</h3>
+          </div>
+          
+          <div class="slider-group">
+            <input type="range" id="vital-stress" min="0" max="100" value="50" class="stress-slider">
+            <div class="slider-labels">
+              <span>DEEP PEACE</span>
+              <span>CENTERED</span>
+              <span>HIGH TENSION</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Area -->
+        <div class="log-action-area">
+          <button type="button" id="btn-save-vitals" class="btn-update">Update Vitals</button>
+          <p class="footer-quote">“Your body is your first home. Tend to it with kindness.”</p>
+        </div>
+
+      </form>
+
+    </main>
+  </div>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+

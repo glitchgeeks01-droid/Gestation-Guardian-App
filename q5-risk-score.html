@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Questionnaire Q5</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="q5-body">
+
+  <div class="q-screen">
+    <div class="q-bg-gradient"></div>
+    <div class="q-bg-illustration"></div>
+
+    <header class="q-header">
+      <div class="q-top-bar">
+        <button class="q-back-btn" onclick="location.href='q4-risk-score.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div class="q-title-group">
+          <h1>Gestosis Risk Score</h1>
+          <p>Assessing your preeclampsia risk level</p>
+        </div>
+      </div>
+
+      <div class="q-progress-section">
+        <span class="q-step-label">STEP 5 OF 12</span>
+        <div class="q-progress-track">
+          <div class="q-progress-fill" style="width: 41.66%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="q-main">
+      <div class="q-card">
+        <div class="q-card-header">
+          <div class="q-badge">
+            <span class="q-badge-text">Q5 OF 12</span>
+            <div class="q-badge-line"></div>
+          </div>
+        </div>
+
+        <h2 class="q-question">Do you have a history of diabetes?</h2>
+
+        <div class="q-choice-list">
+          <label class="q-choice-item">
+            <input type="radio" name="q5" value="none">
+            <div class="q-choice-content">
+              <div class="q-choice-radio"></div>
+              <div class="q-choice-text">
+                <span class="q-choice-title">No diabetes</span>
+                <span class="q-choice-points">0 pts added</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="q-choice-item">
+            <input type="radio" name="q5" value="type1_2">
+            <div class="q-choice-content">
+              <div class="q-choice-radio"></div>
+              <div class="q-choice-text">
+                <span class="q-choice-title">Yes, Type 1 or Type 2</span>
+                <span class="q-choice-points">+1 pt scoring factor</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="q-choice-item">
+            <input type="radio" name="q5" value="gestational" checked>
+            <div class="q-choice-content">
+              <div class="q-choice-radio"></div>
+              <div class="q-choice-text">
+                <span class="q-choice-title">Yes, Gestational Diabetes</span>
+                <span class="q-choice-points">+1 pt scoring factor</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="q-helper-box">
+          <div class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <p>Both forms of diabetes are risk factors that we track carefully to ensure clinical safety.</p>
+        </div>
+      </div>
+
+      <div class="q-actions">
+        <button id="q5-next-btn" class="q-btn-primary" onclick="location.href='q6-risk-score.html'">Next</button>
+        <button class="q-btn-secondary" onclick="location.href='dashboard.html'">Save and Exit</button>
+      </div>
+    </main>
+  </div>
+
+  </div>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+
+
+
+

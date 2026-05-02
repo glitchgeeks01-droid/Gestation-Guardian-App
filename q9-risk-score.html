@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Questionnaire Q9</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="q9-body">
+
+  <div class="q-screen">
+    <div class="q-bg-gradient"></div>
+    <div class="q-bg-illustration"></div>
+
+    <header class="q-header">
+      <div class="q-top-bar">
+        <button class="q-back-btn" onclick="location.href='q8-risk-score.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div class="q-title-group">
+          <h1>Gestosis Risk Score</h1>
+          <p>Assessing your preeclampsia risk level</p>
+        </div>
+      </div>
+
+      <div class="q-progress-section">
+        <span class="q-step-label">STEP 9 OF 12</span>
+        <div class="q-progress-track">
+          <div class="q-progress-fill" style="width: 75%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="q-main">
+      <div class="q-card">
+        <div class="q-badge">
+          <span class="q-badge-text">Q9 OF 12</span>
+          <div class="q-badge-line"></div>
+        </div>
+
+        <h2 class="q-question">What is your blood pressure right now?</h2>
+
+        <div class="q-input-container" style="margin-bottom:12px;">
+          <input type="number" placeholder="000" id="q9-systolic" min="70" max="250">
+          <span class="q-input-unit">Systolic</span>
+        </div>
+
+        <div class="q-input-container">
+          <input type="number" placeholder="00" id="q9-diastolic" min="40" max="150">
+          <span class="q-input-unit">Diastolic</span>
+        </div>
+
+        <div class="q-helper-box">
+          <div class="icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <p id="bp-advice">Please log this with your doctor immediately for any reading of 140/90 or higher.</p>
+        </div>
+      </div>
+
+      <div class="q-actions">
+        <button id="q9-next-btn" class="q-btn-primary" disabled onclick="location.href='q10-risk-score.html'">Next</button>
+        <button class="q-btn-secondary" onclick="location.href='q10-risk-score.html'">Skip / No Reading</button>
+      </div>
+    </main>
+  </div>
+
+<script src='script.js'></script>
+<script>
+  const sInp = document.getElementById('q9-systolic');
+  const dInp = document.getElementById('q9-diastolic');
+  const btn = document.getElementById('q9-next-btn');
+  const advice = document.getElementById('bp-advice');
+
+  function validate() {
+    const s = parseInt(sInp.value);
+    const d = parseInt(dInp.value);
+    const valid = s >= 70 && s <= 250 && d >= 40 && d <= 150;
+    btn.disabled = !valid;
+    
+    if (valid) {
+      if (s >= 140 || d >= 90) {
+        advice.innerHTML = "<strong>Warning:</strong> Hypertensive reading. This is a critical risk factor.";
+        advice.parentElement.style.background = "rgba(186, 26, 26, 0.1)";
+      } else {
+        advice.innerText = "Current BP is the primary live indicator of vascular stress.";
+        advice.parentElement.style.background = "rgba(244, 243, 241, 0.4)";
+      }
+      const a = GG.get('gg_q_answers', {});
+      a.q9_sys = s;
+      a.q9_dia = d;
+      GG.set('gg_q_answers', a);
+    }
+  }
+  sInp.addEventListener('input', validate);
+  dInp.addEventListener('input', validate);
+</script>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+
+
+
+
