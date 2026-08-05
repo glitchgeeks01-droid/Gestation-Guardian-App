@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Profile</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="stylesheet" href="mobile-patch.css">
+  <link rel="stylesheet" href="figma-theme.css">
+</head>
+<body class="profile-body">
+
+  <div class="profile-screen">
+    
+    <!-- Top App Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <button class="icon-btn back-btn" onclick="location.href='dashboard.html'">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1A1C1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <h1 class="header-title-dark">Profile</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <main class="profile-main">
+      
+      <!-- Profile Header Area -->
+      <section class="profile-header-section">
+        <div class="avatar-container">
+          <!-- Placeholder avatar matching the layout -->
+          <img src="https://i.pravatar.cc/150?img=47" alt="Aditi Sharma" class="profile-avatar">
+          <div class="avatar-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+        </div>
+        <h2 class="profile-name">Aditi Sharma</h2>
+        <div class="week-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Week 24</span>
+        </div>
+      </section>
+
+      <!-- Personal Details Card -->
+      <section class="form-card">
+        <div class="card-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <h3>Personal Details</h3>
+        </div>
+        
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" value="Aditi Sharma">
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label>Age</label>
+            <input type="number" value="28">
+          </div>
+          <div class="input-group">
+            <label>Date of Birth</label>
+            <input type="text" value="12/05/1995">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Primary Phone Number</label>
+          <div class="phone-input">
+            <span class="country-code">+91</span>
+            <input type="tel" value="9876543210">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Alternate Phone Number</label>
+          <input type="tel" placeholder="Optional">
+        </div>
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" value="aditi.sharma@example.com">
+        </div>
+      </section>
+
+      <!-- Address Details Card -->
+      <section class="form-card">
+        <div class="card-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <h3>Address Details</h3>
+        </div>
+
+        <div class="input-group">
+          <label>Current Address</label>
+          <textarea rows="3">Flat 402, Green Valley Apartments, Bandra West, Mumbai, Maharashtra - 400050</textarea>
+        </div>
+      </section>
+
+      <!-- Health & Preferences Card -->
+      <section class="form-card">
+        <div class="card-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            <line x1="12" y1="11" x2="12" y2="17"></line>
+            <line x1="9" y1="14" x2="15" y2="14"></line>
+          </svg>
+          <h3>Health & Preferences</h3>
+        </div>
+
+        <div class="input-group">
+          <label>Preferred Language</label>
+          <div class="select-wrapper">
+            <select>
+              <option>Tamil</option>
+              <option>English</option>
+              <option>Hindi</option>
+            </select>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Blood Group</label>
+          <div class="select-wrapper">
+            <select>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>O+</option>
+            </select>
+            <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <div class="profile-actions">
+        <button class="btn-save" style="margin-bottom:12px;">Save Changes</button>
+        <button id="btn-export-data" style="width:100%;padding:16px;border-radius:16px;background:rgba(67,103,70,0.1);color:#436746;font-weight:600;font-size:16px;border:none;margin-bottom:12px;">Export Health Data (JSON)</button>
+        <button class="btn-signout">Sign Out</button>
+      </div>
+
+    </main>
+  </div>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+

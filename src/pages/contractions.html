@@ -1,0 +1,59 @@
+<!-- pages/contractions.html -->
+<div id="page-contractions" class="page">
+    
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            <h1 style="font-size: 20px; color: var(--clr-dark-green);">Contraction Timer</h1>
+        </div>
+    </header>
+
+    <div style="padding: 96px 24px 100px; display: flex; flex-direction: column; align-items: center; height: 100%;">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <p style="font-size: 16px; color: var(--clr-text-muted);">Track duration and frequency</p>
+        </div>
+        
+        <!-- Large Interactive Circle (Purple theme for contractions) -->
+        <div id="contraction-button" class="ripple" onclick="Kicks.toggleContraction()" style="
+            width: 280px; height: 280px; 
+            border-radius: 50%; 
+            background: var(--clr-bg-white); 
+            border: 8px solid var(--clr-purple-bg);
+            box-shadow: 0 16px 40px rgba(139, 92, 246, 0.2);
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            margin-bottom: 40px; cursor: pointer;
+            transition: all 0.3s ease;
+        ">
+            <h1 id="contraction-state-display" style="font-size: 32px; color: var(--clr-purple); line-height: 1.2;">Tap to<br>Start</h1>
+            <p id="contraction-timer-display" style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700; margin-top: 12px; display: none; font-variant-numeric: tabular-nums;">00:00</p>
+        </div>
+        
+        <!-- Metrics -->
+        <div style="display: flex; gap: 16px; width: 100%; margin-bottom: 48px;">
+            <div class="card-white" style="flex: 1; text-align: center; padding: 16px;">
+                <p class="micro-label" style="color: var(--clr-text-muted);">AVG DURATION</p>
+                <p id="avg-duration" style="font-size: 20px; font-weight: 700; margin-top: 4px;">--</p>
+            </div>
+            <div class="card-white" style="flex: 1; text-align: center; padding: 16px;">
+                <p class="micro-label" style="color: var(--clr-text-muted);">AVG FREQUENCY</p>
+                <p id="avg-frequency" style="font-size: 20px; font-weight: 700; margin-top: 4px;">--</p>
+            </div>
+        </div>
+        
+        <!-- Rule of 5-1-1 Banner -->
+        <div class="card-info w-full" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2);">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+                <i data-lucide="alert-circle" style="color: #F59E0B; width: 24px; height: 24px; flex-shrink: 0;"></i>
+                <div>
+                    <h4 style="font-weight: 700; color: #B45309; margin-bottom: 4px;">The 5-1-1 Rule</h4>
+                    <p style="font-size: 14px; color: #92400E;">Go to the hospital if contractions are <b>5</b> minutes apart, last <b>1</b> minute, for <b>1</b> hour.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

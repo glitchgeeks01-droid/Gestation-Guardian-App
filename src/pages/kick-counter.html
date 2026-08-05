@@ -1,0 +1,59 @@
+<!-- pages/kick-counter.html -->
+<div id="page-kick-counter" class="page">
+    
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            <h1 style="font-size: 20px; color: var(--clr-dark-green);">Kick Counter</h1>
+        </div>
+    </header>
+
+    <div style="padding: 96px 24px 100px; display: flex; flex-direction: column; align-items: center; height: 100%;">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <p style="font-size: 16px; color: var(--clr-text-muted);">Aim for 10 kicks in 2 hours</p>
+        </div>
+        
+        <!-- Large Interactive Circle -->
+        <div id="kick-button" class="ripple" onclick="Kicks.logKick()" style="
+            width: 280px; height: 280px; 
+            border-radius: 50%; 
+            background: var(--clr-bg-white); 
+            border: 8px solid var(--clr-green-tint);
+            box-shadow: 0 16px 40px rgba(109, 161, 113, 0.2);
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center;
+            margin-bottom: 40px; cursor: pointer;
+            transition: transform 0.1s;
+        ">
+            <h1 id="kick-count-display" style="font-size: 96px; color: var(--clr-primary); line-height: 1;">0</h1>
+            <p style="font-size: 18px; color: var(--clr-text-muted); font-weight: 600; margin-top: -8px;">KICKS</p>
+        </div>
+        
+        <!-- Session Controls -->
+        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 320px; align-items: center;">
+            <div style="text-align: left;">
+                <p class="micro-label" style="color: var(--clr-text-muted);">SESSION TIME</p>
+                <p id="kick-timer-display" style="font-size: 24px; font-weight: 700; color: var(--clr-text-heading); font-variant-numeric: tabular-nums;">00:00</p>
+            </div>
+            
+            <button id="kick-control-btn" class="btn btn-secondary" style="width: auto; padding: 0 24px;" onclick="Kicks.toggleSession()">
+                Start Session
+            </button>
+        </div>
+        
+        <!-- Recent Sessions List -->
+        <div class="card-white w-full mt-6" style="margin-top: 48px;">
+            <h3 style="font-size: 16px; margin-bottom: 16px;">Recent Sessions</h3>
+            <div id="kick-history-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated by JS -->
+                <p style="color: var(--clr-text-muted); text-align: center; font-size: 14px; padding: 16px 0;">No sessions yet today.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

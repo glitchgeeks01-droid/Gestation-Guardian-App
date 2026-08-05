@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Welcome</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.error('SW reg failed', err));
+      });
+    }
+  </script>
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="stylesheet" href="mobile-patch.css">
+  <link rel="stylesheet" href="figma-theme.css">
+</head>
+<body class="onboarding-body">
+
+  <div class="onboarding-screen">
+    <!-- Background Illustration Placeholder & Gradient -->
+    <div class="background-illustration"></div>
+    <div class="gradient-overlay"></div>
+
+    <!-- Main Content Canvas -->
+    <div class="main-content">
+      
+      <!-- Top Text -->
+      <div class="typography-branding">
+        <h1 class="heading">Gestation<br>Guardian</h1>
+        <p class="subtitle">Your trusted companion through<br>every step of motherhood</p>
+      </div>
+
+      <!-- Bottom Actions & Info -->
+      <div class="bottom-section">
+        
+        <div class="actions">
+          <button class="btn-primary">
+            <span>Get Started</span>
+            <span class="icon"></span>
+          </button>
+          <button class="btn-secondary">Sign In</button>
+        </div>
+
+        <div class="secondary-info">
+          <span class="info-text">Empowering Every Birth</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <div class="footer-quote">
+          <div class="quote-icon"></div>
+          <p class="quote-text">"A mother's journey is unique and sacred. We are here to ensure every moment is met with care, knowledge, and peace of mind."</p>
+        </div>
+
+      </div>
+      
+    </div>
+  </div>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+

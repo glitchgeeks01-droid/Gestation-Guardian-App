@@ -1,0 +1,113 @@
+/* css/reset.css */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  line-height: 1.62;
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--clr-bg-white);
+  color: var(--clr-text-body);
+  overflow-x: hidden;
+  user-select: none; /* Prevent text selection in app mode */
+  -webkit-tap-highlight-color: transparent; /* Remove blue tap highlight on mobile */
+}
+
+/* Allow text selection in specific areas like inputs */
+input, textarea {
+  user-select: auto;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Base Typography Scale */
+h1 {
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1.25;
+  letter-spacing: -0.9px;
+  color: var(--clr-text-heading);
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.25;
+  letter-spacing: -0.75px;
+  color: var(--clr-text-body-alt2);
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  color: var(--clr-dark-green);
+}
+
+.subtitle {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.62;
+  color: var(--clr-text-heading);
+}
+
+.label {
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 1.33;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--clr-text-body);
+}
+
+.micro-label {
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--clr-accent-green);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

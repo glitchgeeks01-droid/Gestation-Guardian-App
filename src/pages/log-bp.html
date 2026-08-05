@@ -1,0 +1,96 @@
+<!-- pages/log-bp.html -->
+<div id="page-log-bp" class="page">
+    
+    <!-- Top Glass Header -->
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            <h1 style="font-size: 20px; color: var(--clr-dark-green);">Log Blood Pressure</h1>
+        </div>
+    </header>
+
+    <div style="padding: 96px 24px 100px; max-width: 512px; margin: 0 auto;">
+        
+        <form onsubmit="event.preventDefault(); Vitals.saveBP();" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <div class="card-white">
+                <div style="display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 24px;">
+                    <!-- Systolic -->
+                    <div style="text-align: center;">
+                        <input type="number" id="bp-sys" class="input-form" style="width: 100px; height: 80px; font-size: 32px; font-weight: 700; text-align: center;" placeholder="120" required>
+                        <p class="micro-label" style="margin-top: 8px; color: var(--clr-text-muted);">SYS (mmHg)</p>
+                    </div>
+                    
+                    <div style="font-size: 32px; font-weight: 300; color: var(--clr-text-muted);">/</div>
+                    
+                    <!-- Diastolic -->
+                    <div style="text-align: center;">
+                        <input type="number" id="bp-dia" class="input-form" style="width: 100px; height: 80px; font-size: 32px; font-weight: 700; text-align: center;" placeholder="80" required>
+                        <p class="micro-label" style="margin-top: 8px; color: var(--clr-text-muted);">DIA (mmHg)</p>
+                    </div>
+                </div>
+
+                <!-- Pulse -->
+                <div class="input-group" style="align-items: center;">
+                    <label class="label text-center w-full">Pulse (BPM)</label>
+                    <input type="number" id="bp-pulse" class="input-form" style="width: 120px; text-align: center;" placeholder="72">
+                </div>
+            </div>
+
+            <!-- Position Selector -->
+            <div>
+                <label class="label" style="margin-bottom: 12px; display: block;">Position</label>
+                <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                    <label style="flex: 0 0 120px;">
+                        <input type="radio" name="bp-position" value="sitting" checked style="display: none;">
+                        <div class="btn btn-secondary" style="height: 48px; border-radius: var(--r-card);">Sitting</div>
+                    </label>
+                    <label style="flex: 0 0 120px;">
+                        <input type="radio" name="bp-position" value="lying" style="display: none;">
+                        <div class="btn btn-secondary" style="height: 48px; border-radius: var(--r-card);">Lying</div>
+                    </label>
+                    <label style="flex: 0 0 120px;">
+                        <input type="radio" name="bp-position" value="standing" style="display: none;">
+                        <div class="btn btn-secondary" style="height: 48px; border-radius: var(--r-card);">Standing</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Arm Selector -->
+            <div>
+                <label class="label" style="margin-bottom: 12px; display: block;">Arm Used</label>
+                <div style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                    <label style="flex: 0 0 120px;">
+                        <input type="radio" name="bp-arm" value="left" checked style="display: none;">
+                        <div class="btn btn-secondary" style="height: 48px; border-radius: var(--r-card);">Left</div>
+                    </label>
+                    <label style="flex: 0 0 120px;">
+                        <input type="radio" name="bp-arm" value="right" style="display: none;">
+                        <div class="btn btn-secondary" style="height: 48px; border-radius: var(--r-card);">Right</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="input-group">
+                <label class="label">Notes (Optional)</label>
+                <textarea id="bp-notes" class="input-form" style="height: 100px; resize: none; padding: 16px;" placeholder="How are you feeling?"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 16px;">
+                Save Reading
+            </button>
+        </form>
+    </div>
+    
+    <!-- CSS for radio button selection states -->
+    <style>
+        input[type="radio"]:checked + .btn-secondary {
+            background: var(--clr-primary);
+            color: white;
+            border-color: var(--clr-primary);
+        }
+    </style>
+</div>

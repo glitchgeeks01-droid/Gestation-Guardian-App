@@ -1,0 +1,80 @@
+/* css/tokens.css */
+
+:root {
+  /* ── Brand Greens ── */
+  --clr-primary:        #6DA171;   /* Main CTA, onboarding buttons */
+  --clr-dark-green:     #436746;   /* Tab active, action buttons, headings */
+  --clr-mid-green:      #6B8E6D;   /* Gradient endpoint */
+  --clr-accent-green:   #8DB48E;   /* Bluetooth, connect buttons, icons */
+  --clr-green-10:       rgba(141, 180, 142, 0.1); /* Light green bg fills */
+  --clr-green-tint:     rgba(194, 237, 203, 0.3); /* Device icon bg (BP) */
+
+  /* ── Text Hierarchy ── */
+  --clr-text-heading:   #0F110F;   /* H1 headings */
+  --clr-text-primary:   #121412;   /* Body strong text */
+  --clr-text-dark:      #1A1C1A;   /* Dark body text */
+  --clr-text-body:      #2D332D;   /* Subtitle, labels */
+  --clr-text-body-alt:  #2D312D;   /* Card labels */
+  --clr-text-body-alt2: #2D2F2F;   /* Bluetooth card text */
+  --clr-text-muted:     #5C615C;   /* Placeholders */
+  --clr-text-muted-alt: #5A5C5C;   /* Bluetooth descriptions */
+  --clr-text-placeholder: #8E938E; /* Input placeholders */
+  --clr-text-warm:      #80543B;   /* Accent labels (trimester, dates) */
+
+  /* ── Surfaces ── */
+  --clr-bg-white:       #FFFFFF;
+  --clr-bg-warm:        #FAF9F6;   /* Bluetooth page background */
+  --clr-bg-input:       #F9FAF9;   /* Form input fill */
+  --clr-bg-card:        #F4F3F1;   /* Dashboard cards */
+  --clr-bg-pill:        #EFEEEB;   /* Date pills */
+  --clr-bg-glass:       rgba(255, 255, 255, 0.85); /* Glass card */
+  --clr-bg-glass-footer: rgba(250, 249, 246, 0.8); /* Footer blur */
+
+  /* ── Borders ── */
+  --clr-border-input:   #DCE1DC;
+  --clr-border-glass:   rgba(255, 255, 255, 0.3);
+  --clr-border-subtle:  rgba(0, 0, 0, 0.05);
+  --clr-border-device:  rgba(172, 173, 173, 0.3);
+  --clr-divider:        rgba(0, 0, 0, 0.1);
+
+  /* ── Status / Accent ── */
+  --clr-purple:         #625190;
+  --clr-purple-bg:      rgba(193, 174, 245, 0.3);
+  --clr-oximeter-bg:    rgba(232, 240, 232, 0.4);
+  --clr-danger:         #BA1A1A;
+  --clr-danger-bg:      rgba(186, 26, 26, 0.1);
+  --clr-info-brown:     #665D4E;
+  --clr-info-brown-bg:  rgba(102, 93, 78, 0.1);
+
+  /* ── Gradients ── */
+  --grad-btn-primary:   linear-gradient(102.26deg, #436746 0%, #6B8E6D 100%);
+  --grad-btn-cta:       none; /* Solid #6DA171 for onboarding */
+  --grad-kick:          linear-gradient(135deg, #436746 0%, #8DB48E 100%);
+  --grad-stress:        linear-gradient(90deg, #4CAF82 0%, #F59E0B 50%, #E8547A 100%);
+  --grad-overlay:       linear-gradient(180deg,
+                          rgba(255,255,255,0.6) 0%,
+                          rgba(255,255,255,0) 50%,
+                          rgba(255,255,255,0.9) 100%);
+
+  /* ── Shadows ── */
+  --shadow-btn-green:   0px 15px 30px -5px rgba(109, 161, 113, 0.4);
+  --shadow-btn-action:  0px 10px 15px -3px rgba(67, 103, 70, 0.3), 0px 4px 6px -4px rgba(67, 103, 70, 0.3);
+  --shadow-btn-accent:  0px 10px 15px -3px rgba(141, 180, 142, 0.2), 0px 4px 6px -4px rgba(141, 180, 142, 0.2);
+  --shadow-card-glass:  0px 32px 64px -16px rgba(0, 0, 0, 0.2);
+  --shadow-card-white:  0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-card-device: 0px 12px 32px -8px rgba(141, 180, 142, 0.08);
+  --shadow-header:      0px 8px 32px rgba(26, 28, 26, 0.06);
+  --shadow-footer:      0px -8px 32px rgba(26, 28, 26, 0.06);
+  --shadow-xs:          0px 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-text:        0px 1px 1px rgba(0, 0, 0, 0.05);
+
+  /* ── Radii ── */
+  --r-pill:    9999px;
+  --r-card-xl: 48px;  /* Why-connect card, overlay */
+  --r-card-lg: 40px;  /* Glass cards, signup card, inputs */
+  --r-card:    32px;  /* Device cards, dashboard cards */
+  --r-sm:      16px;  /* Quote card */
+
+  /* ── Typography ── */
+  --font-family: 'Lexend', system-ui, -apple-system, sans-serif;
+}

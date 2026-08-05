@@ -1,0 +1,238 @@
+// @ts-nocheck
+import { Auth } from './auth';
+import { Bluetooth } from '../services/bluetooth';
+import { Store } from '../store/store';
+import { UI } from '../components/ui';
+import { Kicks } from './kicks';
+import { Vitals } from './vitals';
+import { Assessment } from './assessment';
+import { Charts } from './charts';
+import { Scoring } from '../core/scoring';
+import { AIBot } from '../services/ai-bot';
+import { HealthRecords } from './health-records';
+import { DashboardUI } from './dashboard';
+import { MedicalHistory } from './medical-history';
+
+// js/app.js
+
+/**
+ * Gestation Guardian - Single Page Application Router
+ */
+
+export const App = {
+    // Current active page ID
+    currentPage: null,
+    
+    // Page history for back navigation
+    history: [],
+    
+    // Initialize the application
+    async init() {
+        console.log('App Initializing...');
+        
+        // Initialize Global AI Bot
+        if (AIBot) AIBot.init();
+        
+        // Initialize Offline Sync Engine
+        if (Store) Store.initSyncEngine();
+        
+        // Handle hash changes for routing
+        window.addEventListener('hashchange', this.handleRoute.bind(this));
+        
+        // Hide splash screen after a short delay
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.classList.add('fade-out');
+                setTimeout(() => splash.remove(), 500);
+            }
+        }, 1000);
+
+        // Initial route handling
+        if (!window.location.hash || window.location.hash === '#/') {
+            // Determine initial route based on auth state
+            // If they have a profile, go to dashboard, else onboarding
+            const hasProfile = (await Store.getProfile()) !== null;
+            window.location.hash = hasProfile ? '#/dashboard' : '#/onboarding';
+        } else {
+            this.handleRoute();
+        }
+    },
+    
+    // Router logic
+    async handleRoute() {
+        const hash = window.location.hash || '#/';
+        const route = hash.replace('#/', '') || 'onboarding';
+        
+        console.log(`Routing to: ${route}`);
+        
+        // Auth guard (redirect to onboarding if not signed in and trying to access protected route)
+        const isAuthRoute = ['onboarding', 'signin', 'signup'].includes(route);
+        const hasProfile = (await Store.getProfile()) !== null;
+        
+        if (!hasProfile && !isAuthRoute) {
+            window.location.hash = '#/onboarding';
+            return;
+        }
+
+        // Fetch page template if not already in DOM
+        let pageEl = document.getElementById(`page-${route}`);
+        
+        if (!pageEl) {
+            pageEl = await this.loadPageTemplate(route);
+        }
+        
+        // Transition to new page
+        this.transitionTo(pageEl, route);
+        
+        // Update Bottom Nav state
+        UI.updateBottomNav(route);
+        
+        // Trigger page-specific initialization
+        await this.initPage(route);
+    },
+    
+    async loadPageTemplate(route: string) {
+        try {
+            // Use Vite's glob import to bundle HTML as raw strings (bypasses WebView file:// fetch blocks)
+            const templates = (import.meta as any).glob('../../pages/*.html', { eager: true, query: '?raw', import: 'default' });
+            const templateKey = `../../pages/${route}.html`;
+            
+            const html = templates[templateKey] as string;
+            
+            if (!html) throw new Error(`Page template not found for route: ${route}`);
+            
+            const temp = document.createElement('div');
+            temp.innerHTML = html.trim();
+            
+            // Extract the actual page element from the template
+            // It assumes the template provides its own <div id="page-xxx" class="page">
+            let pageEl = temp.firstElementChild;
+            
+            // Fallback just in case template doesn't have a single root
+            if (!pageEl || !pageEl.classList.contains('page')) {
+                pageEl = document.createElement('div');
+                pageEl.id = `page-${route}`;
+                pageEl.className = 'page';
+                pageEl.innerHTML = html;
+            }
+            
+            document.getElementById('app-root').appendChild(pageEl);
+            
+            // Re-initialize Lucide icons for new content
+            if ((window as any).lucide) {
+                (window as any).lucide.createIcons({ root: pageEl });
+            }
+            
+            return pageEl;
+        } catch (error) {
+            console.error(`Error loading page ${route}:`, error);
+            // Fallback UI or redirect
+            return null;
+        }
+    },
+    
+    transitionTo(newPageEl, route) {
+        if (!newPageEl) return;
+        
+        // Manage history
+        if (this.currentPage && this.currentPage !== route) {
+            const oldPageEl = document.getElementById(`page-${this.currentPage}`);
+            if (oldPageEl) {
+                oldPageEl.classList.remove('active');
+            }
+            this.history.push(this.currentPage);
+        }
+        
+        newPageEl.classList.add('active');
+        this.currentPage = route;
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+        newPageEl.scrollTop = 0;
+    },
+    
+    goBack() {
+        if (this.history.length > 0) {
+            const prev = this.history.pop();
+            // Don't push to history array on back navigation
+            window.history.back(); // Use browser history to change hash
+        } else {
+            window.location.hash = '#/dashboard';
+        }
+    },
+    
+    // Page-specific initializers
+    async initPage(route) {
+        switch (route) {
+            case 'onboarding':
+                break;
+            case 'signin':
+            case 'signup':
+                if (Auth) Auth.init(route);
+                break;
+            case 'bluetooth':
+                if (Bluetooth) Bluetooth.init();
+                break;
+            case 'contractions':
+                if (Kicks) await Kicks.initContractions();
+                break;
+            case 'dashboard':
+                if (DashboardUI) await DashboardUI.init();
+                if (Scoring) (window as any).Scoring = Scoring;
+                break;
+            case 'health-hub':
+                if (HealthRecords) await HealthRecords.init();
+                break;
+            case 'kick-counter':
+                if (Kicks) Kicks.init();
+                break;
+            case 'log-vitals':
+                if (Vitals) Vitals.initVitalsPage();
+                break;
+            case 'log-bp':
+                if (Vitals) Vitals.initBPPage();
+                break;
+            case 'medical-history':
+                if (MedicalHistory) await MedicalHistory.init();
+                break;
+            case 'reminders':
+                // Reminders is entirely statically driven via UI methods
+                break;
+            case 'risk-assessment':
+                if (Assessment) Assessment.init();
+                break;
+        }
+        
+        // Expose UI and Store so they aren't tree shaken if they are used globally by HTML onclicks
+        (window as any).UI = UI;
+        (window as any).Store = Store;
+        
+        // Bottom Nav toggle
+        const bottomNav = document.getElementById('bottom-nav');
+        if (bottomNav) {
+            const mainRoutes = ['dashboard', 'health-hub', 'care-guide', 'profile'];
+            if (mainRoutes.includes(route)) {
+                bottomNav.classList.remove('hidden');
+                // Update active state
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    if (item.getAttribute('data-target') === route) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            } else {
+                bottomNav.classList.add('hidden');
+            }
+        }
+    }
+};
+
+// Boot the app when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    App.init();
+});
+
+// Expose for HTML inline handlers
+(window as any).App = App;

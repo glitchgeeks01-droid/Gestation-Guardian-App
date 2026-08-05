@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "Gestation Guardian — Maternal Health Web App",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "test": "playwright test",
     "test:report": "playwright show-report"
   },
   "devDependencies": {
-    "@playwright/test": "^1.44.0"
+    "@playwright/test": "^1.44.0",
+    "@vitejs/plugin-legacy": "^8.2.0",
+    "terser": "^5.49.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4"
   }
 }

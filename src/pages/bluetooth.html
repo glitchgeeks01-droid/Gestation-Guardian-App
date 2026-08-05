@@ -1,0 +1,103 @@
+<!-- pages/bluetooth.html -->
+<div id="page-bluetooth" class="page">
+    
+    <!-- Top Glass Header -->
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                <i data-lucide="arrow-left"></i>
+            </a>
+            <h1 style="font-size: 20px; color: var(--clr-dark-green);">Connect Devices</h1>
+        </div>
+        
+        <!-- User Profile Photo Placeholder -->
+        <div style="width: 40px; height: 40px; background: var(--clr-border-input); border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+            <i data-lucide="user" style="color: var(--clr-text-muted);"></i>
+        </div>
+    </header>
+
+    <div class="bt-main">
+        
+        <!-- Hero Section with Scanning Animation -->
+        <div class="bt-hero">
+            <div class="scanning-animation">
+                <div class="scan-ring"></div>
+                <div class="scan-ring"></div>
+                <div class="scan-ring"></div>
+                <div class="scan-center">
+                    <i data-lucide="bluetooth" class="scan-center-icon"></i>
+                </div>
+            </div>
+            
+            <h2 class="mt-4">Connect Your<br>Devices</h2>
+            <p style="font-size: 18px; color: var(--clr-text-muted-alt); text-align: center; margin-top: 8px;">
+                Real-time insights for a safer journey.
+            </p>
+        </div>
+
+        <!-- Device List -->
+        <div class="bt-device-list">
+            
+            <!-- BP Monitor -->
+            <div class="card-device">
+                <div class="card-device-icon-bg green">
+                    <i data-lucide="heart-pulse"></i>
+                </div>
+                <div class="card-device-content">
+                    <h3>BP Monitor</h3>
+                    <p>Omron / iHealth</p>
+                </div>
+                <button class="btn btn-connect" onclick="Bluetooth.connect('bp')">Connect</button>
+            </div>
+
+            <!-- Smartwatch -->
+            <div class="card-device">
+                <div class="card-device-icon-bg purple">
+                    <i data-lucide="watch"></i>
+                </div>
+                <div class="card-device-content">
+                    <h3>Smartwatch</h3>
+                    <p>Apple Watch / Fitbit</p>
+                </div>
+                <button class="btn btn-connect" onclick="Bluetooth.connect('watch')">Connect</button>
+            </div>
+
+            <!-- Pulse Oximeter -->
+            <div class="card-device">
+                <div class="card-device-icon-bg teal">
+                    <i data-lucide="activity"></i>
+                </div>
+                <div class="card-device-content">
+                    <h3>Pulse Oximeter</h3>
+                    <p>Digital Vitals Trackers</p>
+                </div>
+                <button class="btn btn-connect" onclick="Bluetooth.connect('spo2')">Connect</button>
+            </div>
+            
+        </div>
+
+        <!-- Info Anchor Card -->
+        <div class="card-info w-full">
+            <i data-lucide="activity" class="card-info-bg-icon"></i>
+            <div style="position: relative; z-index: 1;">
+                <p class="micro-label" style="margin-bottom: 8px;">WHY CONNECT?</p>
+                <p style="font-size: 16px; color: var(--clr-text-muted-alt); line-height: 1.62;">
+                    Syncing your devices allows us to detect subtle patterns in your health, providing you and your doctor with precise, real-time insights for a safer journey.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Glass Footer -->
+    <footer class="glass-footer">
+        <a href="#/dashboard" class="btn btn-accent">
+            Continue
+            <i data-lucide="arrow-right"></i>
+        </a>
+        <a href="#/dashboard" class="btn btn-text w-full text-center">
+            Skip for now
+        </a>
+    </footer>
+
+</div>

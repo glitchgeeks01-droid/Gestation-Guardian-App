@@ -1,0 +1,1032 @@
+/* =============================================
+   FIGMA DESIGN SYSTEM — Clean, Minimal, Modern
+   Gestation Guardian — Extracted from Figma Specs
+   Loaded LAST to override skeuomorphic layer
+   ============================================= */
+
+/* ── Google Font Import ── */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  /* Primary Palette */
+  --fg-primary: #6DA171;
+  --fg-dark-green: #436746;
+  --fg-accent-green: #8DB48E;
+  --fg-light-green-bg: rgba(141, 180, 142, 0.1);
+  
+  /* Text Colors */
+  --fg-text-primary: #1A1C1A;
+  --fg-text-heading: #0F110F;
+  --fg-text-secondary: #2D332D;
+  --fg-text-muted: #5C615C;
+  --fg-text-warm: #80543B;
+  --fg-text-body: #424841;
+  --fg-text-subtle: #727970;
+  
+  /* Surfaces */
+  --fg-bg-white: #FFFFFF;
+  --fg-bg-card: #F4F3F1;
+  --fg-bg-input: #F9FAF9;
+  --fg-bg-pill: #EFEEEB;
+  --fg-border-input: #DCE1DC;
+  --fg-border-subtle: rgba(194, 200, 190, 0.1);
+  --fg-divider: rgba(194, 200, 190, 0.2);
+  
+  /* Gradients */
+  --fg-gradient-btn: linear-gradient(90deg, #436746 0%, #8DB48E 100%);
+  --fg-gradient-btn-alt: linear-gradient(102.26deg, #436746 0%, #6B8E6D 100%);
+  --fg-gradient-kick: linear-gradient(135deg, #436746 0%, #8DB48E 100%);
+  --fg-gradient-stress: linear-gradient(90deg, #4CAF82 0%, #F59E0B 50%, #E8547A 100%);
+  --fg-gradient-overlay: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.9) 100%);
+  
+  /* Shadows */
+  --fg-shadow-btn: 0px 10px 15px -3px rgba(67, 103, 70, 0.3), 0px 4px 6px -4px rgba(67, 103, 70, 0.3);
+  --fg-shadow-btn-primary: 0px 15px 30px -5px rgba(109, 161, 113, 0.4);
+  --fg-shadow-card: 0px 12px 32px -8px rgba(141, 180, 142, 0.08);
+  --fg-shadow-card-heavy: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --fg-shadow-xs: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --fg-shadow-kick: 0px 8px 32px rgba(67, 103, 70, 0.15);
+  
+  /* Radii */
+  --fg-radius-pill: 9999px;
+  --fg-radius-card: 32px;
+  --fg-radius-card-lg: 40px;
+  --fg-radius-card-xl: 48px;
+  --fg-radius-sm: 16px;
+  --fg-radius-tag: 6px;
+  
+  /* Status Colors */
+  --fg-status-green-bg: rgba(67, 103, 70, 0.1);
+  --fg-status-green-text: #436746;
+  --fg-status-red-bg: rgba(186, 26, 26, 0.1);
+  --fg-status-red-text: #BA1A1A;
+  --fg-status-brown-bg: rgba(102, 93, 78, 0.1);
+  --fg-status-brown-text: #665D4E;
+  --fg-status-purple-bg: rgba(193, 174, 245, 0.3);
+  --fg-status-purple-text: #625190;
+}
+
+
+/* ═══════════════════════════════════════════
+   GLOBAL RESETS — Remove Skeuomorphic Layer
+   ═══════════════════════════════════════════ */
+
+/* Kill all noise/texture overlays */
+.dashboard-screen::after,
+.reminders-screen::after,
+.dashboard-body::before,
+.reminders-body::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Kill linen textures */
+.dashboard-body,
+.reminders-body {
+  background: var(--fg-bg-white) !important;
+}
+
+/* Kill all embossed/debossed text shadows */
+.section-title,
+.label-caps,
+.nav-item span,
+.bento-card span,
+.vital-val,
+.week-number,
+.score-num,
+.chip,
+.nav-fab .plus {
+  text-shadow: none !important;
+}
+
+/* Kill brushed metal on nav */
+.dashboard-top-nav::after,
+.bottom-nav::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Kill stitching on week card */
+.week-card::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Kill glossy dome overlays on ALL cards */
+.week-card::before,
+.vital-card::before,
+.bento-card::before,
+.risk-banner::before,
+.reminder-card::before,
+.hero-cta-card::before,
+.size-pill::before,
+.chip::before,
+.btn-add-reminder::before,
+.nav-fab::before,
+.nav-fab::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY — Clean Lexend
+   ═══════════════════════════════════════════ */
+
+body, html, * {
+  font-family: 'Lexend', sans-serif !important;
+}
+
+h1, .heading {
+  font-weight: 900 !important;
+  letter-spacing: -0.9px !important;
+  color: var(--fg-text-heading) !important;
+}
+
+h2, .week-number {
+  font-weight: 700 !important;
+  letter-spacing: -0.75px !important;
+  color: var(--fg-text-primary) !important;
+}
+
+h3, .section-title {
+  font-weight: 600 !important;
+  color: var(--fg-text-primary) !important;
+}
+
+.label-caps {
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  color: var(--fg-text-warm) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   SCREEN CONTAINERS — Clean White
+   ═══════════════════════════════════════════ */
+
+.dashboard-screen,
+.reminders-screen,
+.onboarding-screen,
+[class$="-screen"] {
+  background: var(--fg-bg-white) !important;
+  box-shadow: none !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   TOP NAVIGATION — Clean, No Brushed Metal
+   ═══════════════════════════════════════════ */
+
+.dashboard-top-nav,
+.reminders-header,
+[class$="-header"] {
+  background: var(--fg-bg-white) !important;
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--fg-divider) !important;
+}
+
+.nav-icon-btn {
+  background: var(--fg-bg-white) !important;
+  border: 1px solid var(--fg-border-subtle) !important;
+  border-top: none !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-icon-btn:active {
+  background: var(--fg-bg-card) !important;
+  box-shadow: none !important;
+  transform: scale(0.95) !important;
+}
+
+.profile-border {
+  border: 2px solid var(--fg-accent-green) !important;
+  box-shadow: none !important;
+}
+
+.profile-img {
+  box-shadow: none !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   WEEK PROGRESS CARD — Clean Rounded Card
+   ═══════════════════════════════════════════ */
+
+.week-card {
+  background: var(--fg-bg-card) !important;
+  border: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: hidden !important;
+}
+
+.week-number {
+  color: var(--fg-dark-green) !important;
+  text-shadow: none !important;
+}
+
+.size-pill {
+  background: var(--fg-bg-white) !important;
+  border: none !important;
+  border-top: none !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  overflow: visible !important;
+}
+
+.progress-track {
+  background: #C4EDC4 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-top: none !important;
+  border-radius: var(--fg-radius-pill) !important;
+  height: 12px !important;
+}
+
+.progress-fill {
+  background: var(--fg-dark-green) !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-top: none !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+.progress-fill::after {
+  display: none !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   RISK BANNER — Clean Card
+   ═══════════════════════════════════════════ */
+
+.risk-banner {
+  background: var(--fg-bg-white) !important;
+  border: 1px solid var(--fg-border-subtle) !important;
+  border-top: none !important;
+  box-shadow: var(--fg-shadow-card) !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: visible !important;
+}
+
+.score-circle {
+  filter: none !important;
+}
+
+.score-num {
+  text-shadow: none !important;
+  color: var(--fg-dark-green) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   VITAL CARDS — Clean Flat Tiles
+   ═══════════════════════════════════════════ */
+
+.vital-card {
+  background: var(--fg-bg-card) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: visible !important;
+  transition: transform 0.2s ease !important;
+}
+
+.vital-card:active {
+  box-shadow: none !important;
+  transform: scale(0.96) !important;
+}
+
+.vital-val {
+  text-shadow: none !important;
+  color: var(--fg-text-primary) !important;
+}
+
+.vital-icon {
+  filter: none !important;
+  background: var(--fg-bg-white) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 12px !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.vital-icon i,
+.vital-icon svg {
+  color: var(--fg-dark-green) !important;
+  stroke: var(--fg-dark-green) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   LOG BUTTON — Clean Dashed
+   ═══════════════════════════════════════════ */
+
+.btn-dashed-log {
+  background: var(--fg-bg-white) !important;
+  border: 1.5px dashed rgba(109, 161, 113, 0.4) !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-dashed-log:hover {
+  background: var(--fg-light-green-bg) !important;
+}
+
+.btn-dashed-log:active {
+  box-shadow: none !important;
+  transform: scale(0.97) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   BENTO GRID — Clean Flat Cards
+   ═══════════════════════════════════════════ */
+
+.bento-card {
+  background: var(--fg-bg-card) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: visible !important;
+  transition: transform 0.2s ease !important;
+}
+
+.bento-card.highlight {
+  background: var(--fg-light-green-bg) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.bento-card:active {
+  box-shadow: none !important;
+  transform: scale(0.95) !important;
+}
+
+.bento-icon {
+  filter: none !important;
+  background: var(--fg-bg-white) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 12px !important;
+  display: inline-flex !important;
+}
+
+.bento-icon i,
+.bento-icon svg {
+  color: var(--fg-dark-green) !important;
+  stroke: var(--fg-dark-green) !important;
+}
+
+.bento-card span {
+  text-shadow: none !important;
+  font-weight: 600 !important;
+  color: var(--fg-text-primary) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   SYMPTOM CHIPS — Clean Pill Buttons
+   ═══════════════════════════════════════════ */
+
+.chip {
+  background: var(--fg-bg-white) !important;
+  border: 1px solid var(--fg-border-input) !important;
+  border-top: 1px solid var(--fg-border-input) !important;
+  border-bottom: 1px solid var(--fg-border-input) !important;
+  box-shadow: none !important;
+  border-radius: var(--fg-radius-pill) !important;
+  overflow: visible !important;
+  font-weight: 500 !important;
+  color: var(--fg-text-body) !important;
+  transition: all 0.2s ease !important;
+}
+
+.chip:active {
+  box-shadow: none !important;
+  transform: scale(0.95) !important;
+  background: var(--fg-bg-card) !important;
+}
+
+.chip.active,
+.chip[data-selected="true"] {
+  background: var(--fg-gradient-btn) !important;
+  color: var(--fg-bg-white) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+  text-shadow: none !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   BOTTOM NAVIGATION — Clean White Bar
+   ═══════════════════════════════════════════ */
+
+.bottom-nav {
+  background: var(--fg-bg-white) !important;
+  box-shadow: 0px -1px 0px var(--fg-divider) !important;
+  border-top: none !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+.nav-item.active {
+  background: var(--fg-light-green-bg) !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+.nav-item span {
+  text-shadow: none !important;
+}
+
+.nav-icon {
+  filter: none !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   FAB — Clean Gradient Circle
+   ═══════════════════════════════════════════ */
+
+.nav-fab {
+  background: var(--fg-gradient-kick) !important;
+  box-shadow: var(--fg-shadow-kick) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  overflow: visible !important;
+}
+
+.nav-fab:active {
+  box-shadow: var(--fg-shadow-btn) !important;
+  transform: scale(0.92) !important;
+  border-top-color: transparent !important;
+}
+
+.nav-fab .plus {
+  text-shadow: none !important;
+  color: var(--fg-bg-white) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   REMINDERS PAGE — Clean Style
+   ═══════════════════════════════════════════ */
+
+.hero-cta-card {
+  background: var(--fg-light-green-bg) !important;
+  border: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: visible !important;
+}
+
+.btn-add-reminder {
+  background: var(--fg-gradient-btn) !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  overflow: visible !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-add-reminder:active {
+  box-shadow: none !important;
+  transform: scale(0.97) !important;
+}
+
+.reminder-card {
+  background: var(--fg-bg-white) !important;
+  border: 1px solid var(--fg-border-subtle) !important;
+  border-top: 1px solid var(--fg-border-subtle) !important;
+  border-bottom: 1px solid var(--fg-border-subtle) !important;
+  box-shadow: var(--fg-shadow-card) !important;
+  border-radius: var(--fg-radius-card) !important;
+  overflow: visible !important;
+}
+
+.icon-wrapper-circle {
+  box-shadow: none !important;
+  background: var(--fg-light-green-bg) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   ONBOARDING PAGE — Match Figma Frame
+   ═══════════════════════════════════════════ */
+
+.onboarding-screen {
+  background: var(--fg-bg-white) !important;
+}
+
+.gradient-overlay {
+  background: var(--fg-gradient-overlay) !important;
+}
+
+.btn-primary {
+  background: var(--fg-primary) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  box-shadow: var(--fg-shadow-btn-primary) !important;
+  border: none !important;
+  padding: 20px 32px !important;
+  font-weight: 700 !important;
+  font-size: 20px !important;
+  color: var(--fg-bg-white) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary:active {
+  transform: scale(0.97) !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 2px solid var(--fg-primary) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  backdrop-filter: blur(2px) !important;
+  padding: 20px 32px !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: var(--fg-primary) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-secondary:active {
+  transform: scale(0.97) !important;
+}
+
+.info-text {
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  letter-spacing: 2.2px !important;
+  text-transform: uppercase !important;
+  color: var(--fg-text-secondary) !important;
+}
+
+.divider-line {
+  background: var(--fg-primary) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  height: 4px !important;
+  width: 40px !important;
+}
+
+.footer-quote {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-left: 4px solid var(--fg-primary) !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  backdrop-filter: blur(6px) !important;
+  border-radius: var(--fg-radius-sm) !important;
+  padding: 24px !important;
+}
+
+.quote-icon {
+  color: var(--fg-primary) !important;
+}
+
+.quote-text {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 23px !important;
+  color: var(--fg-text-secondary) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   SIGN IN / SIGN UP — Glass Card
+   ═══════════════════════════════════════════ */
+
+.auth-card,
+[class*="card"][class*="glass"],
+.signin-card,
+.signup-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(6px) !important;
+  border-radius: var(--fg-radius-card-lg) !important;
+  box-shadow: var(--fg-shadow-card-heavy) !important;
+  padding: 40px 32px 32px !important;
+}
+
+/* Tab Switcher */
+.tab-switcher,
+.auth-tabs {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 6px !important;
+}
+
+.tab-switcher .tab.active,
+.auth-tabs .tab.active {
+  background: var(--fg-bg-white) !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  font-weight: 700 !important;
+  color: var(--fg-dark-green) !important;
+}
+
+/* Form Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  background: var(--fg-bg-input) !important;
+  border: 1px solid var(--fg-border-input) !important;
+  border-radius: var(--fg-radius-card-lg) !important;
+  padding: 18px 24px !important;
+  font-family: 'Lexend', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  color: var(--fg-text-primary) !important;
+  transition: border-color 0.2s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--fg-accent-green) !important;
+  box-shadow: 0 0 0 3px rgba(141, 180, 142, 0.15) !important;
+}
+
+input::placeholder {
+  color: #8E938E !important;
+  font-weight: 400 !important;
+}
+
+/* Form Labels */
+label,
+.form-label,
+.field-label {
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase !important;
+  color: var(--fg-text-secondary) !important;
+}
+
+/* Action Buttons (Submit, Sign In, etc.) */
+.btn-action,
+.btn-submit,
+button[type="submit"],
+.action-btn {
+  background: var(--fg-gradient-btn-alt) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+  border: none !important;
+  padding: 16px 0 !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: var(--fg-bg-white) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Social Buttons */
+.btn-google,
+.social-btn.google {
+  background: var(--fg-bg-white) !important;
+  border: 2px solid rgba(0, 0, 0, 0.05) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  font-weight: 700 !important;
+  color: #121412 !important;
+}
+
+.btn-apple,
+.social-btn.apple {
+  background: #121412 !important;
+  border-radius: var(--fg-radius-pill) !important;
+  color: var(--fg-bg-white) !important;
+  font-weight: 700 !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   LOG VITALS PAGE — Figma Spec
+   ═══════════════════════════════════════════ */
+
+.log-vitals-screen .section-title,
+.log-vitals-main h2 {
+  font-weight: 400 !important;
+  font-size: 36px !important;
+  line-height: 40px !important;
+  letter-spacing: -1.8px !important;
+  color: var(--fg-text-primary) !important;
+}
+
+/* Vitals Input Cards */
+.vitals-input-card,
+.log-card {
+  background: var(--fg-bg-card) !important;
+  border-radius: var(--fg-radius-card) !important;
+  padding: 32px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.vitals-input-card .icon-circle,
+.log-card .icon-bg {
+  background: var(--fg-bg-white) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 12px !important;
+}
+
+/* Stress Slider */
+.stress-slider,
+.slider-track {
+  background: var(--fg-gradient-stress) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  height: 8px !important;
+}
+
+.slider-thumb,
+input[type="range"]::-webkit-slider-thumb {
+  background: var(--fg-bg-white) !important;
+  border: 3px solid var(--fg-dark-green) !important;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Submit Button */
+.submit-btn,
+.log-submit {
+  background: var(--fg-gradient-btn) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+  border: none !important;
+  padding: 20px !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: var(--fg-bg-white) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   KICK COUNTER PAGE — Figma Spec
+   ═══════════════════════════════════════════ */
+
+.kick-btn,
+.kick-counter-btn {
+  background: var(--fg-gradient-kick) !important;
+  box-shadow: var(--fg-shadow-kick) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  border: none !important;
+  width: 224px !important;
+  height: 224px !important;
+}
+
+.kick-btn:active,
+.kick-counter-btn:active {
+  transform: scale(0.93) !important;
+  box-shadow: var(--fg-shadow-btn) !important;
+}
+
+.kick-count-display {
+  font-weight: 800 !important;
+  font-size: 128px !important;
+  line-height: 128px !important;
+  letter-spacing: -6.4px !important;
+  color: var(--fg-dark-green) !important;
+}
+
+.daily-goal-card {
+  background: var(--fg-bg-card) !important;
+  border-radius: var(--fg-radius-card) !important;
+  padding: 40px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.goal-progress-track {
+  background: #C4EDC4 !important;
+  border-radius: var(--fg-radius-pill) !important;
+  height: 12px !important;
+}
+
+.goal-progress-fill {
+  background: var(--fg-dark-green) !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   MEDICAL HISTORY — Timeline Style
+   ═══════════════════════════════════════════ */
+
+.timeline-icon,
+.history-icon {
+  background: var(--fg-accent-green) !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 12px !important;
+}
+
+.timeline-icon i,
+.timeline-icon svg,
+.history-icon i,
+.history-icon svg {
+  color: #234629 !important;
+  stroke: #234629 !important;
+}
+
+.timeline-line,
+.vertical-divider {
+  background: #C2C8BE !important;
+  opacity: 0.3 !important;
+  width: 2px !important;
+}
+
+.date-pill,
+.history-date {
+  background: var(--fg-bg-pill) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  color: var(--fg-text-warm) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 4px 12px !important;
+}
+
+.history-card,
+.timeline-card {
+  background: var(--fg-bg-white) !important;
+  border: 1px solid var(--fg-border-subtle) !important;
+  box-shadow: var(--fg-shadow-xs) !important;
+  border-radius: var(--fg-radius-card) !important;
+  padding: 24px !important;
+}
+
+/* Status Tags */
+.tag-normal,
+.status-normal {
+  background: var(--fg-status-green-bg) !important;
+  color: var(--fg-status-green-text) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 4px 12px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+
+.tag-alert,
+.status-alert {
+  background: var(--fg-status-red-bg) !important;
+  color: var(--fg-status-red-text) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 4px 12px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+
+.tag-info,
+.status-info {
+  background: var(--fg-status-brown-bg) !important;
+  color: var(--fg-status-brown-text) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  padding: 4px 12px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+
+/* Metric Pills in History Cards */
+.metric-pill {
+  background: var(--fg-bg-card) !important;
+  border-radius: var(--fg-radius-tag) !important;
+  padding: 8px 16px !important;
+}
+
+.metric-pill .label {
+  font-weight: 700 !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  color: var(--fg-text-warm) !important;
+  opacity: 0.7 !important;
+}
+
+.metric-pill .value {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  color: var(--fg-text-primary) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   BLUETOOTH / DEVICE CONNECTION
+   ═══════════════════════════════════════════ */
+
+.device-card {
+  background: var(--fg-bg-white) !important;
+  border-radius: var(--fg-radius-card) !important;
+  box-shadow: var(--fg-shadow-card) !important;
+  padding: 24px !important;
+  border: none !important;
+}
+
+.device-icon-circle {
+  border-radius: var(--fg-radius-card-xl) !important;
+  padding: 0 !important;
+}
+
+.connect-btn {
+  border: 1px solid rgba(172, 173, 173, 0.3) !important;
+  border-radius: var(--fg-radius-pill) !important;
+  background: transparent !important;
+  color: var(--fg-accent-green) !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  padding: 8px 24px !important;
+}
+
+.scanning-ring {
+  border: 2px solid var(--fg-accent-green) !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+.scanning-inner {
+  background: var(--fg-light-green-bg) !important;
+  backdrop-filter: blur(6px) !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+.why-connect-card {
+  background: var(--fg-light-green-bg) !important;
+  border-radius: var(--fg-radius-card-xl) !important;
+  padding: 32px !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   GENERIC OVERRIDES — All Other Cards
+   ═══════════════════════════════════════════ */
+
+/* Any remaining skeuomorphic shadows/borders */
+[class*="card"],
+[class*="Card"] {
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+}
+
+/* Link colors */
+a {
+  color: var(--fg-dark-green) !important;
+  text-decoration: none !important;
+}
+
+/* Selection */
+::selection {
+  background: rgba(109, 161, 113, 0.3) !important;
+  color: var(--fg-text-primary) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(141, 180, 142, 0.3) !important;
+  border-radius: var(--fg-radius-pill) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(141, 180, 142, 0.5) !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   WARM ACCENT TEXT — Figma's #80543B
+   ═══════════════════════════════════════════ */
+
+.subtitle-warm,
+.sub-label,
+.days-left,
+.track-markers span {
+  color: var(--fg-text-warm) !important;
+}

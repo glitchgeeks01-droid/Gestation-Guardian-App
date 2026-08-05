@@ -7,6 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <meta name="theme-color" content="#FAF9F6">
 </head>
 <body class="reminders-body">
 
@@ -59,21 +61,21 @@
 
     </main>
 
-    <!-- Add Reminder Modal (Enhanced Style) -->
-    <div id="add-reminder-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(12px);z-index:100;align-items:center;justify-content:center;padding:20px;">
-      <div style="background:#FAF9F6;padding:32px;border-radius:48px;width:100%;max-width:340px;box-shadow:0 12px 48px rgba(0,0,0,0.15);">
-        <h3 style="margin:0 0 20px;color:#1A1C1A;font-size:20px;font-family:'Lexend';font-weight:600;">New Reminder</h3>
-        <div style="margin-bottom:16px;">
-          <label style="display:block;font-size:12px;font-weight:700;color:#5F645F;margin-bottom:8px;letter-spacing:1px;">LABEL</label>
-          <input type="text" id="new-reminder-title" placeholder="e.g. Vitamins" style="width:100%;padding:16px;border-radius:16px;border:1px solid rgba(0,0,0,0.05);background:#FFFFFF;font-family:'Lexend';">
+    <!-- Add Reminder Modal -->
+    <div id="add-reminder-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-card">
+        <h3 class="modal-title">New Reminder</h3>
+        <div class="modal-input-group">
+          <label class="modal-label">LABEL</label>
+          <input type="text" id="new-reminder-title" class="modal-input" placeholder="e.g. Vitamins">
         </div>
-        <div style="margin-bottom:32px;">
-          <label style="display:block;font-size:12px;font-weight:700;color:#5F645F;margin-bottom:8px;letter-spacing:1px;">TIME</label>
-          <input type="time" id="new-reminder-time" style="width:100%;padding:16px;border-radius:16px;border:1px solid rgba(0,0,0,0.05);background:#FFFFFF;font-family:'Lexend';">
+        <div class="modal-input-group">
+          <label class="modal-label">TIME</label>
+          <input type="time" id="new-reminder-time" class="modal-input">
         </div>
-        <div style="display:flex;gap:12px;">
-          <button id="btn-cancel-reminder" style="flex:1;padding:16px;border-radius:9999px;background:rgba(0,0,0,0.05);color:#424841;font-weight:600;border:none;cursor:pointer;font-family:'Lexend';">Cancel</button>
-          <button id="btn-save-reminder" style="flex:1;padding:16px;border-radius:9999px;background:#436746;color:#fff;font-weight:600;border:none;cursor:pointer;font-family:'Lexend';">Save</button>
+        <div class="modal-actions">
+          <button id="btn-cancel-reminder" class="modal-btn-cancel">Cancel</button>
+          <button id="btn-save-reminder" class="modal-btn-save">Save</button>
         </div>
       </div>
     </div>
@@ -82,7 +84,3 @@
 
 <script src='script.js'></script></body>
 </html>
-
-
-
-

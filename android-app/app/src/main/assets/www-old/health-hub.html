@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - My Health Hub</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="stylesheet" href="mobile-patch.css">
+  <link rel="stylesheet" href="figma-theme.css">
+</head>
+<body class="hub-body">
+
+  <div class="hub-screen">
+    
+    <!-- Top App Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg>
+        </div>
+        <h1 class="header-title">Gestation Guardian</h1>
+      </div>
+      <div class="avatar-small">
+        <img src="https://i.pravatar.cc/150?img=47" alt="User Profile">
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <main class="hub-main">
+      
+      <!-- Page Header -->
+      <section class="page-header">
+        <div class="header-text">
+          <h2 class="page-title">My Health</h2>
+          <p class="sync-info">Wednesday, October 25 • <span class="sync-status">Last synced: 2 mins ago</span></p>
+        </div>
+        <button class="btn-sync">Sync Devices</button>
+      </section>
+
+      <!-- Blood Pressure Section -->
+      <section class="hub-card bp-card">
+        <div class="card-header-split">
+          <div class="card-title-group">
+            <svg width="20" height="18" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+            <span class="card-label">BLOOD PRESSURE</span>
+          </div>
+          <div class="threshold-label">
+            <span>THRESHOLD 140/90</span>
+            <div class="threshold-line"></div>
+          </div>
+        </div>
+        
+        <div class="bp-reading">
+          <span class="bp-value">118/76</span>
+          <span class="bp-unit">mmHg</span>
+          <span class="status-pill normal">Normal</span>
+        </div>
+
+        <!-- Fake Chart Area -->
+        <div class="chart-area-mockup">
+          <div class="chart-line"></div>
+          <div class="x-axis-labels">
+            <span>Mon</span><span>Tue</span><span>Wed</span>
+            <span class="active-day">Thu</span>
+            <span>Fri</span><span>Sat</span><span class="active-day">Sun</span>
+          </div>
+          <div class="today-marker"></div>
+        </div>
+      </section>
+
+      <!-- Fetal Kick Counter Action Card -->
+      <section class="kick-action-card">
+        <div class="kick-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+          </svg>
+        </div>
+        <span class="card-label light">KICK COUNTER</span>
+        <div class="kick-count">0</div>
+        <span class="kick-goal">Goal: 10 kicks in 2hrs</span>
+        <button class="btn-tap-kick" id="hub-kick-btn">TAP ON KICK</button>
+        <div class="timer-info">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FAF9F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Active timer: 42m remaining</span>
+        </div>
+      </section>
+
+      <!-- Heart Rate & HRV Sparklines -->
+      <section class="sparkline-card">
+        <div class="card-header-split">
+          <div class="card-title-group">
+            <span class="card-label">HEART RATE</span>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </div>
+        <div class="metric-reading">
+          <span class="metric-val green">78</span>
+          <span class="metric-unit">BPM</span>
+        </div>
+        <div class="sparkline hr-sparkline"></div>
+      </section>
+
+      <section class="sparkline-card">
+        <div class="card-header-split">
+          <div class="card-title-group">
+            <span class="card-label">HRV</span>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <div class="metric-reading">
+          <span class="metric-val brown">42</span>
+          <span class="metric-unit">ms</span>
+        </div>
+        <div class="sparkline hrv-sparkline"></div>
+      </section>
+
+      <!-- SpO2 -->
+      <section class="hub-card spo2-card">
+        <div class="card-header-split">
+          <div class="card-title-group">
+            <span class="card-label">SPO2</span>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>
+        </div>
+        <div class="metric-reading">
+          <span class="metric-val green">98</span>
+          <span class="metric-unit">%</span>
+        </div>
+        <div class="spo2-footer">
+          <div class="status-dot-label">
+            <div class="dot green-dot"></div>
+            <span>Optimal range</span>
+          </div>
+          <span class="avg-label">97-99% avg</span>
+        </div>
+      </section>
+
+      <!-- Weight Tracking -->
+      <section class="hub-card weight-card">
+        <div class="card-header-split">
+          <div class="card-title-group">
+            <span class="card-label">WEIGHT TRACKING</span>
+          </div>
+          <button class="btn-text-link">+ Log Weight</button>
+        </div>
+        
+        <div class="weight-metrics-grid">
+          <div class="metric-col">
+            <span class="metric-sublabel">CURRENT</span>
+            <div class="metric-reading">
+              <span class="metric-val black">68.4</span>
+              <span class="metric-unit">kg</span>
+            </div>
+            <div class="trend-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              <span>+0.4kg this week</span>
+            </div>
+          </div>
+          
+          <div class="metric-col">
+            <span class="metric-sublabel">BMI</span>
+            <div class="metric-reading">
+              <span class="metric-val black">23.2</span>
+            </div>
+            <span class="category-label">Normal Category</span>
+          </div>
+        </div>
+
+        <div class="growth-curve-area">
+          <div class="curve-path"></div>
+          <div class="curve-target"></div>
+          <span class="target-label">Target Curve</span>
+        </div>
+      </section>
+
+      <!-- Sleep & Activity Row -->
+      <div class="split-cards-row">
+        
+        <!-- Sleep Card -->
+        <div class="mini-hub-card">
+          <div class="mini-icon-ring brown-ring">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </div>
+          <div class="mini-content">
+            <span class="card-label">SLEEP QUALITY</span>
+            <div class="metric-reading">
+              <span class="metric-val black">7.5</span>
+              <span class="metric-unit">hrs last night</span>
+            </div>
+            <span class="status-pill beige">Good Recovery</span>
+          </div>
+        </div>
+
+        <!-- Activity Card -->
+        <div class="mini-hub-card">
+          <div class="mini-icon-ring green-ring">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div class="mini-content">
+            <span class="card-label">DAILY ACTIVITY</span>
+            <div class="metric-reading">
+              <span class="metric-val black">4,500</span>
+              <span class="metric-unit">/ 7,500 steps</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: 60%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Hydration Tracker -->
+      <section class="hub-card hydration-card">
+        <div class="hydration-header">
+          <h3>Hydration Tracker</h3>
+          <p>Check urine color for hydration status</p>
+        </div>
+        
+        <div class="color-selector">
+          <label class="color-option">
+            <input type="radio" name="hydration" value="1" checked>
+            <div class="color-swatch" style="background: #FAF9F6;">
+              <svg class="check-mark" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+          </label>
+          <label class="color-option"><input type="radio" name="hydration" value="2"><div class="color-swatch" style="background: #FFFCE6;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="3"><div class="color-swatch" style="background: #FFF9CC;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="4"><div class="color-swatch" style="background: #FFF599;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="5"><div class="color-swatch" style="background: #FFEC66;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="6"><div class="color-swatch" style="background: #FFDF33;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="7"><div class="color-swatch" style="background: #FFD200;"></div></label>
+          <label class="color-option"><input type="radio" name="hydration" value="8"><div class="color-swatch" style="background: #D4AF37;"></div></label>
+        </div>
+
+        <div class="hydration-status-banner">
+          Perfectly Hydrated — You're doing great!
+        </div>
+      </section>
+
+      <!-- Lab Results -->
+      <section class="hub-card list-card">
+        <div class="card-header-split">
+          <h3>Recent Lab Results</h3>
+          <button class="btn-text-link">View All</button>
+        </div>
+
+        <div class="list-item">
+          <div class="item-text">
+            <h4>Platelet Count</h4>
+            <span class="subtext">Last checked Oct 12</span>
+          </div>
+          <div class="item-value">
+            <span class="val-text">214,000 /μL</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="item-text">
+            <h4>Hemoglobin</h4>
+            <span class="subtext">Last checked Oct 12</span>
+          </div>
+          <div class="item-value">
+            <span class="val-text">12.1 g/dL</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          </div>
+        </div>
+
+        <div class="list-item">
+          <div class="item-text">
+            <h4>ALT / AST</h4>
+            <span class="subtext">Last checked Oct 12</span>
+          </div>
+          <div class="item-value">
+            <span class="val-text">18 / 22 U/L</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8DB48E" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Medication Log -->
+      <section class="hub-card list-card">
+        <div class="card-header-split">
+          <h3>Medication Log</h3>
+          <span class="card-label green">Daily Checklist</span>
+        </div>
+
+        <label class="med-item checked">
+          <div class="med-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B1F11" stroke-width="2"><rect x="4" y="7" width="16" height="10" rx="5" ry="5"></rect><line x1="12" y1="7" x2="12" y2="17"></line></svg>
+          </div>
+          <div class="med-text">
+            <h4>Prenatal Vitamin</h4>
+            <span class="subtext">1 TABLET • MORNING</span>
+          </div>
+          <input type="checkbox" checked>
+          <div class="custom-checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </label>
+
+        <label class="med-item">
+          <div class="med-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B1F11" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          </div>
+          <div class="med-text">
+            <h4>Iron Supplement</h4>
+            <span class="subtext">1 TABLET • EVENING</span>
+          </div>
+          <input type="checkbox">
+          <div class="custom-checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </label>
+
+        <label class="med-item">
+          <div class="med-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B1F11" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+          </div>
+          <div class="med-text">
+            <h4>DHA Omega-3</h4>
+            <span class="subtext">1 SOFTGEL • EVENING</span>
+          </div>
+          <input type="checkbox">
+          <div class="custom-checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </label>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (Matching previous screens) -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      
+      <a href="health-hub.html" class="nav-item active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#436746"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Health</span>
+      </a>
+
+      <!-- Floating Action Button -->
+      <div class="nav-fab-container" onclick="location.href='log-vitals.html'">
+        <button class="nav-fab">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <span class="fab-label">Log</span>
+      </div>
+
+      <a href="care-guide.html" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+        <span>Learn</span>
+      </a>
+
+      <a href="profile.html" class="nav-item">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#80543B" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+  </div>
+
+<script src='script.js'></script></body>
+</html>
+
+
+
+

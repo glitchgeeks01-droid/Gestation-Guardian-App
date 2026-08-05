@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Gestation Guardian</title>
+    
+    <!-- Meta tags for PWA / Mobile Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FFFFFF">
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Design System CSS -->
+    
+    <!-- Inline styles to hide splash screen later -->
+    <style>
+        #app-root {
+            width: 100%;
+            height: 100vh; /* Fallback */
+            height: 100dvh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--clr-primary, #6DA171);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+  <script type="module" src="./assets/index-DqVKc7tA.js"></script>
+  <link rel="stylesheet" href="./assets/index-C3rYf6PD.css">
+  <script type="module">import'data:text/javascript,if(!import.meta.resolve)throw Error("import.meta.resolve not supported")';import.meta.url;import("_").catch(()=>1);(async function*(){})().next();window.__vite_is_modern_browser=true</script>
+  <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
+</head>
+<body>
+
+    <!-- Initial Splash Screen -->
+    <div id="splash-screen">
+        <!-- We will put a logo here -->
+        <h1 style="color: white; font-family: sans-serif; font-weight: 900; font-size: 32px; margin: 0;">Gestation Guardian</h1>
+    </div>
+
+    <!-- The Single Page App Root where all templates will be injected -->
+    <div id="app-root"></div>
+
+    <!-- Global UI Elements (Modals, Toasts, Bottom Sheets, Bottom Nav) -->
+    <div id="ui-container">
+        <!-- Toast Container -->
+        <div id="toast-container" class="toast-container"></div>
+        
+        <!-- Bottom Nav (Hidden on auth pages) -->
+        <nav id="bottom-nav" class="bottom-nav hidden">
+            <a href="#/dashboard" class="nav-item" data-target="dashboard">
+                <i data-lucide="home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#/health-hub" class="nav-item" data-target="health-hub">
+                <i data-lucide="activity"></i>
+                <span>Health</span>
+            </a>
+            <a href="#/log" class="nav-item nav-item-fab" data-target="log" id="nav-log-btn">
+                <div class="fab-inner">
+                    <i data-lucide="plus"></i>
+                </div>
+            </a>
+            <a href="#/care-guide" class="nav-item" data-target="care-guide">
+                <i data-lucide="book-open"></i>
+                <span>Learn</span>
+            </a>
+            <a href="#/profile" class="nav-item" data-target="profile">
+                <i data-lucide="user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+        
+        <!-- Bottom Sheet Overlay for Logging Actions -->
+        <div id="log-sheet-overlay" class="sheet-overlay hidden">
+            <div class="bottom-sheet">
+                <div class="sheet-handle"></div>
+                <h3 class="sheet-title">Log Data</h3>
+                <div class="sheet-actions">
+                    <a href="#/log-bp" class="sheet-btn">
+                        <div class="icon-wrapper bg-green-tint"><i data-lucide="heart-pulse"></i></div>
+                        <span>Blood Pressure</span>
+                    </a>
+                    <a href="#/kick-counter" class="sheet-btn">
+                        <div class="icon-wrapper bg-green-tint"><i data-lucide="baby"></i></div>
+                        <span>Kick Counter</span>
+                    </a>
+                    <a href="#/contractions" class="sheet-btn">
+                        <div class="icon-wrapper bg-green-tint"><i data-lucide="timer"></i></div>
+                        <span>Contractions</span>
+                    </a>
+                    <a href="#/log-vitals" class="sheet-btn">
+                        <div class="icon-wrapper bg-green-tint"><i data-lucide="activity"></i></div>
+                        <span>Other Vitals</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Draggable AI Widget -->
+        <div id="ai-bot-fab" style="position: fixed; bottom: 90px; right: 24px; width: 56px; height: 56px; background: var(--clr-bg-white); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 24px rgba(232, 84, 122, 0.3); z-index: 900; cursor: pointer; border: 2px solid #E8547A; color: #E8547A; transition: transform 0.1s; touch-action: none;">
+            <i data-lucide="bot" style="width: 28px; height: 28px;"></i>
+        </div>
+
+        <!-- AI Chat Full Screen Overlay -->
+        <div id="ai-chat-overlay" class="sheet-overlay hidden" style="z-index: 1000;">
+            <div class="bottom-sheet" style="height: 90dvh; display: flex; flex-direction: column; padding: 0; border-radius: 32px 32px 0 0;">
+                <div class="sheet-handle" style="margin-top: 12px; margin-bottom: 0;"></div>
+                
+                <header style="display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--clr-divider);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; background: rgba(232, 84, 122, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #E8547A;">
+                            <i data-lucide="bot"></i>
+                        </div>
+                        <div>
+                            <h2 style="font-size: 16px; font-weight: 700; color: var(--clr-text-heading); margin-bottom: 2px;">Gestation AI</h2>
+                            <p style="font-size: 12px; color: var(--clr-text-muted);">Always here to help</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" style="width: 32px; height: 32px; padding: 0; border-radius: 50%;" id="close-ai-chat">
+                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </header>
+
+                <div id="global-chat-history" style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #fafafa;">
+                    <!-- Welcome Msg -->
+                    <div style="display: flex; gap: 12px; align-items: flex-start; max-width: 85%;">
+                        <div style="width: 32px; height: 32px; background: #E8547A; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                            <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div style="background: white; padding: 16px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider);">
+                            <p style="font-size: 14px; color: var(--clr-text-body); line-height: 1.5;">
+                                Hi Sarah! I'm your Gestation AI assistant. How can I help you today?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 16px 24px; background: white; border-top: 1px solid var(--clr-divider);">
+                    <form id="global-chat-form" style="display: flex; gap: 12px; align-items: flex-end;">
+                        <div style="flex: 1; position: relative;">
+                            <textarea id="global-chat-input" class="input-form" rows="1" placeholder="Ask anything..." style="min-height: 48px; max-height: 120px; resize: none; border-radius: 24px; padding: 14px 20px; overflow-y: hidden;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="background: #E8547A; border-color: #E8547A; width: 48px; height: 48px; border-radius: 50%; padding: 0; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                            <i data-lucide="send" style="width: 20px; height: 20px; transform: translateX(-2px) translateY(1px);"></i>
+                        </button>
+                    </form>
+                    <p style="text-align: center; font-size: 10px; color: var(--clr-text-muted); margin-top: 8px;">
+                        Gestation AI provides guidance, not medical diagnosis.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3rd Party Libs -->
+    <script src="https://unpkg.com/lucide@latest"></script> <!-- We'll replace with local SVGs later if needed, but this is fine for dev -->
+
+    <!-- Core App Logic -->
+    
+    <script>
+        // Initialize Lucide icons for the static parts
+        lucide.createIcons();
+    </script>
+  <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+  <script nomodule id="vite-legacy-polyfill" src="./assets/polyfills-legacy-C5NuuCx_.js"></script>
+  <script nomodule id="vite-legacy-entry" data-src="./assets/index-legacy-CnpFEEHo.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
+</body>
+</html>

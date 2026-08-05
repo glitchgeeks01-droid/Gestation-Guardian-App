@@ -1,0 +1,106 @@
+<!-- pages/signup.html -->
+<div id="page-signup" class="page">
+    
+    <div class="signup-content">
+        <!-- Solid White Card -->
+        <div class="card-white w-full" style="padding-top: 40px;">
+            
+            <div class="signup-header">
+                <!-- Placeholder for logo -->
+                <div style="width: 80px; height: 80px; background: var(--clr-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px;">
+                    <i data-lucide="shield" style="color: white; width: 40px; height: 40px;"></i>
+                </div>
+                <h2>Create Your<br>Safe Space</h2>
+                <p style="font-weight: 500; font-size: 16px; color: var(--clr-text-body); margin-top: 12px;">Let's get started on your journey</p>
+            </div>
+
+            <form id="form-signup" class="signup-form" onsubmit="event.preventDefault(); Auth.handleSignUp();">
+                
+                <!-- Full Name -->
+                <div class="input-group">
+                    <label class="label">Full Name</label>
+                    <div style="position: relative;">
+                        <input type="text" id="su-name" class="input-form" placeholder="Eleanor Vance" required>
+                        <i data-lucide="user" class="input-icon-right" style="pointer-events: none;"></i>
+                    </div>
+                </div>
+
+                <!-- Phone & OTP Section -->
+                <div class="input-group">
+                    <label class="label">Phone Number</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="tel" id="su-phone" class="input-form" style="flex: 1;" placeholder="+91 98765 43210" required>
+                        <button type="button" class="btn btn-primary" style="width: auto; padding: 0 24px; height: 58px; font-size: 14px;" onclick="Auth.sendOTP()">Send</button>
+                    </div>
+                </div>
+
+                <div id="otp-section" class="input-group hidden">
+                    <label class="label">Enter OTP</label>
+                    <div class="otp-group">
+                        <input type="text" maxlength="1" class="input-otp" data-index="1">
+                        <input type="text" maxlength="1" class="input-otp" data-index="2">
+                        <input type="text" maxlength="1" class="input-otp" data-index="3">
+                        <input type="text" maxlength="1" class="input-otp" data-index="4">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="input-group">
+                    <label class="label">Email</label>
+                    <input type="email" id="su-email" class="input-form" placeholder="name@example.com" required>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group">
+                    <label class="label">Password</label>
+                    <div style="position: relative;">
+                        <input type="password" id="su-password" class="input-form" placeholder="Create a password" required>
+                        <button type="button" class="input-icon-right" onclick="Auth.togglePassword('su-password')">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Date of Birth -->
+                <div class="input-group">
+                    <label class="label">Date of Birth</label>
+                    <input type="date" id="su-dob" class="input-form" required>
+                </div>
+
+                <!-- LMP / EDD -->
+                <div class="input-group">
+                    <label class="label">Last Menstrual Period (LMP)</label>
+                    <input type="date" id="su-lmp" class="input-form" onchange="Auth.calculateEDD()" required>
+                    <p id="su-edd-display" style="font-size: 12px; color: var(--clr-text-muted); margin-top: 4px;"></p>
+                </div>
+
+                <!-- Blood Group -->
+                <div class="input-group">
+                    <label class="label">Blood Group</label>
+                    <select id="su-blood" class="input-form" required>
+                        <option value="" disabled selected>Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-action" style="margin-top: 16px;">
+                    Continue to Health Profile
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 24px;">
+                <p style="font-size: 14px; color: var(--clr-text-muted);">
+                    Already have an account? <a href="#/signin" style="color: var(--clr-primary); font-weight: 700;">Sign In</a>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>

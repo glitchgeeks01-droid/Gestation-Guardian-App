@@ -7,6 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <meta name="theme-color" content="#FAF9F6">
 </head>
 <body class="dashboard-body">
 
@@ -53,7 +56,7 @@
             <h2 class="week-number">Week 24</h2>
           </div>
           <div class="size-pill">
-            <span class="icon">🌽</span>
+            <span class="icon"></span>
             <span class="size-text">Ear of corn</span>
           </div>
         </div>
@@ -98,21 +101,21 @@
         <h3 class="section-title">Today's Vitals</h3>
         <div class="vitals-scroll">
           <div class="vital-card">
-            <div class="vital-icon heart-icon">❤️</div>
+            <div class="vital-icon heart-icon"><i data-lucide="heart-pulse"></i></div>
             <div class="vital-data">
               <span class="vital-val" id="dash-bp">118/76</span>
               <span class="vital-label">BLOOD PRESSURE</span>
             </div>
           </div>
           <div class="vital-card">
-            <div class="vital-icon weight-icon">⚖️</div>
+            <div class="vital-icon weight-icon"><i data-lucide="scale"></i></div>
             <div class="vital-data">
               <span class="vital-val" id="dash-weight">65<small>kg</small></span>
               <span class="vital-label">CURRENT WEIGHT</span>
             </div>
           </div>
           <div class="vital-card">
-            <div class="vital-icon sleep-icon">🌙</div>
+            <div class="vital-icon sleep-icon"><i data-lucide="moon"></i></div>
             <div class="vital-data">
               <span class="vital-val" id="dash-sleep">7.5<small>hrs</small></span>
               <span class="vital-label">SLEEP QUALITY</span>
@@ -126,29 +129,29 @@
       </section>
 
       <!-- Bento Action Grid -->
-      <section class="action-grid">
+      <section class="bento-grid">
         <div class="bento-card highlight" onclick="location.href='log-bp.html'">
-          <div class="bento-icon">🩺</div>
+          <div class="bento-icon"><i data-lucide="stethoscope"></i></div>
           <span>Log BP</span>
         </div>
         <div class="bento-card" onclick="location.href='kick-counter.html'">
-          <div class="bento-icon">👶</div>
+          <div class="bento-icon"><i data-lucide="baby"></i></div>
           <span>Kick Counter</span>
         </div>
         <div class="bento-card" onclick="location.href='log-vitals.html'">
-          <div class="bento-icon">📊</div>
+          <div class="bento-icon"><i data-lucide="activity"></i></div>
           <span>Log Vital Data</span>
         </div>
         <div class="bento-card" onclick="location.href='health-hub.html'">
-          <div class="bento-icon">🤖</div>
+          <div class="bento-icon"><i data-lucide="bot"></i></div>
           <span>AI Assistant</span>
         </div>
         <div class="bento-card" onclick="location.href='assessment-report.html'">
-          <div class="bento-icon">📄</div>
+          <div class="bento-icon"><i data-lucide="file-text"></i></div>
           <span>Reports</span>
         </div>
         <div class="bento-card highlight" onclick="location.href='reminders.html'">
-          <div class="bento-icon">🔔</div>
+          <div class="bento-icon"><i data-lucide="bell"></i></div>
           <span>Reminders</span>
         </div>
       </section>
@@ -170,11 +173,11 @@
     <!-- Bottom Nav Bar -->
     <nav class="bottom-nav">
       <a href="dashboard.html" class="nav-item active">
-        <div class="nav-icon">🏠</div>
+        <div class="nav-icon"><i data-lucide="home"></i></div>
         <span>HOME</span>
       </a>
       <a href="health-hub.html" class="nav-item">
-        <div class="nav-icon">🩺</div>
+        <div class="nav-icon"><i data-lucide="stethoscope"></i></div>
         <span>HEALTH</span>
       </a>
       <div class="nav-fab-container" onclick="location.href='log-vitals.html'">
@@ -184,16 +187,17 @@
         <span class="fab-label">LOG</span>
       </div>
       <a href="care-guide.html" class="nav-item">
-        <div class="nav-icon">📚</div>
+        <div class="nav-icon"><i data-lucide="book-open"></i></div>
         <span>LEARN</span>
       </a>
       <a href="profile.html" class="nav-item">
-        <div class="nav-icon">👤</div>
+        <div class="nav-icon"><i data-lucide="user"></i></div>
         <span>PROFILE</span>
       </a>
     </nav>
 
   </div>
 
-<script src='script.js'></script></body>
+<script src='script.js'></script>  <script>lucide.createIcons();</script>
+</body>
 </html>

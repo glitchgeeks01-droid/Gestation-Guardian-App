@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Gestation Guardian - Questionnaire Q7</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-skeuomorphic.css">
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="stylesheet" href="mobile-patch.css">
+  <link rel="stylesheet" href="figma-theme.css">
+</head>
+<body class="q7-body">
+
+  <div class="q-screen">
+    <div class="q-bg-gradient"></div>
+    <div class="q-bg-illustration"></div>
+
+    <header class="q-header">
+      <div class="q-top-bar">
+        <button class="q-back-btn" onclick="location.href='q6-risk-score.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#436746" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div class="q-title-group">
+          <h1>Gestosis Risk Score</h1>
+          <p>Assessing your preeclampsia risk level</p>
+        </div>
+      </div>
+
+      <div class="q-progress-section">
+        <span class="q-step-label">STEP 7 OF 12</span>
+        <div class="q-progress-track">
+          <div class="q-progress-fill" style="width: 58.33%;"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="q-main">
+      <div class="q-card">
+        <div class="q-card-header">
+          <div class="q-badge">
+            <span class="q-badge-text">Q7 OF 12</span>
+            <div class="q-badge-line"></div>
+          </div>
+        </div>
+
+        <h2 class="q-question">What is your current height and weight?</h2>
+
+        <div class="q-input-container" style="margin-bottom:12px;">
+          <input type="number" placeholder="000" id="q7-height" min="100" max="250">
+          <span class="q-input-unit">cm</span>
+        </div>
+
+        <div class="q-input-container">
+          <input type="number" placeholder="00" id="q7-weight" min="30" max="200">
+          <span class="q-input-unit">kg</span>
+        </div>
+
+        <div class="q-helper-box" style="background:rgba(141,180,142,0.1); border-color:rgba(141,180,142,0.2);">
+          <div class="icon"></div>
+          <p id="bmi-result">Enter your details to calculate BMI. BMI ≥25 is associated with higher risk.</p>
+        </div>
+      </div>
+
+      <div class="q-actions">
+        <button id="q7-next-btn" class="q-btn-primary" disabled onclick="location.href='q8-risk-score.html'">Next</button>
+        <button class="q-btn-secondary" onclick="location.href='dashboard.html'">Save and Exit</button>
+      </div>
+    </main>
+  </div>
+
+<script src='script.js'></script>
+<script>
+  const hInp = document.getElementById('q7-height');
+  const wInp = document.getElementById('q7-weight');
+  const btn = document.getElementById('q7-next-btn');
+  const res = document.getElementById('bmi-result');
+
+  function update() {
+    const h = parseFloat(hInp.value) / 100;
+    const w = parseFloat(wInp.value);
+    if (h > 1 && w > 30) {
+      const bmi = (w / (h * h)).toFixed(1);
+      res.innerText = `Your calculated BMI is ${bmi}. ` + (bmi >= 25 ? 'This is a risk factor.' : 'This is within normal range.');
+      btn.disabled = false;
+      const a = GG.get('gg_q_answers', {});
+      a.q7_bmi = bmi;
+      GG.set('gg_q_answers', a);
+    } else {
+      res.innerText = 'Enter your details to calculate BMI. BMI ≥25 is associated with higher risk.';
+      btn.disabled = true;
+    }
+  }
+  hInp.addEventListener('input', update);
+  wInp.addEventListener('input', update);
+</script>
+</html>
+
+
+
+
+
+
+

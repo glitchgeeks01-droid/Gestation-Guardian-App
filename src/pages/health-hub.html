@@ -1,0 +1,32 @@
+<!-- pages/health-hub.html -->
+<div id="page-health-hub" class="page">
+    
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                    <i data-lucide="arrow-left"></i>
+                </a>
+                <h1 style="font-size: 20px; color: var(--clr-dark-green);">Health Records</h1>
+            </div>
+            
+            <button onclick="document.getElementById('nav-log-btn').click();" style="background: none; border: none; color: var(--clr-primary); font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                <i data-lucide="plus" style="width: 16px; height: 16px;"></i> Log
+            </button>
+        </div>
+    </header>
+
+    <div style="padding: 80px 24px 100px; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Timeline will be injected here -->
+        <div id="health-records-timeline" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Empty state -->
+            <div id="health-records-empty" style="display: none; text-align: center; padding: 48px 24px; color: var(--clr-text-muted);">
+                <i data-lucide="clipboard-list" style="width: 48px; height: 48px; margin: 0 auto 16px; opacity: 0.5;"></i>
+                <p>No health records logged yet.</p>
+                <button class="btn btn-primary mt-4" style="border-radius: var(--r-pill); display: inline-flex; width: auto; padding: 0 24px;" onclick="document.getElementById('nav-log-btn').click();">Log your first entry</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

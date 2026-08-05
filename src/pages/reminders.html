@@ -1,0 +1,92 @@
+<!-- pages/reminders.html -->
+<div id="page-reminders" class="page" style="padding-bottom: 100px;">
+    <!-- Top App Bar -->
+    <header class="glass-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="App.goBack(); return false;" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h1 style="font-size: 20px; color: var(--clr-dark-green);">Health Reminders</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <div style="padding: 96px 24px 24px; max-width: 512px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+      
+      <!-- Hero / Add Reminder CTA -->
+      <div class="card-info" style="display: flex; flex-direction: column; gap: 16px;">
+        <h2 style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700; z-index: 1;">Organize your wellness routine</h2>
+        <button class="btn btn-primary" style="z-index: 1;" onclick="document.getElementById('add-reminder-modal').style.display='flex'">
+          <i data-lucide="plus"></i> Add Reminder
+        </button>
+        <i data-lucide="bell" class="card-info-bg-icon"></i>
+      </div>
+
+      <!-- Active Schedules Section -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 14px; font-weight: 700; color: var(--clr-text-body-alt); letter-spacing: 1px;">ACTIVE SCHEDULES</h3>
+          <button class="btn-text" id="btn-clear-reminders">Edit all</button>
+        </div>
+
+        <div id="reminders-list" style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Card 1 -->
+          <div class="card-white" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 40px; height: 40px; background: var(--clr-green-10); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+                <i data-lucide="pill"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 16px; font-weight: 600; color: var(--clr-text-heading);">Prenatal Vitamins</h4>
+                <p style="font-size: 14px; color: var(--clr-text-muted); margin-top: 2px;">09:00 AM - Daily</p>
+              </div>
+            </div>
+            <!-- Toggle Switch Mock -->
+            <div style="width: 48px; height: 28px; background: var(--clr-primary); border-radius: 14px; position: relative; cursor: pointer;">
+              <div style="width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; right: 2px; box-shadow: var(--shadow-sm);"></div>
+            </div>
+          </div>
+          
+          <!-- Card 2 -->
+          <div class="card-white" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #3B82F6;">
+                <i data-lucide="droplet"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 16px; font-weight: 600; color: var(--clr-text-heading);">Hydration</h4>
+                <p style="font-size: 14px; color: var(--clr-text-muted); margin-top: 2px;">02:00 PM - Daily</p>
+              </div>
+            </div>
+            <div style="width: 48px; height: 28px; background: var(--clr-border-subtle); border-radius: 14px; position: relative; cursor: pointer;">
+              <div style="width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; box-shadow: var(--shadow-sm);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Add Reminder Modal -->
+    <div id="add-reminder-modal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: flex-end;">
+      <div style="background: var(--clr-bg-white); width: 100%; border-radius: 32px 32px 0 0; padding: 32px 24px 64px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1);">
+        <h3 style="font-size: 20px; font-weight: 700; color: var(--clr-text-heading); margin-bottom: 24px; text-align: center;">New Reminder</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="input-group">
+            <label class="label">Reminder Name</label>
+            <input type="text" id="new-reminder-title" class="input-form" placeholder="e.g. Prenatal Vitamins">
+          </div>
+          <div class="input-group">
+            <label class="label">Time</label>
+            <input type="time" id="new-reminder-time" class="input-form">
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 12px; margin-top: 32px;">
+          <button class="btn btn-secondary" style="flex: 1; height: 56px;" onclick="document.getElementById('add-reminder-modal').style.display='none'">Cancel</button>
+          <button class="btn btn-primary" style="flex: 1; height: 56px;" onclick="document.getElementById('add-reminder-modal').style.display='none'; UI.showToast('Reminder saved', 'success')">Save</button>
+        </div>
+      </div>
+    </div>
+</div>

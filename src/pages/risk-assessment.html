@@ -1,0 +1,199 @@
+<!-- pages/risk-assessment.html -->
+<div id="page-risk-assessment" class="page" style="background: var(--clr-bg-warm);">
+    
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+            <h1 style="font-size: 18px; color: var(--clr-dark-green);">Health Profile</h1>
+        </div>
+    </header>
+
+    <div style="padding: 96px 24px 100px; max-width: 600px; margin: 0 auto;">
+        
+        <div style="text-align: center; margin-bottom: 32px;">
+            <i data-lucide="clipboard-plus" style="width: 48px; height: 48px; color: var(--clr-primary); margin-bottom: 12px;"></i>
+            <h2 style="font-size: 24px;">Let's establish your baseline</h2>
+            <p style="color: var(--clr-text-muted); font-size: 14px; margin-top: 8px;">Please answer these 12 questions to calculate your initial GESTOSIS risk score. Your data is secure.</p>
+        </div>
+        
+        <form id="assessment-form" onsubmit="event.preventDefault(); Assessment.submit();" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Q1: Age -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">1. What is your age?</label>
+                <input type="number" id="q-age" class="input-form" placeholder="e.g., 28" required>
+            </div>
+
+            <!-- Q2: First Pregnancy -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">2. Is this your first pregnancy?</label>
+                <div style="display: flex; gap: 12px;">
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-first-preg" value="yes" style="display: none;" required>
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">Yes</div>
+                    </label>
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-first-preg" value="no" style="display: none;">
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">No</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q3: Prior PE -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">3. Have you had preeclampsia in a previous pregnancy?</label>
+                <div style="display: flex; gap: 12px;">
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-prior-pe" value="yes" style="display: none;" required>
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">Yes</div>
+                    </label>
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-prior-pe" value="no" style="display: none;">
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">No</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q4: Chronic HTN -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">4. Do you have pre-existing (chronic) high blood pressure?</label>
+                <div style="display: flex; gap: 12px;">
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-chronic-htn" value="yes" style="display: none;" required>
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">Yes</div>
+                    </label>
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-chronic-htn" value="no" style="display: none;">
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">No</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q5: Diabetes -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">5. Do you have diabetes?</label>
+                <select id="q-diabetes" class="input-form" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="none">No</option>
+                    <option value="gestational">Gestational Diabetes (Pregnancy-induced)</option>
+                    <option value="type1_2">Type 1 or Type 2 Diabetes</option>
+                </select>
+            </div>
+
+            <!-- Q6: Family History -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">6. Is there a family history of preeclampsia or hypertension?</label>
+                <div style="display: flex; gap: 12px;">
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-family" value="yes" style="display: none;" required>
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">Yes</div>
+                    </label>
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-family" value="no" style="display: none;">
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">No</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q7: BMI -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">7. What is your height and pre-pregnancy weight?</label>
+                <div style="display: flex; gap: 16px;">
+                    <div style="flex: 1; position: relative;">
+                        <input type="number" id="q-height" class="input-form" placeholder="160" required style="padding-right: 40px;">
+                        <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">cm</span>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <input type="number" id="q-weight" class="input-form" placeholder="65" required style="padding-right: 40px;">
+                        <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted);">kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q8: Booking BP -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">8. What was your booking (initial) blood pressure?</label>
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <input type="number" id="q-booking-sys" class="input-form" placeholder="SYS" style="flex: 1; text-align: center;">
+                    <span style="color: var(--clr-text-muted);">/</span>
+                    <input type="number" id="q-booking-dia" class="input-form" placeholder="DIA" style="flex: 1; text-align: center;">
+                </div>
+                <p style="font-size: 12px; color: var(--clr-text-muted); margin-top: 8px;">Leave blank if unknown.</p>
+            </div>
+
+            <!-- Q9: Current BP -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">9. What is your most recent blood pressure?</label>
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <input type="number" id="q-current-sys" class="input-form" placeholder="SYS" style="flex: 1; text-align: center;" required>
+                    <span style="color: var(--clr-text-muted);">/</span>
+                    <input type="number" id="q-current-dia" class="input-form" placeholder="DIA" style="flex: 1; text-align: center;" required>
+                </div>
+            </div>
+
+            <!-- Q10: Symptoms -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">10. Are you currently experiencing any of these symptoms?</label>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <label class="checkbox-item" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="q-symptoms" value="severe_headache" style="width: 20px; height: 20px; accent-color: var(--clr-primary);">
+                        <span>Severe headache</span>
+                    </label>
+                    <label class="checkbox-item" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="q-symptoms" value="vision_changes" style="width: 20px; height: 20px; accent-color: var(--clr-primary);">
+                        <span>Visual disturbances (blurriness, spots)</span>
+                    </label>
+                    <label class="checkbox-item" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="q-symptoms" value="ruq_pain" style="width: 20px; height: 20px; accent-color: var(--clr-primary);">
+                        <span>Upper abdominal pain</span>
+                    </label>
+                    <label class="checkbox-item" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <input type="checkbox" name="q-symptoms" value="swelling" style="width: 20px; height: 20px; accent-color: var(--clr-primary);">
+                        <span>Sudden swelling of face or hands</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q11: Weight Gain -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">11. Have you experienced rapid weight gain recently (≥2kg/week)?</label>
+                <div style="display: flex; gap: 12px;">
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-weight-gain" value="yes" style="display: none;" required>
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">Yes</div>
+                    </label>
+                    <label style="flex: 1;">
+                        <input type="radio" name="q-weight-gain" value="no" style="display: none;">
+                        <div class="btn btn-secondary q-radio-btn" style="height: 48px;">No</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Q12: Proteinuria -->
+            <div class="card-white" style="padding: 24px;">
+                <label class="label" style="font-size: 16px; margin-bottom: 16px; display: block;">12. Do you have protein in your urine (Proteinuria)?</label>
+                <select id="q-protein" class="input-form" required>
+                    <option value="" disabled selected>Select from latest test</option>
+                    <option value="negative">Negative</option>
+                    <option value="trace">Trace</option>
+                    <option value="1plus">1+</option>
+                    <option value="2plus">2+</option>
+                    <option value="3plus">3+ or higher</option>
+                    <option value="unknown">Not Tested / Unknown</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="height: 56px; font-size: 16px; margin-top: 16px;">
+                Complete Setup
+            </button>
+        </form>
+    </div>
+
+    <!-- Styles for custom radio buttons -->
+    <style>
+        input[type="radio"]:checked + .q-radio-btn {
+            background: var(--clr-primary);
+            color: white;
+            border-color: var(--clr-primary);
+        }
+    </style>
+</div>

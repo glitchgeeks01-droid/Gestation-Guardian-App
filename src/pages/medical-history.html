@@ -1,0 +1,148 @@
+<!-- pages/medical-history.html -->
+<div id="page-medical-history" class="page">
+    
+    <header class="glass-header">
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+                    <i data-lucide="arrow-left"></i>
+                </a>
+                <h1 style="font-size: 20px; color: var(--clr-dark-green);">Medical History</h1>
+            </div>
+            
+            <a href="#" style="color: var(--clr-primary);">
+                <i data-lucide="share"></i>
+            </a>
+        </div>
+    </header>
+
+    <div style="padding: 80px 24px 100px;">
+        
+        <div style="margin-bottom: 24px;">
+            <p style="color: var(--clr-text-muted); font-size: 14px; margin-bottom: 16px;">This data is securely stored and used to inform your GESTOSIS risk score. Share this with your doctor.</p>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 18px;">Pregnancy Profile</h3>
+                <button class="btn btn-text" style="color: var(--clr-primary); font-size: 14px; font-weight: 600;" onclick="UI.showToast('Edit mode enabled')">Edit</button>
+            </div>
+        </div>
+
+        <div class="card-white" style="margin-bottom: 24px; padding: 0; overflow: hidden;">
+            
+            <!-- Row 1 -->
+            <div style="padding: 16px; border-bottom: 1px solid var(--clr-divider); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="font-size: 14px; font-weight: 600; color: var(--clr-text-heading);">First Pregnancy</p>
+                    <p style="font-size: 12px; color: var(--clr-text-muted);">Nulliparity</p>
+                </div>
+                <!-- Toggle Switch styling via CSS -->
+                <label class="toggle-switch">
+                    <input type="checkbox" id="hist-first-preg">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <!-- Row 2 -->
+            <div style="padding: 16px; border-bottom: 1px solid var(--clr-divider); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="font-size: 14px; font-weight: 600; color: var(--clr-text-heading);">Multiple Gestation</p>
+                    <p style="font-size: 12px; color: var(--clr-text-muted);">Twins, triplets, etc.</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="hist-multiple">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Row 3 -->
+            <div style="padding: 16px; border-bottom: 1px solid var(--clr-divider); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="font-size: 14px; font-weight: 600; color: var(--clr-text-heading);">Prior Preeclampsia</p>
+                    <p style="font-size: 12px; color: var(--clr-text-muted);">In a previous pregnancy</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="hist-prior-pe">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Row 4 -->
+            <div style="padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p style="font-size: 14px; font-weight: 600; color: var(--clr-text-heading);">Chronic Hypertension</p>
+                    <p style="font-size: 12px; color: var(--clr-text-muted);">Pre-existing high BP</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="hist-chronic-htn">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+        </div>
+
+        <h3 style="font-size: 18px; margin-bottom: 16px;">Vitals History</h3>
+        
+        <div class="card-white" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
+            <div class="tab-switcher" style="margin: 16px;">
+                <a href="#" class="tab-btn active">Blood Pressure</a>
+                <a href="#" class="tab-btn">Weight</a>
+            </div>
+            
+            <!-- Sparkline Chart -->
+            <div style="padding: 16px 16px 24px;">
+                <canvas id="bp-history-chart" width="300" height="120" style="width: 100%; height: 120px;"></canvas>
+            </div>
+            
+            <div style="padding: 16px; border-top: 1px solid var(--clr-divider); background: var(--clr-bg-card);">
+                <p style="font-size: 12px; color: var(--clr-text-muted); text-align: center;">Recent Logs</p>
+                <div id="hist-bp-logs" style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+        /* Simple toggle switch CSS */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        .toggle-switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--clr-border-input);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input:checked + .slider {
+            background-color: var(--clr-primary);
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+    </style>
+</div>
+
+

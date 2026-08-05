@@ -1,0 +1,98 @@
+<!-- pages/profile.html -->
+<div id="page-profile" class="page" style="padding-bottom: 100px;">
+    <!-- Top App Bar -->
+    <header class="glass-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="App.goBack(); return false;" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h1 style="font-size: 20px; color: var(--clr-dark-green);">Profile</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <div style="padding: 96px 24px 24px; max-width: 512px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+      
+      <!-- Profile Header Area -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 8px;">
+        <div style="position: relative; width: 96px; height: 96px;">
+          <img src="https://i.pravatar.cc/150?img=47" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: var(--shadow-sm);">
+          <div style="position: absolute; bottom: 0; right: 0; background: var(--clr-primary); width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid white;">
+            <i data-lucide="shield-check" style="color: white; width: 14px; height: 14px;"></i>
+          </div>
+        </div>
+        <h2 style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700;">Sarah</h2>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--clr-green-10); padding: 6px 12px; border-radius: var(--r-pill); color: var(--clr-primary); font-size: 14px; font-weight: 600;">
+          <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+          <span>Week 24</span>
+        </div>
+      </div>
+
+      <!-- Personal Details Card -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <i data-lucide="user" style="color: var(--clr-primary); width: 20px; height: 20px;"></i>
+          <h3 style="font-size: 18px; color: var(--clr-text-heading);">Personal Details</h3>
+        </div>
+        
+        <div class="input-group">
+          <label class="label">Full Name</label>
+          <input type="text" value="Sarah" class="input-form">
+        </div>
+
+        <div style="display: flex; gap: 16px;">
+          <div class="input-group" style="flex: 1;">
+            <label class="label">Age</label>
+            <input type="number" value="28" class="input-form">
+          </div>
+          <div class="input-group" style="flex: 1;">
+            <label class="label">Date of Birth</label>
+            <input type="text" value="12/05/1995" class="input-form">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="label">Primary Phone Number</label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--clr-text-muted); font-weight: 500;">+91</span>
+            <input type="tel" value="9876543210" class="input-form" style="padding-left: 56px;">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="label">Email Address</label>
+          <input type="email" value="sarah@example.com" class="input-form">
+        </div>
+      </div>
+
+      <!-- Health & Preferences Card -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <i data-lucide="activity" style="color: var(--clr-primary); width: 20px; height: 20px;"></i>
+          <h3 style="font-size: 18px; color: var(--clr-text-heading);">Health & Preferences</h3>
+        </div>
+
+        <div class="input-group">
+          <label class="label">Blood Group</label>
+          <select class="input-form">
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>O+</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+        <button class="btn btn-primary" onclick="UI.showToast('Profile Saved'); App.goBack();">Save Changes</button>
+        <button class="btn btn-secondary" onclick="UI.showToast('Exporting data...')">
+          <i data-lucide="download" style="width: 18px; height: 18px;"></i> Export Health Data (JSON)
+        </button>
+        <button class="btn btn-text" onclick="window.location.hash='#/onboarding'" style="color: var(--clr-danger); margin-top: 8px;">
+          <i data-lucide="log-out" style="width: 18px; height: 18px;"></i> Sign Out
+        </button>
+      </div>
+
+    </div>
+</div>

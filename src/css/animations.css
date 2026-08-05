@@ -1,0 +1,127 @@
+/* css/animations.css */
+
+/* ==========================================================================
+   Page Transitions
+   ========================================================================== */
+
+/* Crossfade transitions are handled by .page opacity in pages.css, but we can add slide animations here */
+.slide-in-right {
+  animation: slideInRight 0.3s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.3s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-20px); opacity: 0; }
+}
+
+/* ==========================================================================
+   Bluetooth Scanning Animation (Figma Spec)
+   ========================================================================== */
+
+.scanning-animation {
+  position: relative;
+  width: 192px;
+  height: 192px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scan-ring {
+  position: absolute;
+  border: 2px solid var(--clr-accent-green);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: scanPulse 3s infinite cubic-bezier(0.2, 0, 0.2, 1);
+  opacity: 0;
+}
+
+.scan-ring:nth-child(1) { animation-delay: 0s; width: 64px; height: 64px; }
+.scan-ring:nth-child(2) { animation-delay: 1s; width: 128px; height: 128px; }
+.scan-ring:nth-child(3) { animation-delay: 2s; width: 192px; height: 192px; }
+
+@keyframes scanPulse {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+}
+
+.scan-center {
+  width: 128px;
+  height: 128px;
+  background: rgba(141, 180, 142, 0.1);
+  backdrop-filter: blur(6px);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.scan-center-icon {
+  width: 36px;
+  height: 40px;
+  color: var(--clr-accent-green);
+}
+
+/* ==========================================================================
+   Micro-interactions
+   ========================================================================== */
+
+/* Click ripple effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .5s, opacity 1s;
+}
+
+.ripple:active::after {
+  transform: scale(0, 0);
+  opacity: .3;
+  transition: 0s;
+}
+
+/* Shimmer loading effect */
+.skeleton {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 100%; 
+  display: inline-block;
+  position: relative; 
+  animation-duration: 1s;
+  animation-fill-mode: forwards; 
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+@keyframes placeholderShimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
