@@ -33,7 +33,7 @@ export default defineConfig({
     outDir: '../android-app/app/src/main/assets/www',
     emptyOutDir: true, // also necessary
     rollupOptions: {
-      input: './src/index.html',
+      input: './index.html',
     }
   }
 });
