@@ -135,17 +135,43 @@ export const App = {
     transitionTo(newPageEl, route) {
         if (!newPageEl) return;
         
-        // Manage history
+        // Helper to get body class
+        const getBodyClass = (r) => {
+            const map = {
+                'dashboard': 'dashboard-body',
+                'health-hub': 'hub-body',
+                'care-guide': 'guide-body',
+                'kick-counter': 'kick-body',
+                'log-bp': 'log-bp-body',
+                'log-vitals': 'log-vitals-body',
+                'medical-history': 'history-body',
+                'profile': 'profile-body',
+                'assessment-report': 'report-body',
+                'signin': 'signin-body',
+                'signup': 'signup-body',
+                'reminders': 'reminders-body',
+                'bluetooth': 'bluetooth-body',
+                'onboarding': 'onboarding-body'
+            };
+            if (r && r.includes('-risk-score')) {
+                return r.replace('-risk-score', '-body');
+            }
+            return map[r] || `${r}-body`;
+        };
+
+        // Manage history and body classes
         if (this.currentPage && this.currentPage !== route) {
             const oldPageEl = document.getElementById(`page-${this.currentPage}`);
             if (oldPageEl) {
                 oldPageEl.classList.remove('active');
             }
             this.history.push(this.currentPage);
+            document.body.classList.remove(getBodyClass(this.currentPage));
         }
         
         newPageEl.classList.add('active');
         this.currentPage = route;
+        document.body.classList.add(getBodyClass(route));
         
         // Scroll to top
         window.scrollTo(0, 0);
