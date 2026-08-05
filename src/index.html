@@ -24,7 +24,19 @@
         }
         #splash-screen h1 { color: white; font-weight: 900; font-size: 32px; margin: 0; }
         #splash-screen.fade-out { opacity: 0; pointer-events: none; }
-        #app-root { width: 100%; height: 100vh; height: 100dvh; overflow-x: hidden; overflow-y: auto; position: relative; }
+        #app-root { 
+            width: 100%; 
+            max-width: 430px; /* Constrain to mobile width */
+            margin: 0 auto; /* Center on desktop */
+            height: 100vh; height: 100dvh; 
+            overflow-x: hidden; overflow-y: auto; 
+            position: relative; 
+            background: #FAF9F6;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1); /* Desktop shadow */
+        }
+        @media (min-width: 768px) {
+            body { background: #E8EAE6; } /* Darker background on desktop behind the app */
+        }
     </style>
 
     <!-- Preload & Defer Non-Critical CSS -->
@@ -32,12 +44,10 @@
     <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/style-skeuomorphic.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/glass-icons.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="css/responsive.css" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/style-skeuomorphic.css">
         <link rel="stylesheet" href="css/glass-icons.css">
-        <link rel="stylesheet" href="css/responsive.css">
     </noscript>
 
 </head>
