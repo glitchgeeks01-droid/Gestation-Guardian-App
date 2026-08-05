@@ -42,26 +42,7 @@ export const Store = {
     },
 
     async processSyncQueue() {
-        if (!navigator.onLine) return;
-        
-        const q = this.getSyncQueue();
-        if (q.length === 0) return;
-
-        console.log(`Processing ${q.length} queued operations...`);
-        try {
-            const res = await fetch(`${API_BASE}/sync`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ operations: q })
-            });
-            
-            if (res.ok) {
-                console.log('Sync successful, clearing queue.');
-                this.saveSyncQueue([]);
-            }
-        } catch (e) {
-            console.error('Sync failed, will retry later.', e);
-        }
+        // Disabled: Backend connection removed per user request
     },
 
     initSyncEngine() {
@@ -77,22 +58,7 @@ export const Store = {
 
     // Base methods - Asynchronous
     async _get(key: string, defaultValue: any = null) {
-        // Try network first if online
-        if (navigator.onLine) {
-            try {
-                const res = await fetch(`${API_BASE}/users/${this.userId}/collections/${key}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    // Update local cache
-                    localStorage.setItem(key, JSON.stringify(data));
-                    return data;
-                }
-            } catch (e) {
-                console.warn(`Network fetch failed for ${key}, falling back to local:`, e);
-            }
-        }
-        
-        // Fallback to local storage (Offline Cache)
+        // Local storage only (Backend connection removed per request)
         try {
             const item = localStorage.getItem(key);
             if (!item) return defaultValue;
@@ -108,33 +74,12 @@ export const Store = {
     },
 
     async _set(key: string, value: any) {
-        // Always save locally first for instant feedback (Optimistic UI)
+        // Save locally only
         try {
             localStorage.setItem(key, JSON.stringify(value));
         } catch (e) {
             console.error(`Error saving ${key} to local storage:`, e);
         }
-
-        // Push to network
-        if (navigator.onLine) {
-            try {
-                const res = await fetch(`${API_BASE}/users/${this.userId}/collections/${key}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(value)
-                });
-                if (res.ok) return;
-            } catch (e) {
-                console.warn(`Network write failed for ${key}, queuing for offline sync:`, e);
-            }
-        }
-
-        // If offline or network failed, queue the operation
-        const q = this.getSyncQueue();
-        // Remove older operations for the same key to avoid redundant updates
-        const filteredQ = q.filter(op => op.key !== key);
-        filteredQ.push({ userId: this.userId, key, data: value, timestamp: Date.now() });
-        this.saveSyncQueue(filteredQ);
     },
 
     _generateId() {
