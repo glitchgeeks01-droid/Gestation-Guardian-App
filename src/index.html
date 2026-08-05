@@ -12,38 +12,34 @@
     
     <link rel="manifest" href="manifest.json">
     
-    <!-- Design System CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/style-skeuomorphic.css">
-    <link rel="stylesheet" href="css/glass-icons.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <!-- Inline styles to hide splash screen later -->
+    <!-- Inline Critical CSS for Splash Screen (Instant LCP) -->
     <style>
-        #app-root {
-            width: 100%;
-            height: 100vh; /* Fallback */
-            height: 100dvh;
-            overflow-x: hidden;
-            overflow-y: auto;
-            position: relative;
-        }
-        
+        /* CRITICAL CSS ONLY */
+        body { margin: 0; font-family: sans-serif; background-color: #6DA171; }
         #splash-screen {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--clr-primary, #6DA171);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #6DA171;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.5s ease-out;
         }
-        #splash-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #splash-screen h1 { color: white; font-weight: 900; font-size: 32px; margin: 0; }
+        #splash-screen.fade-out { opacity: 0; pointer-events: none; }
+        #app-root { width: 100%; height: 100vh; height: 100dvh; overflow-x: hidden; overflow-y: auto; position: relative; }
     </style>
+
+    <!-- Preload & Defer Non-Critical CSS -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/style-skeuomorphic.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/glass-icons.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/responsive.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style-skeuomorphic.css">
+        <link rel="stylesheet" href="css/glass-icons.css">
+        <link rel="stylesheet" href="css/responsive.css">
+    </noscript>
+
 </head>
 <body>
 
@@ -170,7 +166,7 @@
     </div>
 
     <!-- 3rd Party Libs -->
-    <script src="https://unpkg.com/lucide@latest"></script> <!-- We'll replace with local SVGs later if needed, but this is fine for dev -->
+    <script src="https://unpkg.com/lucide@latest" defer></script> <!-- We'll replace with local SVGs later if needed, but this is fine for dev -->
 
     <!-- Core App Logic -->
     <script type="module" src="/ts/views/app.ts"></script>
