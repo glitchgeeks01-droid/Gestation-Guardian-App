@@ -7,7 +7,7 @@ export const DashboardUI = {
         console.log('Dashboard initialized');
         const profile = await Store.getProfile();
         if (profile) {
-            document.getElementById('dash-name')!.textContent = profile.name.split(' ')[0] || 'User';
+            document.getElementById('dash-name')!.textContent = (profile.name || '').split(' ')[0] || 'User';
             
             // Trimester logic
             const week = await Store.getCurrentGestationalWeek();

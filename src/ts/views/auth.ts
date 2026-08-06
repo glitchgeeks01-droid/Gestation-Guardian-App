@@ -29,7 +29,7 @@ export const Auth = {
     },
     
     sendOTP() {
-        const phone = document.getElementById('su-phone').value;
+        const phone = document.getElementById('')?.value;
         if (!phone || phone.length < 10) {
             UI.showToast('Please enter a valid phone number', 'error');
             return;
@@ -41,7 +41,7 @@ export const Auth = {
         
         // Focus first OTP box
         setTimeout(() => {
-            document.querySelector('.input-otp[data-index="1"]').focus();
+            document.querySelector<HTMLElement>('.input-otp[data-index="1"]')?.focus();
         }, 100);
     },
     
@@ -90,12 +90,12 @@ export const Auth = {
     
     async handleSignUp() {
         // Collect data
-        const name = document.getElementById('su-name').value;
-        const phone = document.getElementById('su-phone').value;
-        const email = document.getElementById('su-email').value;
-        const dob = document.getElementById('su-dob').value;
-        const lmp = document.getElementById('su-lmp').value;
-        const bloodGroup = document.getElementById('su-blood').value;
+        const name = document.getElementById('')?.value;
+        const phone = document.getElementById('')?.value;
+        const email = document.getElementById('')?.value;
+        const dob = document.getElementById('')?.value;
+        const lmp = document.getElementById('')?.value;
+        const bloodGroup = document.getElementById('')?.value;
         
         // Validate OTP was entered (mock)
         const otpInputs = document.querySelectorAll('.input-otp');
@@ -153,8 +153,8 @@ export const Auth = {
     },
     
     async handleSignIn() {
-        const email = document.getElementById('signin-email').value;
-        const password = document.getElementById('signin-password').value;
+        const email = document.getElementById('')?.value;
+        const password = document.getElementById('')?.value;
         
         if (!email || !password) {
             UI.showToast('Please enter your credentials', 'error');

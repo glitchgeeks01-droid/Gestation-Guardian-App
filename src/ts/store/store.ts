@@ -98,8 +98,7 @@ export const Store = {
     // Generic log methods
     async getLogs(key: string) {
         const data = await this._get(key, []);
-        if (!data || Object.keys(data).length === 0) return [];
-        return data;
+        return Array.isArray(data) ? data : [];
     },
 
     async addLog(key, data) {
@@ -138,8 +137,10 @@ export const Store = {
         if (!profile || !profile.lmp) return 0;
         
         const lmpDate = new Date(profile.lmp);
+        if (isNaN(lmpDate.getTime())) return 0;
+        
         const today = new Date();
-        const diffTime = Math.abs(today - lmpDate);
+        const diffTime = Math.abs(today.getTime() - lmpDate.getTime());
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         const week = Math.floor(diffDays / 7);
         

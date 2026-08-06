@@ -95,7 +95,7 @@ export const Scoring = {
             const previousWeight = vitalsLogs[1].weight;
             const dateDiffDays = (new Date(vitalsLogs[0].timestamp) - new Date(vitalsLogs[1].timestamp)) / (1000 * 60 * 60 * 24);
             
-            if (currentWeight && previousWeight && dateDiffDays > 0) {
+            if (currentWeight && previousWeight && dateDiffDays >= 1) {
                 const weeklyGainRate = ((currentWeight - previousWeight) / dateDiffDays) * 7;
                 if (weeklyGainRate >= 2) { score += 1; factors.push('Weight gain ≥2kg/wk'); }
             }
@@ -130,7 +130,7 @@ export const Scoring = {
     _checkAndTriggerAlerts(currentScore, band, action) {
         // Debounce or store last alert time to prevent spam
         const lastAlertStr = localStorage.getItem('gg_last_alert');
-        const lastAlert = lastAlertStr ? JSON.parse(lastAlertStr) : { time: 0, band: '' };
+        let lastAlert = { time: 0, band: '' }; try { if(lastAlertStr) lastAlert = JSON.parse(lastAlertStr); } catch(e) {}
         const now = Date.now();
 
         // If band changed to a higher risk, or 24 hours have passed in a high risk state

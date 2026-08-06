@@ -57,9 +57,9 @@ export const Vitals = {
     
     // BP Form Submission
     async saveBP() {
-        const sys = parseInt(document.getElementById('bp-sys').value);
-        const dia = parseInt(document.getElementById('bp-dia').value);
-        const pulse = parseInt(document.getElementById('bp-pulse').value) || 0;
+        const sys = parseInt(document.getElementById('')?.value);
+        const dia = parseInt(document.getElementById('')?.value);
+        const pulse = parseInt(document.getElementById('')?.value) || 0;
         
         // Get radio button values
         let position = 'sitting';
@@ -70,7 +70,7 @@ export const Vitals = {
         const armRadios = document.getElementsByName('bp-arm');
         for (let r of armRadios) { if (r.checked) arm = r.value; }
         
-        const notes = document.getElementById('bp-notes').value;
+        const notes = document.getElementById('')?.value;
         
         if (!sys || !dia) {
             UI.showToast('Please enter both Systolic and Diastolic values', 'error');
@@ -96,12 +96,12 @@ export const Vitals = {
     
     // Vitals Form Submission
     async saveVitals() {
-        const weight = parseFloat(document.getElementById('vital-weight').value);
-        const sleep = parseFloat(document.getElementById('vital-sleep').value);
-        const stress = parseInt(document.getElementById('vital-stress').value);
-        const temp = parseFloat(document.getElementById('vital-temp').value);
-        const glucose = parseFloat(document.getElementById('vital-glucose').value);
-        const protein = document.getElementById('vital-protein').value;
+        const weight = parseFloat(document.getElementById('')?.value);
+        const sleep = parseFloat(document.getElementById('')?.value);
+        const stress = parseInt(document.getElementById('')?.value);
+        const temp = parseFloat(document.getElementById('')?.value);
+        const glucose = parseFloat(document.getElementById('')?.value);
+        const protein = document.getElementById('')?.value;
         
         const data = {};
         if (weight) data.weight = weight;

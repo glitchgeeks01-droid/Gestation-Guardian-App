@@ -10,6 +10,9 @@ export const AIBot = {
     },
 
     setupDraggableFab() {
+        if ((window as any)._aiFabListenersBound) return;
+        (window as any)._aiFabListenersBound = true;
+        
         const fab = document.getElementById('ai-bot-fab');
         const overlay = document.getElementById('ai-chat-overlay');
         if (!fab || !overlay) return;
@@ -223,7 +226,7 @@ export const AIBot = {
         typingMsg.style.gap = "12px";
         typingMsg.style.alignItems = "flex-start";
         typingMsg.style.maxWidth = "85%";
-        typingMsg.id = "ai-typing-indicator";
+        typingMsg.className = "ai-typing-indicator";
         typingMsg.innerHTML = `
             <div style="width: 32px; height: 32px; background: #E8547A; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
                 <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
