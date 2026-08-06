@@ -34,6 +34,12 @@
             background: #FAF9F6;
             box-shadow: 0 0 40px rgba(0,0,0,0.1); /* Desktop shadow */
         }
+        #ui-container {
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 430px; height: 100dvh;
+            pointer-events: none; z-index: 1000;
+        }
+        #ui-container > * { pointer-events: auto; }
         @media (min-width: 768px) {
             body { background: #E8EAE6; } /* Darker background on desktop behind the app */
         }
