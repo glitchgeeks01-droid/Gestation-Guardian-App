@@ -19,6 +19,18 @@ Here is what it can do:
 
 ---
 
+## The Tech Stack 🛠️
+
+Kept it super modern, but lightweight. No bloat, just speed:
+- **Frontend Framework:** Vanilla TypeScript (No React/Vue overhead, just pure DOM manipulation for maximum performance).
+- **Build Tool:** Vite ⚡ (Because waiting for Webpack to compile is painful).
+- **Styling:** Custom Vanilla CSS (Bento Grid layout, Glassmorphism, and Skeuomorphic shadows).
+- **Storage:** Offline-First `localStorage` (Privacy focused, zero latency).
+- **Icons:** Lucide Icons (Clean, consistent SVG icons).
+- **Typography:** Lexend (Google Fonts).
+
+---
+
 ## How to run this locally? 💻
 
 It's super easy to get this running on your own machine. Since we ditched the heavy backend, it's just a slick frontend Vite app now.
