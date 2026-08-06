@@ -41,12 +41,22 @@
 
     <!-- Preload & Defer Non-Critical CSS -->
     <link rel="preload" href="css/style.css" as="style">
+    <link rel="stylesheet" href="css/reset.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/tokens.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/style-skeuomorphic.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/components.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/pages.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/animations.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/glass-icons.css" media="print" onload="this.media='all'">
     <noscript>
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/tokens.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/style-skeuomorphic.css">
+        <link rel="stylesheet" href="css/components.css">
+        <link rel="stylesheet" href="css/pages.css">
+        <link rel="stylesheet" href="css/animations.css">
         <link rel="stylesheet" href="css/glass-icons.css">
     </noscript>
 
@@ -183,7 +193,11 @@
     
     <script>
         // Initialize Lucide icons for the static parts
-        lucide.createIcons();
+        window.addEventListener('load', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
     </script>
 </body>
 </html>
