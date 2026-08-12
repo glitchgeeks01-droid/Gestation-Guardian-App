@@ -21,6 +21,21 @@ import { HealthRecords } from './health-records';
 import { DashboardUI } from './dashboard';
 import { MedicalHistory } from './medical-history';
 
+// Expose modules to global scope for inline HTML event handlers
+window.Auth = Auth;
+window.Bluetooth = Bluetooth;
+window.Store = Store;
+window.UI = UI;
+window.Kicks = Kicks;
+window.Vitals = Vitals;
+window.Assessment = Assessment;
+window.Charts = Charts;
+window.Scoring = Scoring;
+window.AIBot = AIBot;
+window.HealthRecords = HealthRecords;
+window.DashboardUI = DashboardUI;
+window.MedicalHistory = MedicalHistory;
+
 // js/app.js
 
 /**
@@ -78,6 +93,12 @@ export const App = {
         const isAuthRoute = ['onboarding', 'signin', 'signup'].includes(route);
         const hasProfile = (await Store.getProfile()) !== null;
         
+        // Hide AI FAB on auth routes to prevent overlap
+        const fab = document.getElementById('ai-bot-fab');
+        if (fab) {
+            fab.style.display = isAuthRoute ? 'none' : 'flex';
+        }
+
         if (!hasProfile && !isAuthRoute) {
             window.location.hash = '#/onboarding';
             return;
@@ -270,3 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Expose for HTML inline handlers
 (window as any).App = App;
+
+// Expose App globally for inline back buttons
+window.App = App;

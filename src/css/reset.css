@@ -85,11 +85,9 @@ h3 {
 }
 
 .label {
-  font-weight: 800;
-  font-size: 12px;
-  line-height: 1.33;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.4;
   color: var(--clr-text-body);
 }
 
