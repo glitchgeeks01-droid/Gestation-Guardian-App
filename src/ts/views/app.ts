@@ -1,4 +1,12 @@
 // @ts-nocheck
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+    }
+  });
+}
+// @ts-nocheck
 import { Auth } from './auth';
 import { Bluetooth } from '../services/bluetooth';
 import { Store } from '../store/store';
