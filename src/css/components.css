@@ -250,6 +250,7 @@
   cursor: pointer;
   background: transparent;
   padding: 4px;
+  width: auto;
 }
 
 /* Signup Card Input */
