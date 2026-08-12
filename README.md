@@ -1,6 +1,6 @@
-# Gestation Guardian 🤰✨
+# Gestation Guardian✨
 
-Yo! Welcome to **Gestation Guardian**. I built this app to be a super smooth, premium companion for expecting mothers. No complicated setups, no lagging—just a clean, safe space to track the pregnancy journey.
+Yo! Welcome to **Gestation Guardian**. I built this app to be a super smooth, premium companion for expecting mothers, especially to monitor pre-eclampsia/hypertension during pregnancy. No complicated setups, no lagging, just a clean and safe space to track the pregnancy journey.
 
 ![Project Banner](https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF)
 
