@@ -1,68 +1,80 @@
-# Gestation Guardian✨
+# 🤰 Gestation Guardian 
 
-Yo! Welcome to **Gestation Guardian**. I built this app to be a super smooth, premium companion for expecting mothers, especially to monitor pre-eclampsia/hypertension during pregnancy. No complicated setups, no lagging, just a clean and safe space to track the pregnancy journey.
-
-![Project Banner](https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF)
-
----
-
-## What's it all about? 🚀
-
-I wanted to make something that actually feels good to use. The whole layout is designed with this clean "Bento Grid" style, so it feels like a native mobile app even when you're just running it on a browser. 
-
-Here is what it can do:
-- **Dashboard:** Tells you exactly what week you're on and gives you cute updates (like "your baby is the size of an avocado 🥑").
-- **AI Chatbot (Gestation AI):** A floating AI assistant that you can ask anything. It remembers your chat history and helps you out with quick answers.
-- **Risk Assessment:** A built-in logic engine that calculates stuff like Gestosis risk based on your weight and blood pressure. It does the math safely so you don't have to panic about weird spikes.
-- **Vital Logs:** Track your blood pressure, kick counts, weight, and sleep.
-- **Fully Offline:** This is the best part. I completely disconnected the heavy backend stuff. The app runs **100% offline** on your device using `localStorage`. Your data stays on your phone, and it never crashes trying to talk to a server. Privacy first! 🛡️
+<div align="center">
+  <img src="https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF&radius=20" alt="Gestation Guardian Logo" width="120"/>
+  <br>
+  <i>Your trusted companion for a safer, healthier pregnancy journey.</i>
+</div>
 
 ---
 
-## The Tech Stack 🛠️
+**Gestation Guardian** is a premium, offline-first mobile web application designed to empower expecting mothers. It focuses specifically on tracking vital health metrics, assessing pre-eclampsia and gestational hypertension risks, and providing actionable care advice—all wrapped in a stunning, native-feeling "Bento Grid" UI.
 
-Kept it super modern, but lightweight. No bloat, just speed:
-- **Frontend Framework:** Vanilla TypeScript (No React/Vue overhead, just pure DOM manipulation for maximum performance).
-- **Build Tool:** Vite ⚡ (Because waiting for Webpack to compile is painful).
-- **Styling:** Custom Vanilla CSS (Bento Grid layout, Glassmorphism, and Skeuomorphic shadows).
-- **Storage:** Offline-First `localStorage` (Privacy focused, zero latency).
-- **Icons:** Lucide Icons (Clean, consistent SVG icons).
-- **Typography:** Lexend (Google Fonts).
+## ✨ Features
 
----
+We engineered this app to be completely self-reliant and hyper-responsive. 
 
-## How to run this locally? 💻
+* 📊 **Risk Assessment Engine:** A built-in mathematical model that tracks weight, blood pressure, and symptom checklists to calculate Gestosis risk safely.
+* 🤖 **Gestation AI:** A floating, context-aware AI chatbot that remembers your conversation history and provides instant, reassuring advice.
+* 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including:
+  * Interactive Fetal Kick Counters
+  * Real-time Labor Contraction Timers
+  * Glassmorphic Alert Banners & Advice Cards
+  * Dynamic Pregnancy Progress Timelines
+* 🛡️ **100% Offline-First (No Backend):** The heavy backend syncing has been intentionally severed. The application runs entirely on your device via `localStorage`. Your highly sensitive medical data never leaves your phone. Zero latency. Zero server crashes.
+* 📡 **Bluetooth Ready:** Base architectural stubs are in place for Web Bluetooth API integration to support external smart blood pressure cuffs and vitals bands.
 
-It's super easy to get this running on your own machine. Since we ditched the heavy backend, it's just a slick frontend Vite app now.
+## 🛠️ The Tech Stack
 
-### Steps:
-1. Make sure you have [Node.js](https://nodejs.org/) installed on your PC.
-2. Open up your terminal and go into this project folder.
-3. Install the packages:
+Built for raw speed and zero bloat:
+
+* **Core:** Vanilla TypeScript & ES Modules (No heavy frameworks like React or Vue).
+* **Styling:** Custom Vanilla CSS featuring Skeuomorphic shadows, Glassmorphism, and a strict CSS Container constraint for mobile-first rendering on any viewport.
+* **Build System:** Vite ⚡ for lightning-fast HMR and optimized bundling.
+* **Data Persistence:** Synchronous, JSON-based `localStorage` engine engineered with defensive error boundaries to prevent data corruption.
+* **Assets:** Lucide Icons & Lexend Typography.
+
+## 🚀 Getting Started
+
+Since the architecture is entirely frontend-driven, running the app locally takes seconds.
+
+### Prerequisites
+* Node.js (v18+)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/glitchgeeks01-droid/Gestation-Guardian-App.git
+   cd Gestation-Guardian-App
+   ```
+
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-4. Fire up the dev server!
+
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
-5. Open the link it gives you (usually `http://localhost:5173/`).
+   > The app will usually launch at `http://localhost:5173/`. 
+   > *Note: If viewing on a desktop browser, the UI will automatically constrain itself to a mobile-sized column to preserve the native UX.*
 
-*Pro tip: If things look weird on desktop, that's because I built it for mobile! It automatically constrains itself to a sleek phone-sized column in the middle of your screen.*
-
-### Want to build it for Android?
-If you're trying to pack this into the Android WebView, just run:
+### Building for Production (Android WebView)
+To compile the TypeScript and CSS down to a static bundle for Android asset wrapping:
 ```bash
 npm run build
 ```
-It will compile everything down into the `dist` folder (or your Android `assets/www` folder depending on the config) so you can ship it!
+The optimized files will be output to the configured destination (typically `dist` or the Android `assets/www` directory).
+
+## 🔒 Architecture Notes
+
+This repository underwent a massive architectural audit to guarantee stability. The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict 10-layer TypeScript module system (`store`, `views`, `services`, `core`, etc.).
+
+By aggressively removing the external `Doctor Connector` API dependency, we eliminated asynchronous loading failures, API timeouts, and state-desync crashes. The result is a bulletproof, privacy-respecting tool for mothers.
 
 ---
-
-## Why did I build it like this? 🤔
-
-Honestly, I was dealing with a lot of silent crashes and weird layout bugs when trying to sync it with the Doctor Connector app. Forms would crash, the AI bot would duplicate, and date math was failing hard. 
-
-So I brought in some autonomous agents, audited the whole thing, fixed every single logic bomb, and stripped out the backend connection. Now? It's literally bulletproof. It handles corrupted data smoothly and degrades gracefully without throwing white screens of death. 
-
-Hope you find it useful. Stay safe! ✌️
+<div align="center">
+  <b>Monitor. Protect. Nurture.</b>
+</div>
