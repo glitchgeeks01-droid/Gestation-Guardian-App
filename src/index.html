@@ -144,46 +144,57 @@
             <div class="bottom-sheet" style="height: 90dvh; display: flex; flex-direction: column; padding: 0; border-radius: 32px 32px 0 0;">
                 <div class="sheet-handle" style="margin-top: 12px; margin-bottom: 0;"></div>
                 
-                <header style="display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--clr-divider);">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 40px; height: 40px; background: rgba(232, 84, 122, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #E8547A;">
+                <header style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--clr-divider);">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 40px; height: 40px; background: rgba(232, 84, 122, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #E8547A; flex-shrink: 0;">
                             <i data-lucide="bot"></i>
                         </div>
                         <div>
-                            <h2 style="font-size: 16px; font-weight: 700; color: var(--clr-text-heading); margin-bottom: 2px;">Gestation AI</h2>
-                            <p style="font-size: 12px; color: var(--clr-text-muted);">Always here to help</p>
+                            <h2 style="font-size: 15px; font-weight: 700; color: var(--clr-text-heading); margin-bottom: 2px;">Gestation Voice AI</h2>
+                            <p style="font-size: 11px; color: var(--clr-text-muted);">WHO Guidelines • Gemini Brain</p>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" style="width: 32px; height: 32px; padding: 0; border-radius: 50%;" id="close-ai-chat">
-                        <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button class="btn btn-secondary" style="width: 34px; height: 34px; padding: 0; border-radius: 50%; display: flex; justify-content: center; align-items: center;" id="ai-tts-toggle" title="Toggle Voice Output">
+                            <i data-lucide="volume-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="btn btn-secondary" style="width: 34px; height: 34px; padding: 0; border-radius: 50%; display: flex; justify-content: center; align-items: center;" id="ai-config-btn" title="Gemini API Key Settings">
+                            <i data-lucide="settings" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="btn btn-secondary" style="width: 34px; height: 34px; padding: 0; border-radius: 50%; display: flex; justify-content: center; align-items: center;" id="close-ai-chat">
+                            <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
                 </header>
 
-                <div id="global-chat-history" style="flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #fafafa;">
+                <div id="global-chat-history" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #fafafa;">
                     <!-- Welcome Msg -->
-                    <div style="display: flex; gap: 12px; align-items: flex-start; max-width: 85%;">
+                    <div style="display: flex; gap: 12px; align-items: flex-start; max-width: 88%;">
                         <div style="width: 32px; height: 32px; background: #E8547A; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
                             <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
                         </div>
-                        <div style="background: white; padding: 16px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider);">
-                            <p style="font-size: 14px; color: var(--clr-text-body); line-height: 1.5;">
-                                Hi Sarah! I'm your Gestation AI assistant. How can I help you today?
+                        <div style="background: white; padding: 14px 18px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider, #eee);">
+                            <p style="font-size: 14px; color: var(--clr-text-body); line-height: 1.5; margin: 0;">
+                                Hello! I'm your <strong>Gestation Voice AI</strong> assistant, trained with <strong>World Health Organization (WHO)</strong> maternal standards and powered by Gemini. You can type or tap the microphone to speak!
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div style="padding: 16px 24px; background: white; border-top: 1px solid var(--clr-divider);">
-                    <form id="global-chat-form" style="display: flex; gap: 12px; align-items: flex-end;">
+                <div style="padding: 14px 20px; background: white; border-top: 1px solid var(--clr-divider);">
+                    <form id="global-chat-form" style="display: flex; gap: 8px; align-items: flex-end;">
+                        <button type="button" id="ai-mic-btn" style="background: var(--clr-bg-card, #f0f4f0); border: 1px solid var(--clr-divider, #e0e0e0); color: var(--clr-primary, #6DA171); width: 46px; height: 46px; border-radius: 50%; padding: 0; display: flex; justify-content: center; align-items: center; flex-shrink: 0; cursor: pointer; transition: all 0.2s;" title="Speak with Gestation AI">
+                            <i data-lucide="mic" style="width: 20px; height: 20px;"></i>
+                        </button>
                         <div style="flex: 1; position: relative;">
-                            <textarea id="global-chat-input" class="input-form" rows="1" placeholder="Ask anything..." style="min-height: 48px; max-height: 120px; resize: none; border-radius: 24px; padding: 14px 20px; overflow-y: hidden;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                            <textarea id="global-chat-input" class="input-form" rows="1" placeholder="Ask or speak anything..." style="min-height: 46px; max-height: 120px; resize: none; border-radius: 24px; padding: 12px 18px; overflow-y: hidden; width: 100%;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="background: #E8547A; border-color: #E8547A; width: 48px; height: 48px; border-radius: 50%; padding: 0; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                            <i data-lucide="send" style="width: 20px; height: 20px; transform: translateX(-2px) translateY(1px);"></i>
+                        <button type="submit" class="btn btn-primary" style="background: #E8547A; border-color: #E8547A; width: 46px; height: 46px; border-radius: 50%; padding: 0; display: flex; justify-content: center; align-items: center; flex-shrink: 0;" title="Send">
+                            <i data-lucide="send" style="width: 18px; height: 18px; transform: translateX(-1px) translateY(1px);"></i>
                         </button>
                     </form>
-                    <p style="text-align: center; font-size: 10px; color: var(--clr-text-muted); margin-top: 8px;">
-                        Gestation AI provides guidance, not medical diagnosis.
+                    <p style="text-align: center; font-size: 10px; color: var(--clr-text-muted); margin-top: 8px; margin-bottom: 0;">
+                        Gestation AI references WHO Guidelines & provides guidance, not medical diagnosis.
                     </p>
                 </div>
             </div>

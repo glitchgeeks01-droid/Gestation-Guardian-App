@@ -125,3 +125,34 @@
   0% { background-position: -468px 0; }
   100% { background-position: 468px 0; }
 }
+
+/* Voice Assistant Pulsing Mic Animation */
+@keyframes micPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 46, 99, 0.7);
+    transform: scale(1);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(255, 46, 99, 0);
+    transform: scale(1.08);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 46, 99, 0);
+    transform: scale(1);
+  }
+}
+
+.pulse-animation {
+  animation: micPulse 1.4s infinite ease-in-out !important;
+}
+
+@keyframes dotTyping {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.dot-typing {
+  animation: dotTyping 1.2s infinite ease-in-out;
+}
+

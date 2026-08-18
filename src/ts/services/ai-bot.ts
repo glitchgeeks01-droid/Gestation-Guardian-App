@@ -1,12 +1,14 @@
 // @ts-nocheck
 // js/ai-bot.ts
 
-import { queryAI } from './mock-ai';
+import { GeminiAIService } from './gemini-service';
+import { VoiceAssistant } from './voice-service';
 
 export const AIBot = {
     init() {
         this.setupDraggableFab();
         this.setupChatUI();
+        VoiceAssistant.init();
     },
 
     setupDraggableFab() {
@@ -30,7 +32,6 @@ export const AIBot = {
             startY = touch.clientY;
             startX = touch.clientX;
             
-            // Get current transform translate values if any, else default to 0
             const transform = window.getComputedStyle(fab).transform;
             let currentX = 0;
             let currentY = 0;
@@ -43,7 +44,7 @@ export const AIBot = {
             initialY = currentY;
             hasMoved = false;
             
-            fab.style.transition = 'none'; // Disable transition for smooth dragging
+            fab.style.transition = 'none';
         }, { passive: true });
 
         fab.addEventListener('touchmove', (e) => {
@@ -67,20 +68,18 @@ export const AIBot = {
             fab.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
             
             if (hasMoved) {
-                // Snap back to normal scale, keep position
                 const transform = window.getComputedStyle(fab).transform;
                 if (transform !== 'none') {
                     const matrix = new DOMMatrix(transform);
                     fab.style.transform = `translate(${matrix.m41}px, ${matrix.m42}px) scale(1)`;
                 }
             } else {
-                // It was a tap! Open the chat overlay
                 fab.style.transform = `translate(${initialX}px, ${initialY}px) scale(1)`;
                 this.openChat();
             }
         });
 
-        // Mouse Events (for testing in browser)
+        // Mouse Events
         fab.addEventListener('mousedown', (e) => {
             isDragging = true;
             hasMoved = false;
@@ -125,8 +124,7 @@ export const AIBot = {
             }
         });
         
-        // Universal click listener (handles taps natively on all platforms)
-        fab.addEventListener('click', (e) => {
+        fab.addEventListener('click', () => {
             if (!hasMoved) {
                 this.openChat();
             }
@@ -137,17 +135,25 @@ export const AIBot = {
         const closeBtn = document.getElementById('close-ai-chat');
         const overlay = document.getElementById('ai-chat-overlay');
         const form = document.getElementById('global-chat-form');
+        const micBtn = document.getElementById('ai-mic-btn');
+        const ttsToggle = document.getElementById('ai-tts-toggle');
+        const configBtn = document.getElementById('ai-config-btn');
 
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
                 this.closeChat();
+                VoiceAssistant.stopSpeaking();
+                VoiceAssistant.stopListening();
             });
         }
         
         if (overlay) {
-            // Close on click outside sheet
             overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) this.closeChat();
+                if (e.target === overlay) {
+                    this.closeChat();
+                    VoiceAssistant.stopSpeaking();
+                    VoiceAssistant.stopListening();
+                }
             });
         }
 
@@ -167,6 +173,70 @@ export const AIBot = {
                 }
             });
         }
+
+        // Setup Mic button for Voice Speech-to-Text
+        if (micBtn) {
+            micBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleVoiceInput();
+            });
+        }
+
+        // Setup TTS Audio playback toggle
+        if (ttsToggle) {
+            ttsToggle.addEventListener('click', () => {
+                const isEnabled = VoiceAssistant.toggleTTS();
+                ttsToggle.innerHTML = isEnabled 
+                    ? `<i data-lucide="volume-2" style="width: 18px; height: 18px;"></i>` 
+                    : `<i data-lucide="volume-x" style="width: 18px; height: 18px;"></i>`;
+                if ((window as any).lucide) (window as any).lucide.createIcons({ root: ttsToggle });
+            });
+        }
+
+        // Setup API Key configuration modal/prompt
+        if (configBtn) {
+            configBtn.addEventListener('click', () => {
+                const currentKey = GeminiAIService.getApiKey();
+                const newKey = prompt("Enter your Google Gemini API Key (or leave empty to use offline WHO expert knowledge engine):", currentKey);
+                if (newKey !== null) {
+                    GeminiAIService.setApiKey(newKey);
+                    alert(newKey.trim() ? "✅ Gemini API Key saved! AI assistant will use Gemini + WHO Data." : "ℹ️ Using offline WHO Antenatal Care Knowledge Engine.");
+                }
+            });
+        }
+    },
+
+    toggleVoiceInput() {
+        const micBtn = document.getElementById('ai-mic-btn');
+        const input = document.getElementById('global-chat-input') as HTMLTextAreaElement;
+
+        VoiceAssistant.startListening(
+            (transcript, isFinal) => {
+                if (input) {
+                    input.value = transcript;
+                    input.style.height = '';
+                    input.style.height = input.scrollHeight + 'px';
+                }
+                if (isFinal) {
+                    setTimeout(() => {
+                        this.sendMessage();
+                    }, 400);
+                }
+            },
+            (isListening) => {
+                if (micBtn) {
+                    if (isListening) {
+                        micBtn.style.background = "#FF2E63";
+                        micBtn.style.color = "white";
+                        micBtn.classList.add("pulse-animation");
+                    } else {
+                        micBtn.style.background = "var(--clr-bg-card, #f0f4f0)";
+                        micBtn.style.color = "var(--clr-primary, #6DA171)";
+                        micBtn.classList.remove("pulse-animation");
+                    }
+                }
+            }
+        );
     },
 
     openChat() {
@@ -200,11 +270,11 @@ export const AIBot = {
         userMsg.style.alignSelf = "flex-end";
         userMsg.style.flexDirection = "row-reverse";
         userMsg.innerHTML = `
-            <div style="width: 32px; height: 32px; background: var(--clr-bg-card); color: var(--clr-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid var(--clr-divider);">
+            <div style="width: 32px; height: 32px; background: var(--clr-bg-card, #f0f4f0); color: var(--clr-primary, #6DA171); border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; border: 1px solid var(--clr-divider, #e0e0e0);">
                 <i data-lucide="user" style="width: 16px; height: 16px;"></i>
             </div>
-            <div style="background: var(--clr-primary); padding: 16px; border-radius: 20px 4px 20px 20px; box-shadow: var(--shadow-sm);">
-                <p style="font-size: 14px; color: white; line-height: 1.5;">
+            <div style="background: var(--clr-primary, #6DA171); padding: 14px 18px; border-radius: 20px 4px 20px 20px; box-shadow: var(--shadow-sm, 0 2px 4px rgba(0,0,0,0.05));">
+                <p style="font-size: 14px; color: white; line-height: 1.5; margin: 0;">
                     ${text.replace(/</g, "&lt;")}
                 </p>
             </div>
@@ -215,40 +285,48 @@ export const AIBot = {
         input.style.height = '48px';
         
         if ((window as any).lucide) {
-            (window as any).lucide.createIcons({root: userMsg});
+            (window as any).lucide.createIcons({ root: userMsg });
         }
         
         history.scrollTop = history.scrollHeight;
         
         // Show typing indicator
+        const typingId = `ai-typing-${Date.now()}`;
         const typingMsg = document.createElement('div');
+        typingMsg.id = typingId;
         typingMsg.style.display = "flex";
         typingMsg.style.gap = "12px";
         typingMsg.style.alignItems = "flex-start";
         typingMsg.style.maxWidth = "85%";
-        typingMsg.className = "ai-typing-indicator";
         typingMsg.innerHTML = `
             <div style="width: 32px; height: 32px; background: #E8547A; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
                 <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
             </div>
-            <div style="background: white; padding: 16px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider);">
-                <p style="font-size: 14px; color: var(--clr-text-body); line-height: 1.5; font-style: italic;">
-                    Typing...
+            <div style="background: white; padding: 14px 18px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider, #eee);">
+                <p style="font-size: 14px; color: var(--clr-text-body, #666); line-height: 1.5; font-style: italic; margin: 0; display: flex; align-items: center; gap: 6px;">
+                    <span>Consulting WHO Guidelines & Gemini</span>
+                    <span class="dot-typing">...</span>
                 </p>
             </div>
         `;
         history.appendChild(typingMsg);
         if ((window as any).lucide) {
-            (window as any).lucide.createIcons({root: typingMsg});
+            (window as any).lucide.createIcons({ root: typingMsg });
         }
         history.scrollTop = history.scrollHeight;
 
         try {
-            const response = await queryAI(text);
+            const response = await GeminiAIService.generateResponse(text);
             
             // Remove typing indicator
-            const indicator = document.getElementById('ai-typing-indicator');
+            const indicator = document.getElementById(typingId);
             if (indicator) indicator.remove();
+
+            // Format markdown headers, bold, bullets
+            const formattedResponse = response
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n- /g, '<br>• ');
 
             const aiMsg = document.createElement('div');
             aiMsg.style.display = "flex";
@@ -260,20 +338,37 @@ export const AIBot = {
                 <div style="width: 32px; height: 32px; background: #E8547A; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
                     <i data-lucide="bot" style="width: 16px; height: 16px;"></i>
                 </div>
-                <div style="background: white; padding: 16px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider);">
-                    <p style="font-size: 14px; color: var(--clr-text-body); line-height: 1.5;">
-                        ${response}
-                    </p>
+                <div style="background: white; padding: 14px 18px; border-radius: 4px 20px 20px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--clr-divider, #eee);">
+                    <div style="font-size: 14px; color: var(--clr-text-body, #333); line-height: 1.55;">
+                        ${formattedResponse}
+                    </div>
+                    <div style="margin-top: 8px; display: flex; justify-content: flex-end; gap: 8px;">
+                        <button class="ai-speak-btn" style="background: transparent; border: none; cursor: pointer; color: var(--clr-text-muted, #888); padding: 4px;" title="Listen to response">
+                            <i data-lucide="volume-2" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
                 </div>
             `;
             history.appendChild(aiMsg);
+
+            // Add speak button listener for this specific message
+            const speakBtn = aiMsg.querySelector('.ai-speak-btn');
+            if (speakBtn) {
+                speakBtn.addEventListener('click', () => {
+                    VoiceAssistant.speak(response);
+                });
+            }
+
             if ((window as any).lucide) {
-                (window as any).lucide.createIcons({root: aiMsg});
+                (window as any).lucide.createIcons({ root: aiMsg });
             }
             history.scrollTop = history.scrollHeight;
+
+            // Automatically speak response if TTS is active
+            VoiceAssistant.speak(response);
         } catch (error) {
             console.error("AI query failed:", error);
-            const indicator = document.getElementById('ai-typing-indicator');
+            const indicator = document.getElementById(typingId);
             if (indicator) indicator.remove();
         }
     }
