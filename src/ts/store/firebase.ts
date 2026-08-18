@@ -1,14 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
 
-// TODO: Replace with your actual Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCdkoux4Sb8Lwep_DkU24P7tn-YlfF7xoI",
+  authDomain: "gg-doctor-dashboard.firebaseapp.com",
+  projectId: "gg-doctor-dashboard",
+  storageBucket: "gg-doctor-dashboard.firebasestorage.app",
+  messagingSenderId: "460198837780",
+  appId: "1:460198837780:web:ac956026c2ae37ddc13101"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -39,10 +38,9 @@ export const FirebaseDB = {
         }
     },
 
-    async addLog(collectionName: string, userId: string, data: any) {
+    async addLog(collectionPath: string, data: any) {
         try {
-            const docRef = await addDoc(collection(db, collectionName), {
-                userId,
+            const docRef = await addDoc(collection(db, collectionPath), {
                 ...data,
                 serverTimestamp: new Date().toISOString()
             });

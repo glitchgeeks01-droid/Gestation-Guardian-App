@@ -28,6 +28,17 @@
         </div>
       </div>
 
+      <!-- Clinical ID Card -->
+      <div class="card-white" style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <h3 style="font-size: 14px; color: var(--clr-text-muted); font-weight: 600; margin: 0;">My Clinical ID</h3>
+          <span id="clinical-id-display" style="font-size: 18px; color: var(--clr-dark-green); font-weight: 700; letter-spacing: 1px;"></span>
+        </div>
+        <button class="btn btn-secondary" onclick="Profile.copyClinicalId()" style="padding: 8px 12px; min-width: auto; height: auto;">
+          <i data-lucide="copy" style="width: 16px; height: 16px;"></i> Copy
+        </button>
+      </div>
+
       <!-- Personal Details Card -->
       <div class="card-white" style="display: flex; flex-direction: column; gap: 16px;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">

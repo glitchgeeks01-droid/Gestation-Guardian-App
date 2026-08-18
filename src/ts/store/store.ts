@@ -30,7 +30,17 @@ export const Store = {
     },
 
     // Assume single user for now until Auth is implemented
-    userId: 'default_user_123',
+    userId: '',
+
+    initUserId() {
+        let id = localStorage.getItem('gg_patient_id');
+        if (!id) {
+            const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+            id = `GG-${randomPart}`;
+            localStorage.setItem('gg_patient_id', id);
+        }
+        this.userId = id;
+    },
 
     // --- Offline Sync Engine ---
     getSyncQueue() {
@@ -57,8 +67,8 @@ export const Store = {
                 if (item.type === 'profile') {
                     success = await FirebaseDB.saveDocument('users', this.userId, item.data);
                 } else if (item.type === 'log') {
-                    // Save to corresponding collection based on log type
-                    const docId = await FirebaseDB.addLog(item.collection, this.userId, item.data);
+                    // Route all logs into the Polyglot telemetry subcollection
+                    const docId = await FirebaseDB.addLog(`users/${this.userId}/telemetry`, item.data);
                     success = !!docId;
                 }
             } catch (e) {
@@ -160,9 +170,37 @@ export const Store = {
 
         const fbCollection = collectionMap[key] || 'misc_logs';
 
-        // Queue for Firebase sync
+        // 1. Strict LOINC FHIR Generation
+        let fhirObservation: any = {
+            resourceType: "Observation",
+            status: "final",
+            subject: { reference: `Patient/${this.userId}` },
+            effectiveDateTime: entry.timestamp
+        };
+
+        if (key === 'gg_bp_logs') {
+            fhirObservation.category = [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}];
+            fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "85354-9", "display": "Blood pressure panel"}]};
+            fhirObservation.component = [
+                {"code": {"coding": [{"code": "8480-6", "display": "Systolic"}]}, "valueQuantity": {"value": Number(data.bpSys), "unit": "mmHg"}},
+                {"code": {"coding": [{"code": "8462-4", "display": "Diastolic"}]}, "valueQuantity": {"value": Number(data.bpDia), "unit": "mmHg"}}
+            ];
+        } else if (key === 'gg_vitals_logs') {
+            fhirObservation.category = [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}];
+            fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "8867-4", "display": "Heart rate"}]};
+            fhirObservation.valueQuantity = {"value": Number(data.maternalHR), "unit": "bpm"};
+        } else {
+            // Generic pseudo-FHIR fallback for other types
+            fhirObservation.code = { text: fbCollection };
+            fhirObservation.component = Object.keys(data).map(k => ({
+                code: { text: k },
+                valueString: String(data[k])
+            }));
+        }
+
+        // Queue for Firebase sync (collection property is mostly ignored now as processSyncQueue hardcodes telemetry)
         const q = this.getSyncQueue();
-        q.push({ type: 'log', collection: fbCollection, data: entry, timestamp: Date.now() });
+        q.push({ type: 'log', collection: 'telemetry', data: fhirObservation, timestamp: Date.now() });
         this.saveSyncQueue(q);
         
         if (navigator.onLine) this.processSyncQueue();

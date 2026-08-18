@@ -57,9 +57,9 @@ export const Vitals = {
     
     // BP Form Submission
     async saveBP() {
-        const sys = parseInt(document.getElementById('')?.value);
-        const dia = parseInt(document.getElementById('')?.value);
-        const pulse = parseInt(document.getElementById('')?.value) || 0;
+        const bpSys = parseInt((document.getElementById('bp-sys') as HTMLInputElement)?.value);
+        const bpDia = parseInt((document.getElementById('bp-dia') as HTMLInputElement)?.value);
+        const maternalHR = parseInt((document.getElementById('bp-pulse') as HTMLInputElement)?.value) || 0;
         
         // Get radio button values
         let position = 'sitting';
@@ -70,20 +70,20 @@ export const Vitals = {
         const armRadios = document.getElementsByName('bp-arm');
         for (let r of armRadios) { if (r.checked) arm = r.value; }
         
-        const notes = document.getElementById('')?.value;
+        const notes = (document.getElementById('bp-notes') as HTMLTextAreaElement)?.value;
         
-        if (!sys || !dia) {
+        if (!bpSys || !bpDia) {
             UI.showToast('Please enter both Systolic and Diastolic values', 'error');
             return;
         }
         
-        if (sys < 50 || sys > 250 || dia < 30 || dia > 150) {
+        if (bpSys < 50 || bpSys > 250 || bpDia < 30 || bpDia > 150) {
             UI.showToast('Values seem out of normal human range. Please check.', 'error');
             return;
         }
 
         await Store.addLog(Store.KEYS.BP_LOGS, {
-            sys, dia, pulse, position, arm, notes,
+            bpSys, bpDia, maternalHR, position, arm, notes,
             date: new Date().toISOString().split('T')[0],
             time: new Date().toTimeString().split(' ')[0]
         });
@@ -96,12 +96,12 @@ export const Vitals = {
     
     // Vitals Form Submission
     async saveVitals() {
-        const weight = parseFloat(document.getElementById('')?.value);
-        const sleep = parseFloat(document.getElementById('')?.value);
-        const stress = parseInt(document.getElementById('')?.value);
-        const temp = parseFloat(document.getElementById('')?.value);
-        const glucose = parseFloat(document.getElementById('')?.value);
-        const protein = document.getElementById('')?.value;
+        const weight = parseFloat((document.getElementById('vital-weight') as HTMLInputElement)?.value);
+        const sleep = parseFloat((document.getElementById('vital-sleep') as HTMLInputElement)?.value);
+        const stress = parseInt((document.getElementById('vital-stress') as HTMLInputElement)?.value);
+        const temp = parseFloat((document.getElementById('vital-temp') as HTMLInputElement)?.value);
+        const glucose = parseFloat((document.getElementById('vital-glucose') as HTMLInputElement)?.value);
+        const protein = (document.getElementById('vital-protein') as HTMLSelectElement)?.value;
         
         const data = {};
         if (weight) data.weight = weight;

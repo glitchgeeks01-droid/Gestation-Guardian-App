@@ -38,7 +38,7 @@ export const DashboardUI = {
         // Latest Vitals
         const latestBP = await Store.getLatestBP();
         if (latestBP) {
-            document.getElementById('dash-vital-bp')!.innerHTML = `${latestBP.sys}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">/${latestBP.dia}</span>`;
+            document.getElementById('dash-vital-bp')!.innerHTML = `${latestBP.bpSys}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">/${latestBP.bpDia}</span>`;
         }
         
         const vitals = await Store.getLogs(Store.KEYS.VITALS_LOGS);

@@ -45,9 +45,9 @@ export const Scoring = {
 
         // ── DYNAMIC SIGNALS ──
         if (latestBP) {
-            if (latestBP.sys >= 160 || latestBP.dia >= 110) { score += 7; factors.push('Severe-range BP'); }
-            else if (latestBP.sys >= 140 || latestBP.dia >= 90) { score += 5; factors.push('BP ≥140/90'); }
-            else if (latestBP.sys >= 130 || latestBP.dia >= 80) { score += 2; factors.push('Elevated BP'); }
+            if (latestBP.bpSys >= 160 || latestBP.bpDia >= 110) { score += 7; factors.push('Severe-range BP'); }
+            else if (latestBP.bpSys >= 140 || latestBP.bpDia >= 90) { score += 5; factors.push('BP ≥140/90'); }
+            else if (latestBP.bpSys >= 130 || latestBP.bpDia >= 80) { score += 2; factors.push('Elevated BP'); }
         }
 
         // Urine Protein & Blood Glucose from Vitals

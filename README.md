@@ -10,25 +10,40 @@
 
 ---
 
-**Gestation Guardian** is a premium, offline-first mobile application designed to empower expecting mothers. It focuses specifically on tracking vital health metrics, assessing pre-eclampsia and gestational hypertension risks, and providing actionable care advice—all wrapped in a stunning, native-feeling "Bento Grid" UI.
+**Gestation Guardian** is a premium, offline-first mobile application designed to empower expecting mothers. It focuses specifically on tracking vital health metrics, assessing pre-eclampsia and gestational hypertension risks, and providing actionable care advice—all wrapped in a stunning, native-feeling UI.
 
 ## ✨ Features
 
-* 📊 **Risk Assessment Engine:** A built-in mathematical model that tracks weight, blood pressure, and symptom checklists to calculate Gestosis risk safely.
+### Core Health Tracking
+* 📊 **Gestosis Risk Assessment Engine:** A built-in mathematical model that calculates cumulative clinical risk scores from static risk factors (age, parity, BMI, chronic conditions) and dynamic physiological signals (blood pressure, proteinuria, glucose, symptoms) — producing a real-time RAG-triaged score with Low / Moderate / High / Critical bands.
+* 🩸 **Blood Pressure Logging:** Systolic, diastolic, and pulse (maternal heart rate) capture with position and arm selection for clinical accuracy.
+* 🏥 **Vitals Dashboard:** Weight, sleep, temperature, blood glucose, urine protein, and stress level tracking in a single unified form.
+* 👶 **Fetal Kick Counter:** Interactive session-based kick counting with timer and threshold alerts.
+* ⏱️ **Contraction Timer:** Real-time labour contraction tracking with frequency and duration calculations.
+* 📋 **Medical History:** Comprehensive recording of chronic conditions, medications, and symptom logs.
+
+### Intelligence & AI
 * 🤖 **Gestation AI:** A floating, context-aware AI chatbot that remembers your conversation history and provides instant, reassuring advice.
-* 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including:
-  * Interactive Fetal Kick Counters
-  * Real-time Labor Contraction Timers
-  * Glassmorphic Alert Banners & Advice Cards
-  * Dynamic Pregnancy Progress Timelines
-* 🔥 **Firebase Firestore Backend:** Cloud-synced data persistence with offline-first architecture. Your data is saved locally for instant access and synced to Firestore when online.
-* 🛡️ **Offline-First Architecture:** The app works fully offline via `localStorage`. When connectivity is available, data syncs automatically to Firebase Firestore in the background.
+* 🚨 **Automated Alerting:** When the Gestosis score escalates to High or Critical, the app immediately triggers persistent high-priority alerts prompting the patient to seek medical attention.
+
+### Clinical Integration (Phase 2)
+* 🔗 **Doctor Dashboard Bridge:** Each patient is assigned a unique Clinical ID (`GG-XXXX`) displayed on their profile page. Sharing this ID with their doctor enables real-time remote monitoring via the [GG Doctor Dashboard](https://github.com/glitchgeeks01-droid/Gestation-Guardian-Web).
+* 📡 **HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding before syncing to the cloud:
+  * Blood Pressure → LOINC `85354-9` (panel), `8480-6` (systolic), `8462-4` (diastolic)
+  * Heart Rate → LOINC `8867-4`
+* 🗄️ **Polyglot Persistence:** Telemetry data is routed to `users/{patientId}/telemetry` subcollections, enabling high-frequency time-series queries for the clinical dashboard's real-time charts.
+* 🔥 **Shared Firebase Backend:** Both the mobile app and doctor dashboard connect to the same `gg-doctor-dashboard` Firebase project, ensuring a unified data ecosystem.
+
+### Platform & UX
+* 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including glassmorphic alert banners, dynamic pregnancy progress timelines, and interactive Bento Grid layouts.
+* 🛡️ **Offline-First Architecture:** The app works fully offline via `localStorage`. When connectivity is available, data syncs automatically to Firebase Firestore via a background sync queue with automatic retry on reconnect.
 * 📡 **Bluetooth Ready:** Base architectural stubs are in place for Web Bluetooth API integration to support external smart blood pressure cuffs and vitals bands.
 
 ## 🛠️ Tech Stack
 
 * **Core:** Vanilla TypeScript & ES Modules (No heavy frameworks like React or Vue).
-* **Backend:** Firebase Firestore with offline-first sync engine.
+* **Backend:** Firebase Firestore (`gg-doctor-dashboard` project) with offline-first sync engine.
+* **Data Standard:** HL7 FHIR R4 Observations with strict LOINC coding for clinical interoperability.
 * **Styling:** Custom Vanilla CSS featuring Skeuomorphic shadows, Glassmorphism, and a strict CSS Container constraint for mobile-first rendering.
 * **Build System:** Vite ⚡ for lightning-fast HMR and optimized bundling.
 * **Data Persistence:** Dual-layer — `localStorage` for instant local reads + Firebase Firestore for cloud backup and sync.
@@ -73,21 +88,11 @@ You can download the pre-built Android APK directly:
 
 ### Firebase Configuration
 
-To connect to your own Firebase project:
+The app is pre-configured to connect to the shared `gg-doctor-dashboard` Firebase project. To connect to your own project instead:
 
 1. Create a project at [Firebase Console](https://console.firebase.google.com/).
 2. Enable **Firestore Database** in your project.
-3. Update your Firebase credentials in `src/ts/store/firebase.ts`:
-   ```typescript
-   const firebaseConfig = {
-     apiKey: "YOUR_API_KEY",
-     authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-     projectId: "YOUR_PROJECT_ID",
-     storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-     appId: "YOUR_APP_ID"
-   };
-   ```
+3. Update your Firebase credentials in `src/ts/store/firebase.ts`.
 
 ### Building for Production
 
@@ -110,10 +115,12 @@ The APK will be generated at `android-app/app/build/outputs/apk/debug/app-debug.
 src/
 ├── ts/
 │   ├── store/
-│   │   ├── store.ts        # Offline-first data layer (localStorage + sync queue)
+│   │   ├── store.ts        # Offline-first data layer + FHIR LOINC transformation engine
 │   │   └── firebase.ts     # Firebase Firestore client & helpers
-│   ├── views/              # SPA view controllers (auth, dashboard, assessment, etc.)
-│   ├── core/               # Scoring engine, utilities
+│   ├── views/              # SPA view controllers (auth, dashboard, assessment, vitals, etc.)
+│   ├── core/
+│   │   ├── scoring.ts      # Gestosis risk scoring engine (RAG triage)
+│   │   └── types.ts        # TypeScript interfaces
 │   ├── components/         # Reusable UI components
 │   └── services/           # AI chatbot, Bluetooth stubs
 ├── pages/                  # HTML templates loaded dynamically via hash routing
@@ -122,10 +129,23 @@ src/
 
 ### Data Flow
 ```
-User Input → localStorage (instant) → Sync Queue → Firebase Firestore (background)
+User Input → localStorage (instant) → FHIR LOINC Transform → Sync Queue → Firebase Firestore
+                                                                              ↓
+                                                              users/{patientId}/telemetry
+                                                                              ↓
+                                                              Doctor Dashboard (real-time)
 ```
 
-The app uses a **write-local-first, sync-later** pattern. All health data (blood pressure, vitals, glucose, urine, kick counts, contractions, symptoms) is persisted locally and queued for Firebase sync when online.
+The app uses a **write-local-first, sync-later** pattern. All health data (blood pressure, vitals, glucose, urine, kick counts, contractions, symptoms) is persisted locally, transformed into HL7 FHIR Observations, and queued for Firebase sync when online. The doctor dashboard receives these updates in real-time via Firestore `onSnapshot` listeners.
+
+## 🔗 Clinical Integration Flow
+
+1. Patient signs up in the mobile app → a unique Clinical ID (`GG-XXXX`) is generated.
+2. Patient navigates to **Profile** → copies their Clinical ID.
+3. Patient shares the ID with their healthcare provider.
+4. Doctor enters the ID in the **GG Doctor Dashboard** → **Connect Patient** dialog.
+5. The dashboard instantly establishes a real-time WebSocket-like connection to the patient's telemetry subcollection.
+6. All future vitals logged by the patient are streamed live to the doctor's clinical charts.
 
 ## 🔒 Privacy & Security
 

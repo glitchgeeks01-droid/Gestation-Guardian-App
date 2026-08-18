@@ -20,6 +20,7 @@ import { AIBot } from '../services/ai-bot';
 import { HealthRecords } from './health-records';
 import { DashboardUI } from './dashboard';
 import { MedicalHistory } from './medical-history';
+import { Profile } from './profile';
 
 // Expose modules to global scope for inline HTML event handlers
 window.Auth = Auth;
@@ -35,6 +36,7 @@ window.AIBot = AIBot;
 window.HealthRecords = HealthRecords;
 window.DashboardUI = DashboardUI;
 window.MedicalHistory = MedicalHistory;
+window.Profile = Profile;
 
 // js/app.js
 
@@ -57,7 +59,10 @@ export const App = {
         if (AIBot) AIBot.init();
         
         // Initialize Offline Sync Engine
-        if (Store) Store.initSyncEngine();
+        if (Store) {
+            Store.initUserId();
+            Store.initSyncEngine();
+        }
         
         // Handle hash changes for routing
         window.addEventListener('hashchange', this.handleRoute.bind(this));
@@ -250,6 +255,9 @@ export const App = {
                 break;
             case 'medical-history':
                 if (MedicalHistory) await MedicalHistory.init();
+                break;
+            case 'profile':
+                if (Profile) await Profile.init();
                 break;
             case 'reminders':
                 // Reminders is entirely statically driven via UI methods

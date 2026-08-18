@@ -29,7 +29,7 @@ export const Auth = {
     },
     
     sendOTP() {
-        const phone = document.getElementById('')?.value;
+        const phone = (document.getElementById('su-phone') as HTMLInputElement)?.value;
         if (!phone || phone.length < 10) {
             UI.showToast('Please enter a valid phone number', 'error');
             return;
