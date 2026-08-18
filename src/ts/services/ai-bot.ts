@@ -137,7 +137,6 @@ export const AIBot = {
         const form = document.getElementById('global-chat-form');
         const micBtn = document.getElementById('ai-mic-btn');
         const ttsToggle = document.getElementById('ai-tts-toggle');
-        const configBtn = document.getElementById('ai-config-btn');
 
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
@@ -190,18 +189,6 @@ export const AIBot = {
                     ? `<i data-lucide="volume-2" style="width: 18px; height: 18px;"></i>` 
                     : `<i data-lucide="volume-x" style="width: 18px; height: 18px;"></i>`;
                 if ((window as any).lucide) (window as any).lucide.createIcons({ root: ttsToggle });
-            });
-        }
-
-        // Setup API Key configuration modal/prompt
-        if (configBtn) {
-            configBtn.addEventListener('click', () => {
-                const currentKey = GeminiAIService.getApiKey();
-                const newKey = prompt("Enter your Google Gemini API Key (or leave empty to use offline WHO expert knowledge engine):", currentKey);
-                if (newKey !== null) {
-                    GeminiAIService.setApiKey(newKey);
-                    alert(newKey.trim() ? "✅ Gemini API Key saved! AI assistant will use Gemini + WHO Data." : "ℹ️ Using offline WHO Antenatal Care Knowledge Engine.");
-                }
             });
         }
     },
