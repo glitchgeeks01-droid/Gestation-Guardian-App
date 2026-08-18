@@ -2,8 +2,11 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 
-// Helper: build file:// URL
-const url = (file) => `file://${path.join(__dirname, '..', file)}`;
+// Helper: build file:// URL for the built SPA
+const url = (file) => {
+  const hash = file.replace('.html', '');
+  return `file://${path.join(__dirname, '../android-app/app/src/main/assets/www/index.html')}#/${hash}`;
+};
 
 // ─────────────────────────────────────────────
 // SUITE 1: Signup → gg_profile persistence
@@ -13,27 +16,46 @@ test.describe('Signup → gg_profile', () => {
     await page.goto(url('signup.html'));
 
     // Fill Full Name
-    await page.fill('input[placeholder="Eleanor Vance"]', 'Priya Menon', { force: true });
+    await page.fill('#su-name', 'Priya Menon');
+
+    // Fill Phone
+    await page.fill('#su-phone', '9876543210');
+
+    // Fill Email
+    await page.fill('#su-email', 'priya@example.com');
+
+    // Fill Password
+    await page.fill('#su-password', 'password123');
+
+    // Fill DOB
+    await page.fill('#su-dob', '1995-01-01');
 
     // Fill LMP date (triggers EDD auto-calc)
     const lmpDate = '2025-09-01';
-    await page.fill('.lmp-card input[type="date"]', lmpDate);
+    await page.fill('#su-lmp', lmpDate);
 
-    // Fill other required fields so HTML5 validation passes
-    await page.fill('input[type="tel"]', '9876543210');
-    await page.fill('input[type="email"]', 'priya@example.com');
-    const pwds = page.locator('input[type="password"]');
-    await pwds.nth(0).fill('password123');
-    await pwds.nth(1).fill('password123');
+    // Blood Group
+    await page.selectOption('#su-blood', 'O+');
+
+    // We don't have to fill OTP in this test because the test environment might bypass it, 
+    // or wait, handleSignUp checks OTP length! 
+    // Let's inject dummy values for OTP so it passes
+    await page.evaluate(() => {
+      document.getElementById('otp-section')?.classList.remove('hidden');
+      document.querySelectorAll('.input-otp').forEach(i => i.value = '1');
+    });
 
     // Submit
-    await page.click('#signup-submit-btn');
+    await page.click('button[type="submit"]');
 
-    // Should navigate to dashboard
-    await expect(page).toHaveURL(/dashboard\.html/);
+    // Should navigate to risk-assessment
+    await expect(page).toHaveURL(/risk-assessment/);
 
-    // Read localStorage via GG object injected by script.js
-    const profile = await page.evaluate(() => GG.get('gg_profile'));
+    // Read localStorage via GG object injected by script.js? Wait, the GG object doesn't exist anymore!
+    // It's probably `Store.getProfile()` or directly in localStorage under 'gg_profile'.
+    // Let's read localStorage directly.
+    const profileStr = await page.evaluate(() => localStorage.getItem('gg_profile'));
+    const profile = JSON.parse(profileStr || 'null');
 
     expect(profile).not.toBeNull();
     expect(profile.name).toBe('Priya Menon');
@@ -47,7 +69,7 @@ test.describe('Signup → gg_profile', () => {
   test('dashboard greeting uses stored profile name', async ({ page }) => {
     await page.goto(url('dashboard.html'));
     await page.evaluate(() => {
-      GG.set('gg_profile', { name: 'Ananya', lmp: '2025-07-01', edd: '2026-04-07' });
+      localStorage.setItem('gg_profile', JSON.stringify({ name: 'Ananya', lmp: '2025-07-01', edd: '2026-04-07' }));
     });
     await page.reload();
     const name = await page.textContent('.greeting-name');
@@ -59,7 +81,7 @@ test.describe('Signup → gg_profile', () => {
     const lmp = new Date(Date.now() - 24 * 7 * 86400000).toISOString().split('T')[0];
     await page.goto(url('dashboard.html'));
     await page.evaluate((lmpVal) => {
-      GG.set('gg_profile', { name: 'Test', lmp: lmpVal, edd: '' });
+      localStorage.setItem('gg_profile', JSON.stringify({ name: 'Test', lmp: lmpVal, edd: '' }));
     }, lmp);
     await page.reload();
     const weekText = await page.textContent('.week-title');

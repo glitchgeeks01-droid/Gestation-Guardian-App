@@ -90,12 +90,12 @@ export const Auth = {
     
     async handleSignUp() {
         // Collect data
-        const name = document.getElementById('')?.value;
-        const phone = document.getElementById('')?.value;
-        const email = document.getElementById('')?.value;
-        const dob = document.getElementById('')?.value;
-        const lmp = document.getElementById('')?.value;
-        const bloodGroup = document.getElementById('')?.value;
+        const name = (document.getElementById('su-name') as HTMLInputElement)?.value;
+        const phone = (document.getElementById('su-phone') as HTMLInputElement)?.value;
+        const email = (document.getElementById('su-email') as HTMLInputElement)?.value;
+        const dob = (document.getElementById('su-dob') as HTMLInputElement)?.value;
+        const lmp = (document.getElementById('su-lmp') as HTMLInputElement)?.value;
+        const bloodGroup = (document.getElementById('su-blood') as HTMLSelectElement)?.value;
         
         // Validate OTP was entered (mock)
         const otpInputs = document.querySelectorAll('.input-otp');
@@ -153,8 +153,8 @@ export const Auth = {
     },
     
     async handleSignIn() {
-        const email = document.getElementById('')?.value;
-        const password = document.getElementById('')?.value;
+        const email = (document.getElementById('signin-email') as HTMLInputElement)?.value;
+        const password = (document.getElementById('signin-password') as HTMLInputElement)?.value;
         
         if (!email || !password) {
             UI.showToast('Please enter your credentials', 'error');

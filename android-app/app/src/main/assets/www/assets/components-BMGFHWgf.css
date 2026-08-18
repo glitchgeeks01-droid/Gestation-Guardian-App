@@ -1,0 +1,386 @@
+/* css/components.css */
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--r-pill);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary Button (Onboarding) */
+.btn-primary {
+  background: var(--clr-primary);
+  color: var(--clr-bg-white);
+  box-shadow: var(--shadow-btn-green);
+  font-weight: 700;
+  font-size: 20px;
+  padding: 20px 32px;
+  height: 68px;
+  width: 100%;
+}
+
+/* Secondary Button (Onboarding) */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--clr-primary);
+  color: var(--clr-primary);
+  backdrop-filter: blur(2px);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 20px 32px;
+  height: 72px;
+  width: 100%;
+}
+
+/* Action Button (Sign In/Auth) */
+.btn-action {
+  background: var(--grad-btn-primary);
+  color: var(--clr-bg-white);
+  box-shadow: var(--shadow-btn-action);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 16px 0;
+  height: 60px;
+  width: 100%;
+}
+
+/* Accent Button (Bluetooth Footer) */
+.btn-accent {
+  background: var(--clr-accent-green);
+  color: var(--clr-bg-white);
+  box-shadow: var(--shadow-btn-accent);
+  font-weight: 600;
+  font-size: 18px;
+  padding: 14px 0;
+  height: 56px;
+  width: 100%;
+}
+
+/* Social Buttons */
+.btn-google {
+  background: var(--clr-bg-white);
+  border: 2px solid var(--clr-border-subtle);
+  color: var(--clr-text-primary);
+  font-weight: 700;
+  font-size: 16px;
+  height: 60px;
+  width: 100%;
+}
+
+.btn-apple {
+  background: var(--clr-text-primary);
+  color: var(--clr-bg-white);
+  font-weight: 700;
+  font-size: 16px;
+  height: 60px;
+  width: 100%;
+}
+
+/* Text Buttons */
+.btn-text {
+  background: transparent;
+  color: var(--clr-accent-green);
+  font-weight: 500;
+  font-size: 16px;
+  height: 40px;
+}
+
+.btn-text-link {
+  color: var(--clr-dark-green);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+
+/* Glass Card (Auth) */
+.card-glass {
+  background: var(--clr-bg-glass);
+  border: 1px solid var(--clr-border-glass);
+  backdrop-filter: blur(6px);
+  border-radius: var(--r-card-lg);
+  box-shadow: var(--shadow-card-glass);
+  padding: 40px 32px 32px;
+}
+
+/* Solid White Card (Signup) */
+.card-white {
+  background: var(--clr-bg-white);
+  border-radius: var(--r-card-lg);
+  box-shadow: var(--shadow-card-white);
+  padding: 32px;
+}
+
+/* Device Card (Bluetooth) */
+.card-device {
+  background: var(--clr-bg-white);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card-device);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.card-device-icon-bg {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-pill);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-device-icon-bg.green { background: var(--clr-green-tint); color: #3D6449; }
+.card-device-icon-bg.purple { background: var(--clr-purple-bg); color: var(--clr-purple); }
+.card-device-icon-bg.teal { background: var(--clr-oximeter-bg); color: var(--clr-accent-green); }
+
+.card-device-content {
+  flex-grow: 1;
+}
+
+.card-device-content h3 {
+  font-size: 18px;
+  color: var(--clr-text-body-alt2);
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+
+.card-device-content p {
+  font-size: 14px;
+  color: var(--clr-text-muted-alt);
+}
+
+.btn-connect {
+  border: 1px solid var(--clr-border-device);
+  color: var(--clr-accent-green);
+  border-radius: var(--r-pill);
+  padding: 8px 24px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Info Card (Why Connect) */
+.card-info {
+  background: var(--clr-green-10);
+  border-radius: var(--r-card-xl);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-info-bg-icon {
+  position: absolute;
+  right: -32px;
+  bottom: -32px;
+  opacity: 0.1;
+  color: var(--clr-accent-green);
+  width: 120px;
+  height: 120px;
+}
+
+/* Quote Card */
+.card-quote {
+  background: rgba(255, 255, 255, 0.9);
+  border-left: 4px solid var(--clr-primary);
+  box-shadow: var(--shadow-xs);
+  backdrop-filter: blur(6px);
+  border-radius: var(--r-sm);
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   Forms & Inputs
+   ========================================================================== */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  position: relative;
+}
+
+.input-group .label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+/* Auth Pill Input */
+.input-auth {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--r-pill);
+  height: 60px;
+  padding: 18px 16px 18px 48px;
+  width: 100%;
+  color: var(--clr-text-muted);
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-text-body-alt);
+  pointer-events: none;
+}
+
+.input-icon-right {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clr-text-body-alt);
+  cursor: pointer;
+  background: transparent;
+  padding: 4px;
+  width: auto;
+}
+
+/* Signup Card Input */
+.input-form {
+  background: var(--clr-bg-input);
+  border: 1px solid var(--clr-border-input);
+  border-radius: var(--r-card-lg);
+  height: 58px;
+  padding: 18px 24px;
+  width: 100%;
+  color: var(--clr-text-body);
+}
+
+/* OTP Boxes */
+.otp-group {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+.input-otp {
+  width: 60px;
+  height: 68px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  background: var(--clr-bg-input);
+  border: 1px solid var(--clr-border-input);
+  border-radius: 20px;
+  color: var(--clr-text-heading);
+}
+.input-otp:focus {
+  border-color: var(--clr-primary);
+  background: var(--clr-bg-white);
+  box-shadow: 0 0 0 4px rgba(109, 161, 113, 0.1);
+}
+
+/* ==========================================================================
+   Layout & Utilities
+   ========================================================================== */
+
+/* Tab Switcher */
+.tab-switcher {
+  background: var(--clr-border-subtle);
+  border-radius: var(--r-pill);
+  padding: 6px;
+  display: flex;
+  height: 56px;
+  width: 100%;
+}
+
+.tab-btn {
+  flex: 1;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--clr-text-body-alt);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tab-btn.active {
+  background: var(--clr-bg-white);
+  box-shadow: var(--shadow-xs);
+  color: var(--clr-dark-green);
+}
+
+/* Dividers */
+.divider-with-text {
+  position: relative;
+  text-align: center;
+  margin: 16px 0;
+  width: 100%;
+}
+.divider-with-text::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--clr-divider);
+}
+.divider-with-text span {
+  position: relative;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
+  padding: 0 16px;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 2.4px;
+  color: var(--clr-text-body-alt);
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+/* Headers and Footers (Glass) */
+.glass-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 72px;
+  background: var(--clr-bg-glass-footer);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-header);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  z-index: 100;
+}
+
+.glass-footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--clr-bg-glass-footer);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-footer);
+  padding: 24px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 100;
+}
+
+/* Spacers */
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mt-8 { margin-top: 32px; }
+.mt-12 { margin-top: 48px; }
+
+/* Helper classes */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.w-full { width: 100%; }

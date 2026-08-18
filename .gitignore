@@ -5,3 +5,7 @@ node_modules/
 optimize_meta.js
 fix.js
 fix_style.js
+*.apk
+test-results/
+playwright-report/
+

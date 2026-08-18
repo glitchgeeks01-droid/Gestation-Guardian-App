@@ -6,7 +6,8 @@
  * Handles localStorage abstraction, data structures, and exports
  */
 
-// No more Firebase imports
+// No more Firebase imports? Just kidding, we are adding it back!
+import { FirebaseDB } from './firebase';
 
 // Helper for API endpoint mapping (Android emulator maps 10.0.2.2 to localhost)
 const API_BASE = window.location.protocol === 'file:' ? 'http://10.0.2.2:3000/api' : '/api';
@@ -42,7 +43,31 @@ export const Store = {
     },
 
     async processSyncQueue() {
-        // Disabled: Backend connection removed per user request
+        if (!navigator.onLine) return;
+        
+        const q = this.getSyncQueue();
+        if (q.length === 0) return;
+
+        console.log(`Processing sync queue of ${q.length} items...`);
+        const remainingQ: any[] = [];
+
+        for (const item of q) {
+            let success = false;
+            try {
+                if (item.type === 'profile') {
+                    success = await FirebaseDB.saveDocument('users', this.userId, item.data);
+                } else if (item.type === 'log') {
+                    // Save to corresponding collection based on log type
+                    const docId = await FirebaseDB.addLog(item.collection, this.userId, item.data);
+                    success = !!docId;
+                }
+            } catch (e) {
+                console.error("Sync error for item:", item, e);
+            }
+            if (!success) remainingQ.push(item);
+        }
+
+        this.saveSyncQueue(remainingQ);
     },
 
     initSyncEngine() {
@@ -58,7 +83,8 @@ export const Store = {
 
     // Base methods - Asynchronous
     async _get(key: string, defaultValue: any = null) {
-        // Local storage only (Backend connection removed per request)
+        // Try getting from Firebase first if online, else fallback to local
+        // For simplicity and speed, we read locally and sync in background
         try {
             const item = localStorage.getItem(key);
             if (!item) return defaultValue;
@@ -74,7 +100,7 @@ export const Store = {
     },
 
     async _set(key: string, value: any) {
-        // Save locally only
+        // Save locally
         try {
             localStorage.setItem(key, JSON.stringify(value));
         } catch (e) {
@@ -91,17 +117,27 @@ export const Store = {
         return await this._get(this.KEYS.PROFILE);
     },
 
-    async saveProfile(profileData) {
+    async saveProfile(profileData: any) {
+        // 1. Save locally for instant UI updates
         await this._set(this.KEYS.PROFILE, profileData);
+        
+        // 2. Queue for Firebase Sync
+        const q = this.getSyncQueue();
+        q.push({ type: 'profile', data: profileData, timestamp: Date.now() });
+        this.saveSyncQueue(q);
+        
+        // 3. Trigger sync
+        if (navigator.onLine) this.processSyncQueue();
     },
 
     // Generic log methods
     async getLogs(key: string) {
+        // Read local logs for immediate UI
         const data = await this._get(key, []);
         return Array.isArray(data) ? data : [];
     },
 
-    async addLog(key, data) {
+    async addLog(key: string, data: any) {
         const logs = await this.getLogs(key);
         const entry = {
             id: this._generateId(),
@@ -110,6 +146,27 @@ export const Store = {
         };
         logs.unshift(entry); // Add to beginning (newest first)
         await this._set(key, logs);
+        
+        // Map local keys to Firebase collections
+        const collectionMap: Record<string, string> = {
+            'gg_bp_logs': 'blood_pressure',
+            'gg_vitals_logs': 'vitals',
+            'gg_glucose_logs': 'glucose',
+            'gg_urine_logs': 'urine',
+            'gg_kick_sessions': 'kick_counts',
+            'gg_contractions': 'contractions',
+            'gg_symptoms': 'symptoms'
+        };
+
+        const fbCollection = collectionMap[key] || 'misc_logs';
+
+        // Queue for Firebase sync
+        const q = this.getSyncQueue();
+        q.push({ type: 'log', collection: fbCollection, data: entry, timestamp: Date.now() });
+        this.saveSyncQueue(q);
+        
+        if (navigator.onLine) this.processSyncQueue();
+
         return entry;
     },
 
