@@ -12,9 +12,11 @@ import { Vitals } from '../views/vitals';
 export const Scoring = {
     // Helper to calculate BMI
     calcBMI(weightKg, heightCm) {
-        if (!weightKg || !heightCm) return 0;
-        const heightM = heightCm / 100;
-        return weightKg / (heightM * heightM);
+        const w = parseFloat(weightKg);
+        const h = parseFloat(heightCm);
+        if (isNaN(w) || isNaN(h) || h <= 0) return 0;
+        const heightM = h / 100;
+        return w / (heightM * heightM);
     },
 
     async evaluateCurrentState() {
@@ -95,7 +97,7 @@ export const Scoring = {
             const previousWeight = vitalsLogs[1].weight;
             const dateDiffDays = (new Date(vitalsLogs[0].timestamp) - new Date(vitalsLogs[1].timestamp)) / (1000 * 60 * 60 * 24);
             
-            if (currentWeight && previousWeight && dateDiffDays >= 1) {
+            if (currentWeight !== undefined && previousWeight !== undefined && dateDiffDays >= 1) {
                 const weeklyGainRate = ((currentWeight - previousWeight) / dateDiffDays) * 7;
                 if (weeklyGainRate >= 2) { score += 1; factors.push('Weight gain ≥2kg/wk'); }
             }

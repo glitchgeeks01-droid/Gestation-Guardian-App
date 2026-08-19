@@ -57,22 +57,26 @@ export const Vitals = {
     
     // BP Form Submission
     async saveBP() {
-        const bpSys = parseInt((document.getElementById('bp-sys') as HTMLInputElement)?.value);
-        const bpDia = parseInt((document.getElementById('bp-dia') as HTMLInputElement)?.value);
-        const maternalHR = parseInt((document.getElementById('bp-pulse') as HTMLInputElement)?.value) || 0;
+        const bpSysInput = document.getElementById('bp-sys') as HTMLInputElement;
+        const bpDiaInput = document.getElementById('bp-dia') as HTMLInputElement;
+        const bpPulseInput = document.getElementById('bp-pulse') as HTMLInputElement;
+        
+        const bpSys = bpSysInput ? parseInt(bpSysInput.value, 10) : NaN;
+        const bpDia = bpDiaInput ? parseInt(bpDiaInput.value, 10) : NaN;
+        const maternalHR = (bpPulseInput && bpPulseInput.value) ? parseInt(bpPulseInput.value, 10) : 0;
         
         // Get radio button values
         let position = 'sitting';
         const posRadios = document.getElementsByName('bp-position');
-        for (let r of posRadios) { if (r.checked) position = r.value; }
+        for (let r of posRadios) { if ((r as HTMLInputElement).checked) position = (r as HTMLInputElement).value; }
         
         let arm = 'left';
         const armRadios = document.getElementsByName('bp-arm');
-        for (let r of armRadios) { if (r.checked) arm = r.value; }
+        for (let r of armRadios) { if ((r as HTMLInputElement).checked) arm = (r as HTMLInputElement).value; }
         
-        const notes = (document.getElementById('bp-notes') as HTMLTextAreaElement)?.value;
+        const notes = (document.getElementById('bp-notes') as HTMLTextAreaElement)?.value || '';
         
-        if (!bpSys || !bpDia) {
+        if (isNaN(bpSys) || isNaN(bpDia)) {
             UI.showToast('Please enter both Systolic and Diastolic values', 'error');
             return;
         }
@@ -96,19 +100,26 @@ export const Vitals = {
     
     // Vitals Form Submission
     async saveVitals() {
-        const weight = parseFloat((document.getElementById('vital-weight') as HTMLInputElement)?.value);
-        const sleep = parseFloat((document.getElementById('vital-sleep') as HTMLInputElement)?.value);
-        const stress = parseInt((document.getElementById('vital-stress') as HTMLInputElement)?.value);
-        const temp = parseFloat((document.getElementById('vital-temp') as HTMLInputElement)?.value);
-        const glucose = parseFloat((document.getElementById('vital-glucose') as HTMLInputElement)?.value);
-        const protein = (document.getElementById('vital-protein') as HTMLSelectElement)?.value;
+        const weightInput = document.getElementById('vital-weight') as HTMLInputElement;
+        const sleepInput = document.getElementById('vital-sleep') as HTMLInputElement;
+        const stressInput = document.getElementById('vital-stress') as HTMLInputElement;
+        const tempInput = document.getElementById('vital-temp') as HTMLInputElement;
+        const glucoseInput = document.getElementById('vital-glucose') as HTMLInputElement;
+        const proteinInput = document.getElementById('vital-protein') as HTMLSelectElement;
         
-        const data = {};
-        if (weight) data.weight = weight;
-        if (sleep) data.sleep = sleep;
-        if (stress) data.stress = stress;
-        if (temp) data.temperature = temp;
-        if (glucose) data.glucose = glucose;
+        const weight = (weightInput && weightInput.value) ? parseFloat(weightInput.value) : NaN;
+        const sleep = (sleepInput && sleepInput.value) ? parseFloat(sleepInput.value) : NaN;
+        const stress = (stressInput && stressInput.value) ? parseInt(stressInput.value, 10) : NaN;
+        const temp = (tempInput && tempInput.value) ? parseFloat(tempInput.value) : NaN;
+        const glucose = (glucoseInput && glucoseInput.value) ? parseFloat(glucoseInput.value) : NaN;
+        const protein = proteinInput?.value || '';
+        
+        const data: any = {};
+        if (!isNaN(weight)) data.weight = weight;
+        if (!isNaN(sleep)) data.sleep = sleep;
+        if (!isNaN(stress)) data.stress = stress;
+        if (!isNaN(temp)) data.temperature = temp;
+        if (!isNaN(glucose)) data.glucose = glucose;
         if (protein) data.protein = protein;
         
         if (Object.keys(data).length === 0) {

@@ -13,7 +13,9 @@ export const DashboardUI = {
             const week = await Store.getCurrentGestationalWeek();
             const trimester = await Store.getCurrentTrimester();
             
-            document.getElementById('dash-week')!.textContent = `Week ${week}`;
+            const safeWeek = typeof week === 'number' && !isNaN(week) ? week : 0;
+            
+            document.getElementById('dash-week')!.textContent = `Week ${safeWeek}`;
             
             let triLabel = 'FIRST TRIMESTER';
             if (trimester === 2) triLabel = 'SECOND TRIMESTER';
@@ -22,17 +24,17 @@ export const DashboardUI = {
             
             // Progress
             const maxWeeks = 40;
-            const progress = Math.min(Math.round((week / maxWeeks) * 100), 100);
+            const progress = Math.min(Math.round((safeWeek / maxWeeks) * 100), 100);
             document.getElementById('dash-progress-bar')!.style.width = `${progress}%`;
             document.getElementById('dash-progress-text')!.textContent = `${progress}%`;
             
-            const daysLeft = Math.max((maxWeeks * 7) - (week * 7), 0);
+            const daysLeft = Math.max((maxWeeks * 7) - (safeWeek * 7), 0);
             document.getElementById('dash-days-left')!.textContent = `${daysLeft} days to go`;
             
             // Baby size emoji (simplified)
             const sizes = ['🫐', '🍇', '🍓', '🍋', '🍑', '🥑', '🧅', '🌽', '🍆', '🥥', '🍍', '🍉'];
-            const sizeIndex = Math.floor(Math.min(week / 4, sizes.length - 1));
-            document.getElementById('dash-baby-size')!.textContent = sizes[sizeIndex];
+            const sizeIndex = Math.floor(Math.min(safeWeek / 4, sizes.length - 1));
+            document.getElementById('dash-baby-size')!.textContent = sizes[Math.max(0, sizeIndex)];
         }
         
         // Latest Vitals

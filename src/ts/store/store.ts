@@ -43,41 +43,64 @@ export const Store = {
     },
 
     // --- Offline Sync Engine ---
+    isSyncing: false,
+
     getSyncQueue() {
-        const q = localStorage.getItem('gg_sync_queue');
-        return q ? JSON.parse(q) : [];
+        try {
+            const q = localStorage.getItem('gg_sync_queue');
+            return q ? JSON.parse(q) : [];
+        } catch (e) {
+            console.error("Error parsing sync queue", e);
+            return [];
+        }
     },
 
     saveSyncQueue(q: any[]) {
-        localStorage.setItem('gg_sync_queue', JSON.stringify(q));
+        try {
+            localStorage.setItem('gg_sync_queue', JSON.stringify(q));
+        } catch (e) {
+            console.error("Error saving sync queue", e);
+        }
     },
 
     async processSyncQueue() {
-        if (!navigator.onLine) return;
+        if (!navigator.onLine || this.isSyncing) return;
         
-        const q = this.getSyncQueue();
-        if (q.length === 0) return;
+        this.isSyncing = true;
+        try {
+            const q = this.getSyncQueue();
+            if (q.length === 0) return;
 
-        console.log(`Processing sync queue of ${q.length} items...`);
-        const remainingQ: any[] = [];
+            console.log(`Processing sync queue of ${q.length} items...`);
+            // Clear queue temporarily to prevent concurrent modifications duplicating sync
+            this.saveSyncQueue([]);
 
-        for (const item of q) {
-            let success = false;
-            try {
-                if (item.type === 'profile') {
-                    success = await FirebaseDB.saveDocument('users', this.userId, item.data);
-                } else if (item.type === 'log') {
-                    // Route all logs into the Polyglot telemetry subcollection
-                    const docId = await FirebaseDB.addLog(`users/${this.userId}/telemetry`, item.data);
-                    success = !!docId;
+            const remainingQ: any[] = [];
+
+            for (const item of q) {
+                let success = false;
+                try {
+                    if (item.type === 'profile') {
+                        success = await FirebaseDB.saveDocument('users', this.userId, item.data);
+                    } else if (item.type === 'log') {
+                        // Route all logs into the Polyglot telemetry subcollection
+                        const docId = await FirebaseDB.addLog(`users/${this.userId}/telemetry`, item.data);
+                        success = !!docId;
+                    }
+                } catch (e) {
+                    console.error("Sync error for item:", item, e);
                 }
-            } catch (e) {
-                console.error("Sync error for item:", item, e);
+                if (!success) remainingQ.push(item);
             }
-            if (!success) remainingQ.push(item);
-        }
 
-        this.saveSyncQueue(remainingQ);
+            if (remainingQ.length > 0) {
+                // Merge remaining with any new items added while processing
+                const currentQ = this.getSyncQueue();
+                this.saveSyncQueue([...remainingQ, ...currentQ]);
+            }
+        } finally {
+            this.isSyncing = false;
+        }
     },
 
     initSyncEngine() {
@@ -182,17 +205,17 @@ export const Store = {
             fhirObservation.category = [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}];
             fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "85354-9", "display": "Blood pressure panel"}]};
             fhirObservation.component = [
-                {"code": {"coding": [{"code": "8480-6", "display": "Systolic"}]}, "valueQuantity": {"value": Number(data.bpSys), "unit": "mmHg"}},
-                {"code": {"coding": [{"code": "8462-4", "display": "Diastolic"}]}, "valueQuantity": {"value": Number(data.bpDia), "unit": "mmHg"}}
+                {"code": {"coding": [{"system": "http://loinc.org", "code": "8480-6", "display": "Systolic blood pressure"}]}, "valueQuantity": {"value": Number(data.bpSys), "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]"}},
+                {"code": {"coding": [{"system": "http://loinc.org", "code": "8462-4", "display": "Diastolic blood pressure"}]}, "valueQuantity": {"value": Number(data.bpDia), "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]"}}
             ];
         } else if (key === 'gg_vitals_logs') {
             fhirObservation.category = [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}];
             fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "8867-4", "display": "Heart rate"}]};
-            fhirObservation.valueQuantity = {"value": Number(data.maternalHR), "unit": "bpm"};
+            fhirObservation.valueQuantity = {"value": Number(data.maternalHR), "unit": "beats/minute", "system": "http://unitsofmeasure.org", "code": "/min"};
         } else {
             // Generic pseudo-FHIR fallback for other types
             fhirObservation.code = { text: fbCollection };
-            fhirObservation.component = Object.keys(data).map(k => ({
+            fhirObservation.component = Object.keys(data || {}).map(k => ({
                 code: { text: k },
                 valueString: String(data[k])
             }));
