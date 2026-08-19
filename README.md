@@ -28,15 +28,16 @@
 
 ### Clinical Integration (Phase 2)
 * 🔗 **Doctor Dashboard Bridge:** Each patient is assigned a unique Clinical ID (`GG-XXXX`) displayed on their profile page. Sharing this ID with their doctor enables real-time remote monitoring via the [GG Doctor Dashboard](https://github.com/glitchgeeks01-droid/Gestation-Guardian-Web).
-* 📡 **HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding before syncing to the cloud:
-  * Blood Pressure → LOINC `85354-9` (panel), `8480-6` (systolic), `8462-4` (diastolic)
-  * Heart Rate → LOINC `8867-4`
+* 📡 **Strict HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding and UCUM units (`unitsofmeasure.org`) before syncing to the cloud:
+  * Blood Pressure → LOINC `85354-9` (panel), `8480-6` (systolic, `mm[Hg]`), `8462-4` (diastolic, `mm[Hg]`)
+  * Heart Rate → LOINC `8867-4` (`beats/minute`, `/min`)
 * 🗄️ **Polyglot Persistence:** Telemetry data is routed to `users/{patientId}/telemetry` subcollections, enabling high-frequency time-series queries for the clinical dashboard's real-time charts.
 * 🔥 **Shared Firebase Backend:** Both the mobile app and doctor dashboard connect to the same `gg-doctor-dashboard` Firebase project, ensuring a unified data ecosystem.
 
-### Platform & UX
+### Platform, Safety & UX
 * 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including glassmorphic alert banners, dynamic pregnancy progress timelines, and interactive Bento Grid layouts.
-* 🛡️ **Offline-First Architecture:** The app works fully offline via `localStorage`. When connectivity is available, data syncs automatically to Firebase Firestore via a background sync queue with automatic retry on reconnect.
+* 🛡️ **Offline-First & Thread-Safe:** The app works fully offline via `localStorage`. When connectivity is available, data syncs automatically to Firebase Firestore via a robust, background sync queue featuring a Mutex lock (`isSyncing`) to prevent race conditions during rapid data entry.
+* 🧮 **Clinical Math Integrity:** All telemetry ingest points feature strict NaN-prevention safeguards to ensure bad data (empty inputs, missing decimals) never pollutes the FHIR payloads or breaks clinical scoring algorithms.
 * 📡 **Bluetooth Ready:** Base architectural stubs are in place for Web Bluetooth API integration to support external smart blood pressure cuffs and vitals bands.
 
 ## 🛠️ Tech Stack
