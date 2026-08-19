@@ -128,11 +128,17 @@ export const App = {
     
     async loadPageTemplate(route: string) {
         try {
-            // Use Vite's glob import to bundle HTML as raw strings (bypasses WebView file:// fetch blocks)
+            // Use Vite's glob import to bundle HTML as raw strings
             const templates = (import.meta as any).glob('../../pages/*.html', { eager: true, query: '?raw', import: 'default' });
-            const templateKey = `../../pages/${route}.html`;
             
-            const html = templates[templateKey] as string;
+            // Flexible lookup to support any path format returned by Vite glob
+            let html: string | null = null;
+            for (const key in templates) {
+                if (key.endsWith(`/${route}.html`)) {
+                    html = templates[key] as string;
+                    break;
+                }
+            }
             
             if (!html) throw new Error(`Page template not found for route: ${route}`);
             
