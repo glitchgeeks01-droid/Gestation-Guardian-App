@@ -149,7 +149,14 @@ The app uses a **write-local-first, sync-later** pattern. All health data (blood
 
 ## 🔒 Privacy & Security
 
-This repository underwent a massive architectural audit to guarantee stability. The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict TypeScript module system (`store`, `views`, `services`, `core`, etc.). Your sensitive medical data stays on your device first, with optional cloud backup via Firebase.
+This repository underwent a massive architectural audit to guarantee stability and security. Key architectural highlights include:
+
+* **Strict Content Security Policy (CSP):** All inline JavaScript event handlers (`onclick`, `onsubmit`, etc.) have been completely eradicated from HTML templates. Event management is centralized through declarative `data-action` delegation, dramatically reducing XSS vulnerabilities.
+* **Modular Refactor:** The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict TypeScript module system (`store`, `views`, `services`, `core`).
+* **Robust Voice AI:** The Voice Assistant seamlessly degrades gracefully and provides visual feedback to the user on browsers where `SpeechRecognition` or `MediaRecorder` access is unavailable. 
+* **Accessibility (a11y):** All primary interactive UI elements are annotated with `aria-label` tags for screen reader compatibility.
+
+Your sensitive medical data stays on your device first, with optional cloud backup via Firebase.
 
 ---
 <div align="center">
