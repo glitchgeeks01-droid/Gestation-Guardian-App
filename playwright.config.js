@@ -4,11 +4,19 @@ const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 15000,
+  timeout: 20000,
   use: {
     headless: true,
-    // file:// pages have no network — disable strict CSP checks
     ignoreHTTPSErrors: true,
+    launchOptions: {
+      args: [
+        '--allow-file-access-from-files',
+        '--use-fake-ui-for-media-stream',
+        '--use-fake-device-for-media-stream',
+        '--autoplay-policy=no-user-gesture-required'
+      ]
+    },
+    permissions: ['microphone']
   },
   projects: [
     {

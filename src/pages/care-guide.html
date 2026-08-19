@@ -3,7 +3,7 @@
     <!-- Top App Bar -->
     <header class="glass-header">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="App.goBack(); return false;" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
           <i data-lucide="arrow-left"></i>
         </button>
         <h1 style="font-size: 20px; color: var(--clr-dark-green);">The Sanctuary</h1>
@@ -155,7 +155,7 @@
         </div>
         <h4 style="font-size: 20px; font-weight: 700; color: var(--clr-text-heading);">Guide Completed</h4>
         <p style="color: var(--clr-text-muted); font-size: 15px;">Knowledge is your superpower.</p>
-        <button class="btn btn-primary" style="margin-top: 8px;" onclick="App.goBack();">FINISH</button>
+        <button class="btn btn-primary" style="margin-top: 8px;" data-action="care-finish" aria-label="Finish">FINISH</button>
       </div>
 
     </div>

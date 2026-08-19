@@ -63,19 +63,15 @@ export const AIBot = {
             fab.style.transform = `translate(${newX}px, ${newY}px) scale(1.05)`;
         }, { passive: true });
 
-        fab.addEventListener('touchend', (e) => {
+        fab.addEventListener('touchend', () => {
             isDragging = false;
             fab.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            
             if (hasMoved) {
                 const transform = window.getComputedStyle(fab).transform;
                 if (transform !== 'none') {
                     const matrix = new DOMMatrix(transform);
                     fab.style.transform = `translate(${matrix.m41}px, ${matrix.m42}px) scale(1)`;
                 }
-            } else {
-                fab.style.transform = `translate(${initialX}px, ${initialY}px) scale(1)`;
-                this.openChat();
             }
         });
 
@@ -112,10 +108,7 @@ export const AIBot = {
             if (!isDragging) return;
             isDragging = false;
             fab.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            if (!hasMoved) {
-                fab.style.transform = `translate(${initialX}px, ${initialY}px) scale(1)`;
-                this.openChat();
-            } else {
+            if (hasMoved) {
                 const transform = window.getComputedStyle(fab).transform;
                 if (transform !== 'none') {
                     const matrix = new DOMMatrix(transform);
@@ -124,7 +117,9 @@ export const AIBot = {
             }
         });
         
-        fab.addEventListener('click', () => {
+        // Single unified click trigger for FAB
+        fab.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (!hasMoved) {
                 this.openChat();
             }
@@ -134,12 +129,14 @@ export const AIBot = {
     setupChatUI() {
         const closeBtn = document.getElementById('close-ai-chat');
         const overlay = document.getElementById('ai-chat-overlay');
+        const bottomSheet = overlay ? overlay.querySelector('.bottom-sheet') : null;
         const form = document.getElementById('global-chat-form');
         const micBtn = document.getElementById('ai-mic-btn');
         const ttsToggle = document.getElementById('ai-tts-toggle');
 
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.closeChat();
                 VoiceAssistant.stopSpeaking();
                 VoiceAssistant.stopListening();
@@ -153,6 +150,12 @@ export const AIBot = {
                     VoiceAssistant.stopSpeaking();
                     VoiceAssistant.stopListening();
                 }
+            });
+        }
+
+        if (bottomSheet) {
+            bottomSheet.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
         }
 
@@ -197,6 +200,14 @@ export const AIBot = {
         const micBtn = document.getElementById('ai-mic-btn');
         const input = document.getElementById('global-chat-input') as HTMLTextAreaElement;
 
+        if (VoiceAssistant.isCurrentlyListening()) {
+            VoiceAssistant.stopListening();
+            if (input && input.value.trim()) {
+                setTimeout(() => this.sendMessage(), 300);
+            }
+            return;
+        }
+
         VoiceAssistant.startListening(
             (transcript, isFinal) => {
                 if (input) {
@@ -216,10 +227,12 @@ export const AIBot = {
                         micBtn.style.background = "#FF2E63";
                         micBtn.style.color = "white";
                         micBtn.classList.add("pulse-animation");
+                        if (input) input.placeholder = "Listening to your voice...";
                     } else {
                         micBtn.style.background = "var(--clr-bg-card, #f0f4f0)";
                         micBtn.style.color = "var(--clr-primary, #6DA171)";
                         micBtn.classList.remove("pulse-animation");
+                        if (input) input.placeholder = "Ask or speak anything...";
                     }
                 }
             }

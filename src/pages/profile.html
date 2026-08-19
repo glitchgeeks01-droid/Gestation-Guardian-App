@@ -3,7 +3,7 @@
     <!-- Top App Bar -->
     <header class="glass-header">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="App.goBack(); return false;" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
           <i data-lucide="arrow-left"></i>
         </button>
         <h1 style="font-size: 20px; color: var(--clr-dark-green);">Profile</h1>
@@ -96,11 +96,11 @@
 
       <!-- Action Buttons -->
       <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
-        <button class="btn btn-primary" onclick="UI.showToast('Profile Saved'); App.goBack();">Save Changes</button>
-        <button class="btn btn-secondary" onclick="UI.showToast('Exporting data...')">
+        <button class="btn btn-primary" data-action="save-profile" aria-label="Save Profile">Save Changes</button>
+        <button class="btn btn-secondary" data-action="toast-msg" data-msg="" aria-label="Toast ">
           <i data-lucide="download" style="width: 18px; height: 18px;"></i> Export Health Data (JSON)
         </button>
-        <button class="btn btn-text" onclick="window.location.hash='#/onboarding'" style="color: var(--clr-danger); margin-top: 8px;">
+        <button class="btn btn-text" data-action="nav-onboarding" aria-label="Go to onboarding" style="color: var(--clr-danger); margin-top: 8px;">
           <i data-lucide="log-out" style="width: 18px; height: 18px;"></i> Sign Out
         </button>
       </div>

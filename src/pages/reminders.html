@@ -3,7 +3,7 @@
     <!-- Top App Bar -->
     <header class="glass-header">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="App.goBack(); return false;" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
           <i data-lucide="arrow-left"></i>
         </button>
         <h1 style="font-size: 20px; color: var(--clr-dark-green);">Health Reminders</h1>
@@ -16,7 +16,7 @@
       <!-- Hero / Add Reminder CTA -->
       <div class="card-info" style="display: flex; flex-direction: column; gap: 16px;">
         <h2 style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700; z-index: 1;">Organize your wellness routine</h2>
-        <button class="btn btn-primary" style="z-index: 1;" onclick="document.getElementById('add-reminder-modal').style.display='flex'">
+        <button class="btn btn-primary" style="z-index: 1;" data-action="toggle-modal" data-modal="add-reminder-modal" data-display="flex" aria-label="Add Reminder">
           <i data-lucide="plus"></i> Add Reminder
         </button>
         <i data-lucide="bell" class="card-info-bg-icon"></i>
@@ -84,8 +84,8 @@
         </div>
         
         <div style="display: flex; gap: 12px; margin-top: 32px;">
-          <button class="btn btn-secondary" style="flex: 1; height: 56px;" onclick="document.getElementById('add-reminder-modal').style.display='none'">Cancel</button>
-          <button class="btn btn-primary" style="flex: 1; height: 56px;" onclick="document.getElementById('add-reminder-modal').style.display='none'; UI.showToast('Reminder saved', 'success')">Save</button>
+          <button class="btn btn-secondary" style="flex: 1; height: 56px;" data-action="toggle-modal" data-modal="add-reminder-modal" data-display="none" aria-label="Cancel Reminder">Cancel</button>
+          <button class="btn btn-primary" style="flex: 1; height: 56px;" data-action="save-reminder" aria-label="Save Reminder">Save</button>
         </div>
       </div>
     </div>

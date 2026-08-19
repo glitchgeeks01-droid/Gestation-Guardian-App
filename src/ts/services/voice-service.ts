@@ -12,13 +12,29 @@ export class VoiceAssistant {
     private static speechRecognition: any = null;
     private static onTranscriptCallback: ((text: string, isFinal: boolean) => void) | null = null;
     private static onStateChangeCallback: ((isListening: boolean) => void) | null = null;
-    private static activeUtterance: SpeechSynthesisUtterance | null = null;
+    private static activeUtterances: SpeechSynthesisUtterance[] = [];
+    private static audioContextUnlocked: boolean = false;
 
     /**
      * Initialize Voice Assistant
      */
     static init() {
-        // Initialize Web Speech Recognition as supplementary fallback if available
+        // Unlock audio context on user gesture
+        const unlockAudio = () => {
+            if (this.audioContextUnlocked) return;
+            this.audioContextUnlocked = true;
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.resume();
+                } catch (_) {}
+            }
+            window.removeEventListener('touchstart', unlockAudio);
+            window.removeEventListener('click', unlockAudio);
+        };
+        window.addEventListener('touchstart', unlockAudio, { passive: true });
+        window.addEventListener('click', unlockAudio, { passive: true });
+
+        // Initialize Web Speech Recognition
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (SpeechRecognition) {
             try {
@@ -37,20 +53,30 @@ export class VoiceAssistant {
                             interim += event.results[i][0].transcript;
                         }
                     }
-                    if (finalStr && this.onTranscriptCallback) {
-                        this.onTranscriptCallback(finalStr, true);
-                    } else if (interim && this.onTranscriptCallback) {
-                        this.onTranscriptCallback(interim, false);
+                    const recognized = finalStr || interim;
+                    if (recognized && this.onTranscriptCallback) {
+                        this.onTranscriptCallback(recognized, Boolean(finalStr));
                     }
                 };
 
+                this.speechRecognition.onerror = (e: any) => {
+                    console.warn("Speech recognition notice:", e.error);
+                };
+
                 this.speechRecognition.onend = () => {
-                    if (!this.isRecording) {
+                    if (this.isRecording && !this.mediaRecorder) {
+                        this.isRecording = false;
                         if (this.onStateChangeCallback) this.onStateChangeCallback(false);
                     }
                 };
             } catch (e) {
                 console.warn("SpeechRecognition init note:", e);
+            }
+        } else {
+            // Speech recognition not supported – show UI notice
+            this.speechRecognition = null;
+            if ((window as any).UI && typeof (window as any).UI.showToast === 'function') {
+                (window as any).UI.showToast('Speech recognition is not supported on this browser', 'warning');
             }
         }
 
@@ -62,14 +88,17 @@ export class VoiceAssistant {
 
         // Preload voices
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => {
+            try {
                 window.speechSynthesis.getVoices();
-            };
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            } catch (_) {}
         }
     }
 
     /**
-     * Start voice recording (MediaRecorder for OpenAI Whisper / WebRTC)
+     * Start or toggle voice recording
      */
     static async startListening(
         onTranscript: (text: string, isFinal: boolean) => void,
@@ -86,21 +115,34 @@ export class VoiceAssistant {
             return;
         }
 
-        // Try modern MediaRecorder with getUserMedia (ideal for OpenAI Whisper)
+        this.isRecording = true;
+        if (this.onStateChangeCallback) this.onStateChangeCallback(true);
+
+        // 1. Start Web Speech Recognition concurrently for immediate live transcription
+        if (this.speechRecognition) {
+            try {
+                this.speechRecognition.start();
+            } catch (_) {}
+        }
+
+        // 2. Start MediaRecorder for OpenAI Whisper
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 this.audioChunks = [];
-                
-                // Use standard audio/webm or audio/mp4 depending on support
-                let mimeType = 'audio/webm';
-                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-                    mimeType = 'audio/webm;codecs=opus';
-                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                    mimeType = 'audio/mp4';
+
+                let options: MediaRecorderOptions = {};
+                if (typeof MediaRecorder.isTypeSupported === 'function') {
+                    if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                        options = { mimeType: 'audio/webm;codecs=opus' };
+                    } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+                        options = { mimeType: 'audio/webm' };
+                    } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                        options = { mimeType: 'audio/mp4' };
+                    }
                 }
 
-                this.mediaRecorder = new MediaRecorder(stream, { mimeType });
+                this.mediaRecorder = new MediaRecorder(stream, options);
 
                 this.mediaRecorder.ondataavailable = (e) => {
                     if (e.data && e.data.size > 0) {
@@ -108,50 +150,28 @@ export class VoiceAssistant {
                     }
                 };
 
-                this.mediaRecorder.onstart = () => {
-                    this.isRecording = true;
-                    if (this.onStateChangeCallback) this.onStateChangeCallback(true);
-                };
-
                 this.mediaRecorder.onstop = async () => {
-                    this.isRecording = false;
-                    if (this.onStateChangeCallback) this.onStateChangeCallback(false);
-                    
                     // Stop audio stream tracks
                     stream.getTracks().forEach(track => track.stop());
 
+                    const mimeType = options.mimeType || 'audio/webm';
                     const audioBlob = new Blob(this.audioChunks, { type: mimeType });
                     if (audioBlob.size > 0) {
                         await this.transcribeWithWhisper(audioBlob);
                     }
                 };
 
-                this.mediaRecorder.start(250); // Collect data chunks every 250ms
-
-                // Also run speech recognition concurrently for instant live preview if available
-                if (this.speechRecognition) {
-                    try { this.speechRecognition.start(); } catch (_) {}
-                }
-
+                this.mediaRecorder.start(250);
                 return;
             } catch (err) {
-                console.warn("getUserMedia error, falling back to Web Speech:", err);
-            }
-        }
-
-        // Fallback to SpeechRecognition if getUserMedia is unavailable
-        if (this.speechRecognition) {
-            try {
-                this.isRecording = true;
-                if (this.onStateChangeCallback) this.onStateChangeCallback(true);
-                this.speechRecognition.start();
-            } catch (e) {
-                console.error("Speech recognition start failed:", e);
-                if (this.onStateChangeCallback) this.onStateChangeCallback(false);
+                // Show user-visible notice when mic access is denied
                 this.isRecording = false;
+                if (this.onStateChangeCallback) this.onStateChangeCallback(false);
+                if ((window as any).UI && typeof (window as any).UI.showToast === 'function') {
+                    (window as any).UI.showToast('Microphone access denied – voice features disabled', 'warning');
+                }
+                console.warn("getUserMedia error:", err);
             }
-        } else {
-            alert("Microphone recording is not supported in this browser. Please type your query.");
         }
     }
 
@@ -159,14 +179,19 @@ export class VoiceAssistant {
      * Stop voice recording
      */
     static stopListening() {
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            this.mediaRecorder.stop();
-        }
-        if (this.speechRecognition) {
-            try { this.speechRecognition.stop(); } catch (_) {}
-        }
         this.isRecording = false;
         if (this.onStateChangeCallback) this.onStateChangeCallback(false);
+
+        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
+            try {
+                this.mediaRecorder.stop();
+            } catch (_) {}
+        }
+        if (this.speechRecognition) {
+            try {
+                this.speechRecognition.stop();
+            } catch (_) {}
+        }
     }
 
     /**
@@ -194,11 +219,10 @@ export class VoiceAssistant {
                     const data = await response.json();
                     if (data && data.text && this.onTranscriptCallback) {
                         this.onTranscriptCallback(data.text.trim(), true);
-                        return;
                     }
                 }
             } catch (err) {
-                console.warn("OpenAI Whisper API transcription error, using current text:", err);
+                console.warn("OpenAI Whisper API error:", err);
             }
         }
     }
@@ -219,7 +243,11 @@ export class VoiceAssistant {
         if (!cleanText) return;
 
         try {
-            window.speechSynthesis.cancel(); // Stop prior audio
+            this.stopSpeaking();
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
 
             // Split into sentences so Android WebView doesn't pause or truncate long speech
             const sentences = cleanText.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [cleanText];
@@ -245,19 +273,34 @@ export class VoiceAssistant {
                 }
 
                 const utterance = new SpeechSynthesisUtterance(sentence);
-                utterance.rate = 0.98; // Natural, calm cadence
-                utterance.pitch = 1.05; // Friendly tone
+                utterance.rate = 1.0;
+                utterance.pitch = 1.05;
                 utterance.lang = 'en-US';
                 if (preferredVoice) utterance.voice = preferredVoice;
 
-                utterance.onend = () => speakNext();
-                utterance.onerror = () => speakNext();
+                // Prevent garbage collection bug in Chrome/WebView by storing utterance
+                this.activeUtterances.push(utterance);
 
-                this.activeUtterance = utterance;
+                utterance.onend = () => {
+                    const idx = this.activeUtterances.indexOf(utterance);
+                    if (idx > -1) this.activeUtterances.splice(idx, 1);
+                    speakNext();
+                };
+
+                utterance.onerror = (e) => {
+                    console.warn("Utterance notice:", e);
+                    const idx = this.activeUtterances.indexOf(utterance);
+                    if (idx > -1) this.activeUtterances.splice(idx, 1);
+                    speakNext();
+                };
+
                 window.speechSynthesis.speak(utterance);
             };
 
-            speakNext();
+            // Small delay to allow any pending cancel() to clear
+            setTimeout(() => {
+                speakNext();
+            }, 50);
         } catch (err) {
             console.error("Speech synthesis failed:", err);
         }
@@ -268,7 +311,10 @@ export class VoiceAssistant {
      */
     static stopSpeaking() {
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
+            try {
+                window.speechSynthesis.cancel();
+                this.activeUtterances = [];
+            } catch (_) {}
         }
     }
 
@@ -286,5 +332,9 @@ export class VoiceAssistant {
 
     static isTTSEnabled(): boolean {
         return this.isSpeechEnabled;
+    }
+
+    static isCurrentlyListening(): boolean {
+        return this.isRecording;
     }
 }

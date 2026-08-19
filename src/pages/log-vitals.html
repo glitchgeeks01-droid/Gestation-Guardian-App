@@ -3,7 +3,7 @@
     
     <header class="glass-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+            <a href="#" data-action="back-link" aria-label="Go back" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
                 <i data-lucide="arrow-left"></i>
             </a>
             <h1 style="font-size: 20px; color: var(--clr-dark-green);">Log Other Vitals</h1>
@@ -12,7 +12,7 @@
 
     <div style="padding: 96px 24px 100px; max-width: 512px; margin: 0 auto;">
         
-        <form onsubmit="event.preventDefault(); Vitals.saveVitals();" style="display: flex; flex-direction: column; gap: 24px;">
+        <form data-action="save-vitals" style="display: flex; flex-direction: column; gap: 24px;">
             
             <p style="color: var(--clr-text-muted); text-align: center;">Only log what you measured today. Empty fields will be ignored.</p>
             

@@ -22,7 +22,7 @@
                 <a href="#/signup" class="tab-btn">Sign Up</a>
             </div>
 
-            <form id="form-signin" onsubmit="event.preventDefault(); Auth.handleSignIn();">
+            <form id="form-signin" data-action="signin-submit">
                 <!-- Form Fields Container -->
                 <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px;">
                     
@@ -44,7 +44,7 @@
                         <div style="position: relative;">
                             <i data-lucide="lock" class="input-icon-left"></i>
                             <input type="password" id="signin-password" class="input-auth" placeholder="••••••••" style="padding-right: 48px;" required>
-                            <button type="button" class="input-icon-right" onclick="Auth.togglePassword('signin-password')">
+                            <button type="button" class="input-icon-right" data-action="toggle-password" data-target="signin-password" aria-label="Toggle password visibility">
                                 <i data-lucide="eye"></i>
                             </button>
                         </div>

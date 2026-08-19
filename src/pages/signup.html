@@ -14,7 +14,7 @@
                 <p style="font-weight: 500; font-size: 16px; color: var(--clr-text-body); margin-top: 12px;">Let's get started on your journey</p>
             </div>
 
-            <form id="form-signup" class="signup-form" onsubmit="event.preventDefault(); Auth.handleSignUp();">
+            <form id="form-signup" class="signup-form" data-action="signup-submit">
                 
                 <!-- Full Name -->
                 <div class="input-group">
@@ -30,7 +30,7 @@
                     <label class="label">Phone Number</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="tel" id="su-phone" class="input-form" style="flex: 1;" placeholder="+91 98765 43210" required>
-                        <button type="button" class="btn btn-primary" style="width: auto; padding: 0 24px; height: 58px; font-size: 14px;" onclick="Auth.sendOTP()">Send</button>
+                        <button type="button" class="btn btn-primary" style="width: auto; padding: 0 24px; height: 58px; font-size: 14px;" data-action="send-otp" aria-label="Send OTP">Send</button>
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                     <label class="label">Password</label>
                     <div style="position: relative;">
                         <input type="password" id="su-password" class="input-form" placeholder="Create a password" style="padding-right: 48px;" required>
-                        <button type="button" class="input-icon-right" onclick="Auth.togglePassword('su-password')">
+                        <button type="button" class="input-icon-right" data-action="toggle-password" data-target="su-password" aria-label="Toggle password visibility">
                             <i data-lucide="eye"></i>
                         </button>
                     </div>
@@ -70,7 +70,7 @@
                 <!-- LMP / EDD -->
                 <div class="input-group">
                     <label class="label">Last Menstrual Period (LMP)</label>
-                    <input type="date" id="su-lmp" class="input-form" onchange="Auth.calculateEDD()" required>
+                    <input type="date" id="su-lmp" class="input-form" data-action="calculate-edd" required>
                     <p id="su-edd-display" style="font-size: 12px; color: var(--clr-text-muted); margin-top: 4px;"></p>
                 </div>
 

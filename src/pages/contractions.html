@@ -3,7 +3,7 @@
     
     <header class="glass-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+            <a href="#" data-action="back-link" aria-label="Go back" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
                 <i data-lucide="arrow-left"></i>
             </a>
             <h1 style="font-size: 20px; color: var(--clr-dark-green);">Contraction Timer</h1>
@@ -17,7 +17,7 @@
         </div>
         
         <!-- Large Interactive Circle (Purple theme for contractions) -->
-        <div id="contraction-button" class="ripple" onclick="Kicks.toggleContraction()" style="
+        <div id="contraction-button" class="ripple" data-action="toggle-contraction" aria-label="Toggle contraction" style="
             width: 280px; height: 280px; 
             border-radius: 50%; 
             background: var(--clr-bg-white); 

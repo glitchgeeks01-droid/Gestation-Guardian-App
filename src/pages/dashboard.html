@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- pages/dashboard.html -->
 <div id="page-dashboard" class="page" style="padding-bottom: 100px;">
     
@@ -96,10 +97,7 @@
                 
             </div>
             
-            <button class="btn btn-text w-full mt-4" style="border: 1px dashed var(--clr-border-device); border-radius: var(--r-pill);" onclick="document.getElementById('nav-log-btn').click();">
-                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
-                Log a New Vital
-            </button>
+            <button class="btn btn-text w-full mt-4" style="border: 1px dashed var(--clr-border-device); border-radius: var(--r-pill);" data-action="log-vital"><i data-lucide="plus" style="width: 16px; height: 16px;"></i>Log a New Vital</button>
         </div>
 
         <!-- Bento Grid Apps -->
@@ -120,7 +118,7 @@
                     <h4 style="font-weight: 700; font-size: 16px; color: var(--clr-text-heading);">Kick<br>Counter</h4>
                 </a>
                 
-                <a href="#" onclick="AIBot.openChat(); return false;" style="background: var(--clr-bg-card); border-radius: 32px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+                <a href="#" data-action="open-ai-chat" aria-label="Open AI Chat" style="background: var(--clr-bg-card); border-radius: 32px; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
                     <div style="width: 48px; height: 48px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #E8547A; box-shadow: var(--shadow-xs);">
                         <i data-lucide="bot"></i>
                     </div>
@@ -141,10 +139,10 @@
         <div style="margin-bottom: 32px;">
             <h3 style="font-size: 18px; margin-bottom: 16px;">How are you feeling?</h3>
             <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" onclick="Vitals.logSymptom('headache', this)">Headache</button>
-                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" onclick="Vitals.logSymptom('swelling', this)">Swelling</button>
-                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" onclick="Vitals.logSymptom('nausea', this)">Nausea</button>
-                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" onclick="Vitals.logSymptom('fatigue', this)">Fatigue</button>
+                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" data-action="log-symptom" data-symptom="" aria-label="Log symptom ">Headache</button>
+                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" data-action="log-symptom" data-symptom="" aria-label="Log symptom ">Swelling</button>
+                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" data-action="log-symptom" data-symptom="" aria-label="Log symptom ">Nausea</button>
+                <button class="btn btn-secondary" style="height: 44px; padding: 0 20px; font-size: 14px; width: auto; font-weight: 500;" data-action="log-symptom" data-symptom="" aria-label="Log symptom ">Fatigue</button>
             </div>
         </div>
 

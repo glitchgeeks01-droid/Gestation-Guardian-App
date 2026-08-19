@@ -293,12 +293,14 @@ export const App = {
 };
 
 // Boot the app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        App.init();
+    });
+} else {
     App.init();
-});
+}
 
 // Expose for HTML inline handlers
 (window as any).App = App;
-
-// Expose App globally for inline back buttons
 window.App = App;

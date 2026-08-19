@@ -15,7 +15,7 @@
             <p style="color: var(--clr-text-muted); font-size: 14px; margin-top: 8px;">Please answer these 12 questions to calculate your initial GESTOSIS risk score. Your data is secure.</p>
         </div>
         
-        <form id="assessment-form" onsubmit="event.preventDefault(); Assessment.submit();" style="display: flex; flex-direction: column; gap: 24px;">
+        <form id="assessment-form" data-action="assessment-submit" style="display: flex; flex-direction: column; gap: 24px;">
             
             <!-- Q1: Age -->
             <div class="card-white" style="padding: 24px;">

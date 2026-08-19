@@ -3,7 +3,7 @@
     
     <header class="glass-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+            <a href="#" data-action="back-link" aria-label="Go back" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
                 <i data-lucide="arrow-left"></i>
             </a>
             <h1 style="font-size: 20px; color: var(--clr-dark-green);">Kick Counter</h1>
@@ -17,7 +17,7 @@
         </div>
         
         <!-- Large Interactive Circle -->
-        <div id="kick-button" class="ripple" onclick="Kicks.logKick()" style="
+        <div id="kick-button" class="ripple" data-action="log-kick" aria-label="Log kick" style="
             width: 280px; height: 280px; 
             border-radius: 50%; 
             background: var(--clr-bg-white); 
@@ -39,7 +39,7 @@
                 <p id="kick-timer-display" style="font-size: 24px; font-weight: 700; color: var(--clr-text-heading); font-variant-numeric: tabular-nums;">00:00</p>
             </div>
             
-            <button id="kick-control-btn" class="btn btn-secondary" style="width: auto; padding: 0 24px;" onclick="Kicks.toggleSession()">
+            <button id="kick-control-btn" class="btn btn-secondary" style="width: auto; padding: 0 24px;" data-action="toggle-kick-session" aria-label="Toggle session">
                 Start Session
             </button>
         </div>

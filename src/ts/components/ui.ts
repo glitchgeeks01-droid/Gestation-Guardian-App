@@ -106,18 +106,127 @@ export const UI = {
         });
     },
 
-    // Haptic Feedback wrapper
-    haptic(duration = 10) {
-        if (navigator.vibrate) {
-            navigator.vibrate(duration);
-        }
-    }
-};
+    // Initialize data-action listeners
+    initActions() {
+        document.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const actionEl = target.closest('[data-action]') as HTMLElement;
+            if (!actionEl) return;
+            const action = actionEl.getAttribute('data-action');
+            if (!action) return;
+            // Prevent default for anchor/button
+            e.preventDefault();
+            switch (action) {
+                case 'log-vital':
+                    // Trigger FAB log button click
+                    const logBtn = document.getElementById('nav-log-btn');
+                    if (logBtn) logBtn.click();
+                    break;
+                case 'back':
+                    if (window['App'] && typeof window['App'].goBack === 'function') {
+                        window['App'].goBack();
+                    }
+                    break;
+                case 'send-otp':
+                    if (window['Auth'] && typeof window['Auth'].sendOTP === 'function') {
+                        window['Auth'].sendOTP();
+                    }
+                    break;
+                case 'toggle-password':
+                    const pwdId = actionEl.getAttribute('data-target');
+                    if (pwdId && window['Auth'] && typeof window['Auth'].togglePassword === 'function') {
+                        window['Auth'].togglePassword(pwdId);
+                    }
+                    break;
+                case 'log-entry':
+                    const logBtn2 = document.getElementById('nav-log-btn');
+                    if (logBtn2) logBtn2.click();
+                    break;
+                case 'signup-submit':
+                    if (window['Auth'] && typeof window['Auth'].handleSignUp === 'function') window['Auth'].handleSignUp();
+                    break;
+                case 'signin-submit':
+                    if (window['Auth'] && typeof window['Auth'].handleSignIn === 'function') window['Auth'].handleSignIn();
+                    break;
+                case 'calculate-edd':
+                    if (window['Auth'] && typeof window['Auth'].calculateEDD === 'function') window['Auth'].calculateEDD();
+                    break;
+                case 'assessment-submit':
+                    if (window['Assessment'] && typeof window['Assessment'].submit === 'function') window['Assessment'].submit();
+                    break;
+                case 'bt-connect':
+                    const device = actionEl.getAttribute('data-device');
+                    if (device && window['Bluetooth'] && typeof window['Bluetooth'].connect === 'function') window['Bluetooth'].connect(device);
+                    break;
+                case 'care-finish':
+                case 'back-link':
+                    if (window['App'] && typeof window['App'].goBack === 'function') window['App'].goBack();
+                    break;
+                case 'toggle-contraction':
+                    if (window['Kicks'] && typeof window['Kicks'].toggleContraction === 'function') window['Kicks'].toggleContraction();
+                    break;
+                case 'open-ai-chat':
+                    if (window['AIBot'] && typeof window['AIBot'].openChat === 'function') window['AIBot'].openChat();
+                    break;
+                case 'log-symptom':
+                    const symptom = actionEl.getAttribute('data-symptom');
+                    if (symptom && window['Vitals'] && typeof window['Vitals'].logSymptom === 'function') window['Vitals'].logSymptom(symptom, actionEl);
+                    break;
+                case 'log-kick':
+                    if (window['Kicks'] && typeof window['Kicks'].logKick === 'function') window['Kicks'].logKick();
+                    break;
+                case 'toggle-kick-session':
+                    if (window['Kicks'] && typeof window['Kicks'].toggleSession === 'function') window['Kicks'].toggleSession();
+                    break;
+                case 'save-bp':
+                    if (window['Vitals'] && typeof window['Vitals'].saveBP === 'function') window['Vitals'].saveBP();
+                    break;
+                case 'save-vitals':
+                    if (window['Vitals'] && typeof window['Vitals'].saveVitals === 'function') window['Vitals'].saveVitals();
+                    break;
+                case 'toast-msg':
+                    const msg = actionEl.getAttribute('data-msg');
+                    if (msg) UI.showToast(msg);
+                    break;
+                case 'nav-onboarding':
+                    window.location.hash='#/onboarding';
+                    break;
+                case 'toggle-modal':
+                    const modalId = actionEl.getAttribute('data-modal');
+                    const display = actionEl.getAttribute('data-display');
+                    if (modalId) {
+                        const m = document.getElementById(modalId);
+                        if (m) m.style.display = display || 'none';
+                    }
+                    break;
+                case 'save-profile':
+                    UI.showToast('Profile Saved');
+                    if (window['App'] && typeof window['App'].goBack === 'function') window['App'].goBack();
+                    break;
+                case 'save-reminder':
+                    document.getElementById('add-reminder-modal').style.display='none';
+                    UI.showToast('Reminder saved', 'success');
+                    break;
+                case 'open-log-sheet':
+                    const logBtn3 = document.getElementById('nav-log-btn');
+                    if (logBtn3) logBtn3.click();
+                    break;
+
+                    const logEntryBtn = document.getElementById('nav-log-btn');
+                    if (logEntryBtn) logEntryBtn.click();
+                    break;
+                default:
+                    console.warn('Unhandled UI action:', action);
+            }
+        });
+    },
 
 // Initialize UI elements when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     UI.initBottomSheet();
+    UI.initActions();
 });
 
 // Expose for HTML inline handlers
 (window as any).UI = UI;
+

@@ -4,7 +4,7 @@
     <!-- Top Glass Header -->
     <header class="glass-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="#" onclick="App.goBack(); return false;" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
+            <a href="#" data-action="back" style="width: 20px; height: 20px; color: var(--clr-dark-green);">
                 <i data-lucide="arrow-left"></i>
             </a>
             <h1 style="font-size: 20px; color: var(--clr-dark-green);">Connect Devices</h1>
@@ -47,7 +47,7 @@
                     <h3>BP Monitor</h3>
                     <p>Omron / iHealth</p>
                 </div>
-                <button class="btn btn-connect" onclick="Bluetooth.connect('bp')">Connect</button>
+                <button class="btn btn-connect" data-action="bt-connect" data-device="" aria-label="Connect ">Connect</button>
             </div>
 
             <!-- Smartwatch -->
@@ -59,7 +59,7 @@
                     <h3>Smartwatch</h3>
                     <p>Apple Watch / Fitbit</p>
                 </div>
-                <button class="btn btn-connect" onclick="Bluetooth.connect('watch')">Connect</button>
+                <button class="btn btn-connect" data-action="bt-connect" data-device="" aria-label="Connect ">Connect</button>
             </div>
 
             <!-- Pulse Oximeter -->
@@ -71,7 +71,7 @@
                     <h3>Pulse Oximeter</h3>
                     <p>Digital Vitals Trackers</p>
                 </div>
-                <button class="btn btn-connect" onclick="Bluetooth.connect('spo2')">Connect</button>
+                <button class="btn btn-connect" data-action="bt-connect" data-device="" aria-label="Connect ">Connect</button>
             </div>
             
         </div>
