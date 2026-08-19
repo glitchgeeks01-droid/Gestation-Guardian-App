@@ -23,7 +23,8 @@
 * 📋 **Medical History:** Comprehensive recording of chronic conditions, medications, and symptom logs.
 
 ### Intelligence & AI
-* 🤖 **Gestation AI:** A floating, context-aware AI chatbot that remembers your conversation history and provides instant, reassuring advice.
+* 🤖 **Gestation AI (Powered by Gemini 1.5 Flash):** A floating, context-aware AI chatbot that securely injects the patient's local clinical vitals into its context window, providing instant, highly-personalized and reassuring medical guidance using a WHO-compliant persona.
+* 🎙️ **Voice-to-Text & Text-to-Speech:** Complete hands-free experience. Features robust Web Speech API integration, seamless fallback to OpenAI Whisper for Apple Safari compatibility, and a stabilized TTS queue that guarantees smooth, cancelable voice playback without robotic fallback voices.
 * 🚨 **Automated Alerting:** When the Gestosis score escalates to High or Critical, the app immediately triggers persistent high-priority alerts prompting the patient to seek medical attention.
 
 ### Clinical Integration (Phase 2)

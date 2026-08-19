@@ -6,7 +6,6 @@
 
 export class VoiceAssistant {
     private static mediaRecorder: MediaRecorder | null = null;
-    private static audioChunks: Blob[] = [];
     private static isRecording: boolean = false;
     private static isSpeechEnabled: boolean = true;
     private static speechRecognition: any = null;
@@ -14,6 +13,7 @@ export class VoiceAssistant {
     private static onStateChangeCallback: ((isListening: boolean) => void) | null = null;
     private static activeUtterances: SpeechSynthesisUtterance[] = [];
     private static audioContextUnlocked: boolean = false;
+    private static currentSpeechId: number = 0;
 
     /**
      * Initialize Voice Assistant
@@ -25,6 +25,9 @@ export class VoiceAssistant {
             this.audioContextUnlocked = true;
             if ('speechSynthesis' in window) {
                 try {
+                    const silentUtterance = new SpeechSynthesisUtterance('');
+                    silentUtterance.volume = 0;
+                    window.speechSynthesis.speak(silentUtterance);
                     window.speechSynthesis.resume();
                 } catch (_) {}
             }
@@ -53,9 +56,10 @@ export class VoiceAssistant {
                             interim += event.results[i][0].transcript;
                         }
                     }
-                    const recognized = finalStr || interim;
+                    const recognized = finalStr + interim;
                     if (recognized && this.onTranscriptCallback) {
-                        this.onTranscriptCallback(recognized, Boolean(finalStr));
+                        const isFinal = finalStr.length > 0 && interim.length === 0;
+                        this.onTranscriptCallback(recognized, isFinal);
                     }
                 };
 
@@ -105,7 +109,7 @@ export class VoiceAssistant {
         onStateChange?: (isListening: boolean) => void
     ) {
         this.onTranscriptCallback = onTranscript;
-        if (onStateChange) this.onStateChangeCallback = onStateChange;
+        this.onStateChangeCallback = onStateChange !== undefined ? onStateChange : null;
 
         // Cancel any active speech synthesis before recording
         this.stopSpeaking();
@@ -129,7 +133,7 @@ export class VoiceAssistant {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                this.audioChunks = [];
+                const localAudioChunks: Blob[] = [];
 
                 let options: MediaRecorderOptions = {};
                 if (typeof MediaRecorder.isTypeSupported === 'function') {
@@ -146,7 +150,7 @@ export class VoiceAssistant {
 
                 this.mediaRecorder.ondataavailable = (e) => {
                     if (e.data && e.data.size > 0) {
-                        this.audioChunks.push(e.data);
+                        localAudioChunks.push(e.data);
                     }
                 };
 
@@ -155,7 +159,7 @@ export class VoiceAssistant {
                     stream.getTracks().forEach(track => track.stop());
 
                     const mimeType = options.mimeType || 'audio/webm';
-                    const audioBlob = new Blob(this.audioChunks, { type: mimeType });
+                    const audioBlob = new Blob(localAudioChunks, { type: mimeType });
                     if (audioBlob.size > 0) {
                         await this.transcribeWithWhisper(audioBlob);
                     }
@@ -167,6 +171,11 @@ export class VoiceAssistant {
                 // Show user-visible notice when mic access is denied
                 this.isRecording = false;
                 if (this.onStateChangeCallback) this.onStateChangeCallback(false);
+                if (this.speechRecognition) {
+                    try {
+                        this.speechRecognition.stop();
+                    } catch (_) {}
+                }
                 if ((window as any).UI && typeof (window as any).UI.showToast === 'function') {
                     (window as any).UI.showToast('Microphone access denied – voice features disabled', 'warning');
                 }
@@ -182,10 +191,13 @@ export class VoiceAssistant {
         this.isRecording = false;
         if (this.onStateChangeCallback) this.onStateChangeCallback(false);
 
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            try {
-                this.mediaRecorder.stop();
-            } catch (_) {}
+        if (this.mediaRecorder) {
+            if (this.mediaRecorder.state !== 'inactive') {
+                try {
+                    this.mediaRecorder.stop();
+                } catch (_) {}
+            }
+            this.mediaRecorder = null;
         }
         if (this.speechRecognition) {
             try {
@@ -203,7 +215,8 @@ export class VoiceAssistant {
         if (apiKey) {
             try {
                 const formData = new FormData();
-                formData.append('file', audioBlob, 'audio.webm');
+                const extension = audioBlob.type.includes('mp4') ? 'mp4' : 'webm';
+                formData.append('file', audioBlob, `audio.${extension}`);
                 formData.append('model', 'whisper-1');
                 formData.append('language', 'en');
 
@@ -263,8 +276,11 @@ export class VoiceAssistant {
                 )
             ) || voices.find(v => v.lang.startsWith('en')) || null;
 
+            const speechId = this.currentSpeechId;
+
             let index = 0;
             const speakNext = () => {
+                if (speechId !== this.currentSpeechId) return;
                 if (index >= sentences.length || !this.isSpeechEnabled) return;
                 const sentence = sentences[index++].trim();
                 if (!sentence) {
@@ -275,8 +291,12 @@ export class VoiceAssistant {
                 const utterance = new SpeechSynthesisUtterance(sentence);
                 utterance.rate = 1.0;
                 utterance.pitch = 1.05;
-                utterance.lang = 'en-US';
-                if (preferredVoice) utterance.voice = preferredVoice;
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                    utterance.lang = preferredVoice.lang;
+                } else {
+                    utterance.lang = 'en-US';
+                }
 
                 // Prevent garbage collection bug in Chrome/WebView by storing utterance
                 this.activeUtterances.push(utterance);
@@ -310,6 +330,7 @@ export class VoiceAssistant {
      * Stop ongoing audio playback
      */
     static stopSpeaking() {
+        this.currentSpeechId++;
         if ('speechSynthesis' in window) {
             try {
                 window.speechSynthesis.cancel();

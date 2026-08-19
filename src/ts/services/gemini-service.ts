@@ -35,12 +35,11 @@ export class GeminiAIService {
     /**
      * Generate Patient Context string for grounding
      */
-    private static getPatientContext(): string {
+    private static async getPatientContext(): Promise<string> {
         try {
-            const profile = Store.getProfile();
-            const bpLogs = Store.getBPLogs() || [];
-            const vitals = Store.getVitals() || [];
-            const latestBP = bpLogs.length > 0 ? bpLogs[bpLogs.length - 1] : null;
+            const profile = await Store.getProfile();
+            const latestBP = await Store.getLatestBP();
+            const vitals = await Store.getLogs(Store.KEYS.VITALS_LOGS) || [];
 
             let context = `### PATIENT PROFILE & HEALTH DATA:\n`;
             if (profile) {
@@ -50,15 +49,16 @@ export class GeminiAIService {
                 if (profile.gestosisScore !== undefined) context += `- Gestosis Risk Score: ${profile.gestosisScore} (${profile.riskTier || 'Standard'})\n`;
             }
             if (latestBP) {
-                context += `- Latest Blood Pressure: ${latestBP.systolic}/${latestBP.diastolic} mmHg (Logged: ${latestBP.date || 'Recent'})\n`;
+                context += `- Latest Blood Pressure: ${latestBP.bpSys || latestBP.systolic}/${latestBP.bpDia || latestBP.diastolic} mmHg (Logged: ${latestBP.timestamp ? new Date(latestBP.timestamp).toLocaleDateString() : 'Recent'})\n`;
             }
             if (vitals.length > 0) {
-                const latestVital = vitals[vitals.length - 1];
+                const latestVital = vitals[0];
                 if (latestVital.weight) context += `- Current Weight: ${latestVital.weight} kg\n`;
                 if (latestVital.bloodGlucose) context += `- Blood Glucose: ${latestVital.bloodGlucose} mg/dL\n`;
             }
             return context;
         } catch (e) {
+            console.error("Failed to load patient context", e);
             return `### PATIENT: Expecting Mother\n`;
         }
     }
@@ -69,7 +69,7 @@ export class GeminiAIService {
     static async generateResponse(userPrompt: string): Promise<string> {
         const apiKey = this.getApiKey();
         const whoContext = WHOApiClient.getWHOSystemPromptContext();
-        const patientContext = this.getPatientContext();
+        const patientContext = await this.getPatientContext();
 
         const systemInstruction = `You are "Gestation AI", a warm, highly empathetic, and clinically rigorous AI voice assistant designed specifically for pregnant women in the Gestation Guardian application.
 
@@ -89,24 +89,30 @@ GUIDELINES FOR YOUR RESPONSE:
         // If Gemini API Key is available and online, call Gemini API
         if (apiKey && navigator.onLine) {
             try {
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+                // Use the correct gemini-1.5-flash model
+                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
                 
-                // Add user message to history
-                this.conversationHistory.push({
+                // Add user message to temporary history
+                const userMessage: { role: 'user' | 'model', parts: [{ text: string }] } = {
                     role: 'user',
                     parts: [{ text: userPrompt }]
-                });
+                };
+                let currentContext = [...this.conversationHistory, userMessage];
 
-                // Keep last 10 messages for context
-                if (this.conversationHistory.length > 10) {
-                    this.conversationHistory = this.conversationHistory.slice(-10);
+                // Keep last 10 messages for context, ensure first message is 'user'
+                if (currentContext.length > 10) {
+                    let startIndex = currentContext.length - 10;
+                    if (currentContext[startIndex].role === 'model') {
+                        startIndex++;
+                    }
+                    currentContext = currentContext.slice(startIndex);
                 }
 
                 const payload = {
-                    systemInstruction: {
+                    system_instruction: {
                         parts: [{ text: systemInstruction }]
                     },
-                    contents: this.conversationHistory,
+                    contents: currentContext,
                     generationConfig: {
                         temperature: 0.4,
                         maxOutputTokens: 800
@@ -125,6 +131,8 @@ GUIDELINES FOR YOUR RESPONSE:
                     const data = await response.json();
                     const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                     if (aiText) {
+                        // Persist successful exchange to conversation history
+                        this.conversationHistory = currentContext;
                         this.conversationHistory.push({
                             role: 'model',
                             parts: [{ text: aiText }]
