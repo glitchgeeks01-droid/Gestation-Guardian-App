@@ -259,9 +259,29 @@
   border: 1px solid var(--clr-border-input);
   border-radius: var(--r-card-lg);
   height: 58px;
-  padding: 18px 24px;
+  padding: 14px 20px;
   width: 100%;
-  color: var(--clr-text-body);
+  color: var(--clr-text-heading);
+  font-family: inherit;
+  font-size: 16px;
+}
+
+input[type="date"].input-form {
+  color-scheme: light;
+  cursor: pointer;
+  position: relative;
+  line-height: 1.2;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+  padding: 4px;
+  margin-left: 8px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 /* OTP Boxes */

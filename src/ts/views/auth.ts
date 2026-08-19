@@ -14,7 +14,19 @@ export const Auth = {
     init(route) {
         if (route === 'signup') {
             this.setupOTPInputs();
+            this.setupDatePickers();
         }
+    },
+    
+    setupDatePickers() {
+        const dateInputs = document.querySelectorAll<HTMLInputElement>('input[type="date"]');
+        dateInputs.forEach(input => {
+            input.addEventListener('click', () => {
+                if (typeof (input as any).showPicker === 'function') {
+                    try { (input as any).showPicker(); } catch (e) {}
+                }
+            });
+        });
     },
     
     togglePassword(inputId) {
