@@ -212,9 +212,6 @@ export const UI = {
                     if (logBtn3) logBtn3.click();
                     break;
 
-                    const logEntryBtn = document.getElementById('nav-log-btn');
-                    if (logEntryBtn) logEntryBtn.click();
-                    break;
                 default:
                     console.warn('Unhandled UI action:', action);
             }
