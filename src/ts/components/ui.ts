@@ -220,6 +220,7 @@ export const UI = {
             }
         });
     },
+};
 
 // Initialize UI elements when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
