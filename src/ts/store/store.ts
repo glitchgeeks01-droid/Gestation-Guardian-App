@@ -7,7 +7,8 @@
  */
 
 // No more Firebase imports? Just kidding, we are adding it back!
-import { FirebaseDB } from './firebase';
+import { FirebaseDB, auth } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // Helper for API endpoint mapping (Android emulator maps 10.0.2.2 to localhost)
 const API_BASE = window.location.protocol === 'file:' ? 'http://10.0.2.2:3000/api' : '/api';
@@ -29,17 +30,26 @@ export const Store = {
         SETTINGS: 'gg_settings'
     },
 
-    // Assume single user for now until Auth is implemented
     userId: '',
+    pairingPin: '',
 
     initUserId() {
-        let id = localStorage.getItem('gg_patient_id');
-        if (!id) {
+        // Generate a 4-digit pin for UI purposes only if it doesn't exist
+        let pin = localStorage.getItem('gg_pairing_pin');
+        if (!pin) {
             const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-            id = `GG-${randomPart}`;
-            localStorage.setItem('gg_patient_id', id);
+            pin = `GG-${randomPart}`;
+            localStorage.setItem('gg_pairing_pin', pin);
         }
-        this.userId = id;
+        this.pairingPin = pin;
+
+        // Firebase Auth listener for the real secure UID
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.userId = user.uid;
+                console.log("Firebase Auth UID acquired:", this.userId);
+            }
+        });
     },
 
     // --- Offline Sync Engine ---
@@ -154,9 +164,10 @@ export const Store = {
         // 1. Save locally for instant UI updates
         await this._set(this.KEYS.PROFILE, profileData);
         
-        // 2. Queue for Firebase Sync
+        // 2. Queue for Firebase Sync with the pairing pin attached
         const q = this.getSyncQueue();
-        q.push({ type: 'profile', data: profileData, timestamp: Date.now() });
+        const payload = { ...profileData, pairingPin: this.pairingPin };
+        q.push({ type: 'profile', data: payload, timestamp: Date.now() });
         this.saveSyncQueue(q);
         
         // 3. Trigger sync

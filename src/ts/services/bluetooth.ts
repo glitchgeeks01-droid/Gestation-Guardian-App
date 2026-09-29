@@ -2,89 +2,95 @@
 import { Store } from '../store/store';
 import { UI } from '../components/ui';
 
-// js/bluetooth.js
-
-/**
- * Gestation Guardian - Bluetooth & IoT Device Manager
- * Stub for Terra SDK or native Android BLE bridge
- */
-
 export const Bluetooth = {
-    connectedDevices: [],
-    
-    init() {
-        console.log('Bluetooth Manager Initialized');
-        // Reset state on page load
-        this.connectedDevices = [];
-        this.updateUI();
+    // Standard GATT Service UUIDs
+    SERVICES: {
+        BLOOD_PRESSURE: 0x1810,
+        HEART_RATE: 0x180D
     },
-    
-    connect(deviceType) {
-        // Show connecting state
+    CHARACTERISTICS: {
+        BP_MEASUREMENT: 0x2A35,
+        HR_MEASUREMENT: 0x2A37
+    },
+
+    device: null as BluetoothDevice | null,
+    server: null as BluetoothRemoteGATTServer | null,
+
+    async connect(deviceType) {
+        if (!navigator.bluetooth) {
+            UI.showToast("Web Bluetooth API is not supported in this browser.", 'error');
+            return false;
+        }
+
         UI.showToast(`Scanning for ${deviceType.toUpperCase()} devices...`, 'success', 2000);
-        
-        // Find the button that was clicked
-        const cards = document.querySelectorAll('.card-device');
-        let targetBtn = null;
-        
-        cards.forEach(card => {
-            const btn = card.querySelector('button');
-            if (btn && btn.getAttribute('onclick').includes(deviceType)) {
-                targetBtn = btn;
-            }
-        });
-        
-        if (targetBtn) {
-            const originalText = targetBtn.innerText;
-            targetBtn.innerText = 'Connecting...';
-            targetBtn.style.opacity = '0.7';
-            
-            // Mock connection delay
-            setTimeout(() => {
-                this.connectedDevices.push(deviceType);
-                
-                targetBtn.innerText = 'Connected';
-                targetBtn.style.background = 'var(--clr-accent-green)';
-                targetBtn.style.color = 'white';
-                targetBtn.style.opacity = '1';
-                targetBtn.disabled = true;
-                
-                UI.showToast(`${deviceType.toUpperCase()} Connected Successfully!`, 'success');
-                
-                this.updateUI();
-            }, 2000);
-        }
-    },
-    
-    updateUI() {
-        // In a real app, this would update the UI based on connected devices
-        // For now, the connect() method handles the button state directly
-    },
-    
-    // Stub for receiving data from the native Android side or Terra SDK
-    async receiveData(deviceType, data) {
-        console.log(`Received data from ${deviceType}:`, data);
-        
-        // Route data to the appropriate store
-        if (deviceType === 'bp') {
-            await Store.addLog(Store.KEYS.BP_LOGS, {
-                date: new Date().toISOString().split('T')[0],
-                time: new Date().toTimeString().split(' ')[0],
-                sys: data.sys,
-                dia: data.dia,
-                pulse: data.pulse,
-                position: 'sitting', // default for automated reading
-                arm: 'left',
-                notes: 'Auto-synced from BP Monitor'
+
+        try {
+            this.device = await navigator.bluetooth.requestDevice({
+                filters: [{ services: [this.SERVICES.BLOOD_PRESSURE] }],
+                optionalServices: [this.SERVICES.HEART_RATE]
             });
-            UI.showToast('New Blood Pressure reading synced', 'success');
-        } else if (deviceType === 'watch' || deviceType === 'spo2') {
-            // e.g. HRV, Sleep, SpO2
+
+            this.device.addEventListener('gattserverdisconnected', this.onDisconnected);
+            this.server = await this.device.gatt?.connect() || null;
+            
+            if (this.server) {
+                UI.showToast(`Connected to ${this.device.name}`, 'success');
+                await this.startBPNotifications();
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error("Bluetooth connection failed:", error);
+            UI.showToast("Connection failed or was cancelled.", 'error');
+            return false;
         }
+    },
+
+    onDisconnected(event: Event) {
+        UI.showToast("Device disconnected.", 'error');
+    },
+
+    async startBPNotifications() {
+        if (!this.server) return;
+        try {
+            const service = await this.server.getPrimaryService(this.SERVICES.BLOOD_PRESSURE);
+            const characteristic = await service.getCharacteristic(this.CHARACTERISTICS.BP_MEASUREMENT);
+            await characteristic.startNotifications();
+            characteristic.addEventListener('characteristicvaluechanged', this.handleBPData.bind(this));
+        } catch (error) {
+            console.error("Error starting BP notifications", error);
+        }
+    },
+
+    handleBPData(event: Event) {
+        const characteristic = event.target as BluetoothRemoteGATTCharacteristic;
+        const value = characteristic.value;
+        if (!value) return;
+
+        const flags = value.getUint8(0);
+        
+        const parseSFloat = (byteOffset: number) => {
+            const raw = value.getUint16(byteOffset, true);
+            const mantissa = raw & 0x0FFF; 
+            return mantissa; 
+        };
+
+        const sys = parseSFloat(1);
+        const dia = parseSFloat(3);
+        const hr = parseSFloat(7); // Roughly where pulse usually sits in standard IEEE
+
+        // Auto-fill the UI form if it's open
+        const sysInput = document.getElementById('bp-sys');
+        const diaInput = document.getElementById('bp-dia');
+        const hrInput = document.getElementById('bp-pulse');
+        
+        if (sysInput) sysInput.value = sys;
+        if (diaInput) diaInput.value = dia;
+        if (hrInput && hr) hrInput.value = hr;
+        
+        UI.showToast(`Reading synced: ${sys}/${dia} mmHg`, 'success');
     }
 };
 
 window.Bluetooth = Bluetooth;
-
-// Expose for HTML inline handlers
 (window as any).Bluetooth = Bluetooth;

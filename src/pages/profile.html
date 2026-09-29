@@ -21,18 +21,18 @@
             <i data-lucide="shield-check" style="color: white; width: 14px; height: 14px;"></i>
           </div>
         </div>
-        <h2 style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700;">Sarah</h2>
+        <h2 id="profile-display-name" style="font-size: 24px; color: var(--clr-text-heading); font-weight: 700;">Loading...</h2>
         <div style="display: inline-flex; align-items: center; gap: 6px; background: var(--clr-green-10); padding: 6px 12px; border-radius: var(--r-pill); color: var(--clr-primary); font-size: 14px; font-weight: 600;">
           <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
-          <span>Week 24</span>
+          <span id="profile-gestation-week">Week --</span>
         </div>
       </div>
 
       <!-- Clinical ID Card -->
       <div class="card-white" style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
         <div style="display: flex; flex-direction: column; gap: 4px;">
-          <h3 style="font-size: 14px; color: var(--clr-text-muted); font-weight: 600; margin: 0;">My Clinical ID</h3>
-          <span id="clinical-id-display" style="font-size: 18px; color: var(--clr-dark-green); font-weight: 700; letter-spacing: 1px;"></span>
+          <h3 style="font-size: 14px; color: var(--clr-text-muted); font-weight: 600; margin: 0;">Doctor Pairing PIN</h3>
+          <span id="clinical-id-display" style="font-size: 22px; color: var(--clr-dark-green); font-weight: 700; letter-spacing: 2px;"></span>
         </div>
         <button class="btn btn-secondary" onclick="Profile.copyClinicalId()" style="padding: 8px 12px; min-width: auto; height: auto;">
           <i data-lucide="copy" style="width: 16px; height: 16px;"></i> Copy
@@ -48,7 +48,7 @@
         
         <div class="input-group">
           <label class="label">Full Name</label>
-          <input type="text" value="Sarah" class="input-form">
+          <input type="text" id="profile-input-name" class="input-form">
         </div>
 
         <div style="display: flex; gap: 16px;">
