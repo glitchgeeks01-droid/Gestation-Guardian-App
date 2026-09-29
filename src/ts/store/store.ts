@@ -161,12 +161,30 @@ export const Store = {
     },
 
     async saveProfile(profileData: any) {
-        // 1. Save locally for instant UI updates
+        // 1. Save locally for instant UI updates (keep raw booleans for mobile app logic)
         await this._set(this.KEYS.PROFILE, profileData);
         
-        // 2. Queue for Firebase Sync with the pairing pin attached
+        // BUG-005 Fix: Transform boolean flags to dashboard-compatible medicalHistory object
+        const conditions = [];
+        if (profileData.chronicHTN) conditions.push("Chronic Hypertension");
+        if (profileData.priorPE) conditions.push("Prior Preeclampsia");
+        if (profileData.diabetes && profileData.diabetes !== 'none') conditions.push(profileData.diabetes === 'gestational' ? 'Gestational Diabetes' : 'Diabetes');
+        if (profileData.isFirstPregnancy) conditions.push("First Pregnancy");
+        if (profileData.multipleGestation) conditions.push("Multiple Gestation (Twins+)");
+        if (profileData.familyHistory) conditions.push("Family History of PE");
+
+        const payload = { 
+            ...profileData, 
+            pairingPin: this.pairingPin,
+            medicalHistory: {
+                conditions: conditions.join(', '),
+                medications: profileData.medications || "",
+                symptoms: [] // Symptoms are generated via telemetry
+            }
+        };
+
+        // 2. Queue for Firebase Sync
         const q = this.getSyncQueue();
-        const payload = { ...profileData, pairingPin: this.pairingPin };
         q.push({ type: 'profile', data: payload, timestamp: Date.now() });
         this.saveSyncQueue(q);
         
@@ -219,10 +237,28 @@ export const Store = {
                 {"code": {"coding": [{"system": "http://loinc.org", "code": "8480-6", "display": "Systolic blood pressure"}]}, "valueQuantity": {"value": Number(data.bpSys), "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]"}},
                 {"code": {"coding": [{"system": "http://loinc.org", "code": "8462-4", "display": "Diastolic blood pressure"}]}, "valueQuantity": {"value": Number(data.bpDia), "unit": "mmHg", "system": "http://unitsofmeasure.org", "code": "mm[Hg]"}}
             ];
+            // BUG-003 Fix: Include maternalHR inside the FHIR BP Panel if it exists
+            if (data.maternalHR) {
+                fhirObservation.component.push(
+                    {"code": {"coding": [{"system": "http://loinc.org", "code": "8867-4", "display": "Heart rate"}]}, "valueQuantity": {"value": Number(data.maternalHR), "unit": "beats/minute", "system": "http://unitsofmeasure.org", "code": "/min"}}
+                );
+            }
         } else if (key === 'gg_vitals_logs') {
+            // BUG-002 Fix: Map all vitals correctly instead of blindly throwing away non-HR data
             fhirObservation.category = [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}];
-            fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "8867-4", "display": "Heart rate"}]};
-            fhirObservation.valueQuantity = {"value": Number(data.maternalHR), "unit": "beats/minute", "system": "http://unitsofmeasure.org", "code": "/min"};
+            fhirObservation.code = {"coding": [{"system": "http://loinc.org", "code": "8716-3", "display": "Vital signs"}]};
+            fhirObservation.component = [];
+            
+            if (data.weight) fhirObservation.component.push({"code": {"coding": [{"system": "http://loinc.org", "code": "29463-7", "display": "Body Weight"}]}, "valueQuantity": {"value": Number(data.weight), "unit": "kg"}});
+            if (data.temperature) fhirObservation.component.push({"code": {"coding": [{"system": "http://loinc.org", "code": "8310-5", "display": "Body temperature"}]}, "valueQuantity": {"value": Number(data.temperature), "unit": "Cel"}});
+            if (data.glucose) fhirObservation.component.push({"code": {"coding": [{"system": "http://loinc.org", "code": "2339-0", "display": "Glucose"}]}, "valueQuantity": {"value": Number(data.glucose), "unit": "mg/dL"}});
+            
+            // Add raw unstructured keys as well
+            Object.keys(data).forEach(k => {
+                if (!['weight', 'temperature', 'glucose'].includes(k)) {
+                    fhirObservation.component.push({ "code": { "text": k }, "valueString": String(data[k]) });
+                }
+            });
         } else {
             // Generic pseudo-FHIR fallback for other types
             fhirObservation.code = { text: fbCollection };
