@@ -162,6 +162,15 @@ This repository underwent a massive architectural audit to guarantee stability a
 Your sensitive medical data stays on your device first, with optional cloud backup via Firebase.
 
 ---
+
+## ?? Security & Architecture Updates
+Following a comprehensive system audit, the Gestation Guardian architecture has been heavily hardened:
+* **Race-Condition-Free Sync Engine:** The offline SyncEngine now utilizes an atomic, non-destructive polling flag (processing), guaranteeing zero data loss during high-frequency Bluetooth telemetry ingestions.
+* **Strict HL7 FHIR Typing:** Telemetry mappers prevent data-loss by perfectly encoding Blood Pressure Panels (LOINC 85354-9) with nested Heart Rate (8867-4) components, ensuring the Doctor Dashboard graphs plot accurately.
+* **Schema Integrity:** Local medical history boolean flags are dynamically mapped and reduced to exact string schemas (e.g., medicalHistory.conditions) required by the Doctor Dashboard payload contract on the fly.
+* **Robust Input Validation:** All medical forms implement strict HTML5 boundaries (min, max) and deep isNaN fallback assertions, ensuring the users/{uid} and 	elemetry subcollections are never polluted with NaN fields or RangeError corrupted dates.
+
+---
 <div align="center">
   <b>Monitor. Protect. Nurture.</b>
 </div>
