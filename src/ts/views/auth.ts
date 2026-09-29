@@ -119,8 +119,15 @@ export const Auth = {
             return;
         }
         
-        // Calculate age
+        // BUG-010 Fix: Validate date inputs before parsing
         const birthDate = new Date(dob);
+        const lmpDate = new Date(lmp);
+        if (isNaN(birthDate.getTime()) || isNaN(lmpDate.getTime())) {
+            UI.showToast('Please enter valid dates for DOB and LMP', 'error');
+            return;
+        }
+
+        // Calculate age
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const m = today.getMonth() - birthDate.getMonth();
@@ -129,7 +136,6 @@ export const Auth = {
         }
         
         // Calculate EDD
-        const lmpDate = new Date(lmp);
         const edd = new Date(lmpDate.getTime());
         edd.setDate(edd.getDate() + 280);
         
@@ -175,17 +181,24 @@ export const Auth = {
         
         // Mock authentication - just create a dummy profile if none exists
         if (!(await Store.getProfile())) {
-            // Give them a dummy profile so they can access the app
-            const dummyLmp = new Date();
-            dummyLmp.setDate(dummyLmp.getDate() - (20 * 7)); // roughly 20 weeks pregnant
-            
-            await Store.saveProfile({
-                name: 'Demo User',
-                email: email,
-                lmp: dummyLmp.toISOString().split('T')[0],
-                age: 28,
-                bloodGroup: 'O+'
-            });
+            // BUG-008 Fix: Do not create dummy data in production
+            // @ts-ignore (Vite injects import.meta.env)
+            if (import.meta.env && import.meta.env.DEV) {
+                // Give them a dummy profile so they can access the app
+                const dummyLmp = new Date();
+                dummyLmp.setDate(dummyLmp.getDate() - (20 * 7)); // roughly 20 weeks pregnant
+                
+                await Store.saveProfile({
+                    name: 'Demo User',
+                    email: email,
+                    lmp: dummyLmp.toISOString().split('T')[0],
+                    age: 28,
+                    bloodGroup: 'O+'
+                });
+            } else {
+                UI.showToast('Account not found. Please sign up.', 'error');
+                return;
+            }
         }
         
         UI.showToast('Signed in successfully', 'success');

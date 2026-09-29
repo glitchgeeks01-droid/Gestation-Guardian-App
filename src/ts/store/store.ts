@@ -78,16 +78,19 @@ export const Store = {
         
         this.isSyncing = true;
         try {
-            const q = this.getSyncQueue();
-            if (q.length === 0) return;
+            let q = this.getSyncQueue();
+            const toProcess = q.filter((i: any) => !i.processing);
+            if (toProcess.length === 0) return;
 
-            console.log(`Processing sync queue of ${q.length} items...`);
-            // Clear queue temporarily to prevent concurrent modifications duplicating sync
-            this.saveSyncQueue([]);
+            console.log(`Processing sync queue of ${toProcess.length} items...`);
+            
+            // Mark as processing
+            q = q.map((i: any) => ({ ...i, processing: i.processing || toProcess.includes(i) }));
+            this.saveSyncQueue(q);
 
-            const remainingQ: any[] = [];
+            const syncedIds = new Set();
 
-            for (const item of q) {
+            for (const item of toProcess) {
                 let success = false;
                 try {
                     if (item.type === 'profile') {
@@ -100,14 +103,16 @@ export const Store = {
                 } catch (e) {
                     console.error("Sync error for item:", item, e);
                 }
-                if (!success) remainingQ.push(item);
+                if (success) {
+                    // Use a unique ID or timestamp to track which got synced
+                    syncedIds.add(item.timestamp);
+                }
             }
 
-            if (remainingQ.length > 0) {
-                // Merge remaining with any new items added while processing
-                const currentQ = this.getSyncQueue();
-                this.saveSyncQueue([...remainingQ, ...currentQ]);
-            }
+            // Remove successfully synced items and clear processing flags
+            const currentQ = this.getSyncQueue();
+            const nextQ = currentQ.filter((i: any) => !syncedIds.has(i.timestamp)).map((i: any) => ({ ...i, processing: false }));
+            this.saveSyncQueue(nextQ);
         } finally {
             this.isSyncing = false;
         }
