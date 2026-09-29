@@ -7,7 +7,7 @@ export const DashboardUI = {
         console.log('Dashboard initialized');
         const profile = await Store.getProfile();
         if (profile) {
-            document.getElementById('dash-name')!.textContent = (profile.name || '').split(' ')[0] || 'User';
+            const elDashName = document.getElementById('dash-name'); if(elDashName) elDashName.textContent = (profile.name || '').split(' ')[0] || 'User';
             
             // Trimester logic
             const week = await Store.getCurrentGestationalWeek();
@@ -15,42 +15,42 @@ export const DashboardUI = {
             
             const safeWeek = typeof week === 'number' && !isNaN(week) ? week : 0;
             
-            document.getElementById('dash-week')!.textContent = `Week ${safeWeek}`;
+            const elDashWeek = document.getElementById('dash-week'); if(elDashWeek) elDashWeek.textContent = `Week ${safeWeek}`;
             
             let triLabel = 'FIRST TRIMESTER';
             if (trimester === 2) triLabel = 'SECOND TRIMESTER';
             if (trimester === 3) triLabel = 'THIRD TRIMESTER';
-            document.getElementById('dash-trimester-label')!.textContent = triLabel;
+            const elDashTri = document.getElementById('dash-trimester-label'); if(elDashTri) elDashTri.textContent = triLabel;
             
             // Progress
             const maxWeeks = 40;
             const progress = Math.min(Math.round((safeWeek / maxWeeks) * 100), 100);
-            document.getElementById('dash-progress-bar')!.style.width = `${progress}%`;
-            document.getElementById('dash-progress-text')!.textContent = `${progress}%`;
+            const elDashProg = document.getElementById('dash-progress-bar'); if(elDashProg) elDashProg.style.width = `${progress}%`;
+            const elDashProgText = document.getElementById('dash-progress-text'); if(elDashProgText) elDashProgText.textContent = `${progress}%`;
             
             const daysLeft = Math.max((maxWeeks * 7) - (safeWeek * 7), 0);
-            document.getElementById('dash-days-left')!.textContent = `${daysLeft} days to go`;
+            const elDashDays = document.getElementById('dash-days-left'); if(elDashDays) elDashDays.textContent = `${daysLeft} days to go`;
             
             // Baby size emoji (simplified)
             const sizes = ['🫐', '🍇', '🍓', '🍋', '🍑', '🥑', '🧅', '🌽', '🍆', '🥥', '🍍', '🍉'];
             const sizeIndex = Math.floor(Math.min(safeWeek / 4, sizes.length - 1));
-            document.getElementById('dash-baby-size')!.textContent = sizes[Math.max(0, sizeIndex)];
+            const elDashBaby = document.getElementById('dash-baby-size'); if(elDashBaby) elDashBaby.textContent = sizes[Math.max(0, sizeIndex)];
         }
         
         // Latest Vitals
         const latestBP = await Store.getLatestBP();
         if (latestBP) {
-            document.getElementById('dash-vital-bp')!.innerHTML = `${latestBP.bpSys}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">/${latestBP.bpDia}</span>`;
+            const elDashBp = document.getElementById('dash-vital-bp'); if(elDashBp) elDashBp.innerHTML = `${latestBP.bpSys}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">/${latestBP.bpDia}</span>`;
         }
         
         const vitals = await Store.getLogs(Store.KEYS.VITALS_LOGS);
         if (vitals.length > 0) {
             const latest = vitals[0];
             if (latest.weight) {
-                document.getElementById('dash-vital-weight')!.innerHTML = `${latest.weight}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">kg</span>`;
+                const elDashWeight = document.getElementById('dash-vital-weight'); if(elDashWeight) elDashWeight.innerHTML = `${latest.weight}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">kg</span>`;
             }
             if (latest.sleep) {
-                document.getElementById('dash-vital-sleep')!.innerHTML = `${latest.sleep}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">hrs</span>`;
+                const elDashSleep = document.getElementById('dash-vital-sleep'); if(elDashSleep) elDashSleep.innerHTML = `${latest.sleep}<br><span style="font-size: 14px; font-weight: 500; color: var(--clr-text-muted);">hrs</span>`;
             }
         }
         
@@ -80,3 +80,4 @@ export const DashboardUI = {
 };
 
 (window as any).DashboardUI = DashboardUI;
+

@@ -178,9 +178,20 @@ export const Store = {
         if (profileData.multipleGestation) conditions.push("Multiple Gestation (Twins+)");
         if (profileData.familyHistory) conditions.push("Family History of PE");
 
+        // BUG-013 Fix: Calculate and append explicit 'weeks' field
+        let weeks = 0;
+        if (profileData.lmp) {
+            const lmpDate = new Date(profileData.lmp);
+            if (!isNaN(lmpDate.getTime())) {
+                const diffTime = Math.abs(new Date().getTime() - lmpDate.getTime());
+                weeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+            }
+        }
+
         const payload = { 
             ...profileData, 
             pairingPin: this.pairingPin,
+            weeks: weeks,
             medicalHistory: {
                 conditions: conditions.join(', '),
                 medications: profileData.medications || "",

@@ -23,6 +23,11 @@ export const Profile = {
             const week = await Store.getCurrentGestationalWeek();
             weekDisplay.textContent = `Week ${week}`;
         }
+
+        const copyBtn = document.getElementById('btn-copy-clinical-id');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => this.copyClinicalId());
+        }
     },
 
     copyClinicalId() {
