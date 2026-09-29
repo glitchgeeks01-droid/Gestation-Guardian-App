@@ -108,15 +108,36 @@ export const UI = {
 
     // Initialize data-action listeners
     initActions() {
+        // Handle form submissions separately so HTML5 validation works
+        document.addEventListener('submit', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName.toLowerCase() === 'form' && target.hasAttribute('data-action')) {
+                const action = target.getAttribute('data-action');
+                if (!action) return;
+                e.preventDefault(); // Prevent page reload
+                this.executeAction(action, target);
+            }
+        });
+
+        // Handle button/link clicks
         document.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             const actionEl = target.closest('[data-action]') as HTMLElement;
+            
             if (!actionEl) return;
+            // Ignore if the data-action is on a form (handled by submit listener)
+            if (actionEl.tagName.toLowerCase() === 'form') return;
+            
             const action = actionEl.getAttribute('data-action');
             if (!action) return;
-            // Prevent default for anchor/button
+            
             e.preventDefault();
-            switch (action) {
+            this.executeAction(action, actionEl);
+        });
+    },
+
+    executeAction(action: string, actionEl: HTMLElement) {
+        switch (action) {
                 case 'log-vital':
                     // Trigger FAB log button click
                     const logBtn = document.getElementById('nav-log-btn');
@@ -215,8 +236,7 @@ export const UI = {
                 default:
                     console.warn('Unhandled UI action:', action);
             }
-        });
-    },
+    }
 };
 
 // Initialize UI elements when DOM is ready
