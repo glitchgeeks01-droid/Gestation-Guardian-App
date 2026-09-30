@@ -6,13 +6,17 @@
     "dev": "vite",
     "build": "vite build",
     "test": "playwright test",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "lint": "npx eslint src/ts/"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.44.0",
     "@vitejs/plugin-legacy": "^8.2.0",
+    "eslint": "^10.11.0",
     "terser": "^5.49.0",
     "typescript": "^7.0.2",
+    "typescript-eslint": "^8.71.0",
     "vite": "^8.1.4"
   },
   "dependencies": {
