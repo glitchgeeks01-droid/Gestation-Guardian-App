@@ -143,7 +143,7 @@ export const Auth = {
         const profile = {
             name,
             phone,
-            email,
+            email: email.toLowerCase().trim(),  // Normalized for doctor lookup
             dob,
             age,
             lmp,
@@ -159,10 +159,13 @@ export const Auth = {
             familyHistory: false
         };
         
-        // Save to store
+        // Save to store (which also generates pairingPin and syncs to Firestore)
         await Store.saveProfile(profile);
-        
-        UI.showToast('Account created securely', 'success');
+
+        // Show the Clinical PIN to the patient so they can share it with their doctor
+        const pin = Store.pairingPin || localStorage.getItem('gg_pairing_pin') || 'GG-????';
+        UI.showToast(`Account created! Your Clinical PIN: ${pin}`, 'success');
+
         
         // Route to Risk Assessment as per flow
         setTimeout(() => {

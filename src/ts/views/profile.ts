@@ -4,9 +4,11 @@ import { UI } from '../components/ui';
 
 export const Profile = {
     async init() {
+        // Show Doctor Pairing PIN
         const idDisplay = document.getElementById('clinical-id-display');
-        if (idDisplay && Store.pairingPin) {
-            idDisplay.textContent = Store.pairingPin;
+        const pin = Store.pairingPin || localStorage.getItem('gg_pairing_pin') || '';
+        if (idDisplay && pin) {
+            idDisplay.textContent = pin;
         }
 
         const profile = await Store.getProfile();
@@ -31,12 +33,15 @@ export const Profile = {
     },
 
     copyClinicalId() {
-        if (Store.userId) {
-            navigator.clipboard.writeText(Store.userId).then(() => {
-                UI.showToast('Clinical ID copied to clipboard');
+        // Copy the Doctor Pairing PIN (GG-XXXX) — this is what the doctor types in "Connect Patient"
+        const pin = Store.pairingPin || localStorage.getItem('gg_pairing_pin') || '';
+        if (pin) {
+            navigator.clipboard.writeText(pin).then(() => {
+                UI.showToast(`PIN copied: ${pin} — Share this with your doctor`);
             }).catch(err => {
-                console.error('Could not copy ID', err);
+                console.error('Could not copy PIN', err);
             });
         }
     }
 };
+
