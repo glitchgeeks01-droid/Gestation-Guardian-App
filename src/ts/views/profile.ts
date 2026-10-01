@@ -15,9 +15,11 @@ export const Profile = {
         if (profile) {
             const nameDisplay = document.getElementById('profile-display-name');
             const nameInput = document.getElementById('profile-input-name') as HTMLInputElement;
+            const emailInput = document.getElementById('profile-input-email') as HTMLInputElement;
             
             if (nameDisplay && profile.name) nameDisplay.textContent = profile.name;
             if (nameInput && profile.name) nameInput.value = profile.name;
+            if (emailInput && profile.email) emailInput.value = profile.email;
         }
 
         const weekDisplay = document.getElementById('profile-gestation-week');
