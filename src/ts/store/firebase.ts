@@ -60,17 +60,17 @@ export const FirebaseDB = {
 
     async getUserLogs(collectionName: string, userId: string) {
         try {
-            // NOTE: Firestore requires an index for multiple fields ordering. 
-            // In a real app, we might need a composite index. 
-            // We'll just fetch by user and sort locally if needed, or rely on simple queries.
-            const q = query(collection(db, collectionName), where("userId", "==", userId));
+            const q = query(
+                collection(db, collectionName), 
+                where("userId", "==", userId),
+                orderBy("timestamp", "desc")
+            );
             const querySnapshot = await getDocs(q);
             const logs: any[] = [];
             querySnapshot.forEach((doc) => {
                 logs.push({ id: doc.id, ...doc.data() });
             });
-            // Sort locally to avoid index requirements
-            return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+            return logs;
         } catch (e) {
             console.error("Error getting user logs: ", e);
             return [];

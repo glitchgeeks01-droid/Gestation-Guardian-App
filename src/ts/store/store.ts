@@ -1,17 +1,10 @@
-// @ts-nocheck
-// js/store.js
-
 /**
  * Gestation Guardian - Data Layer
  * Handles localStorage abstraction, data structures, and exports
  */
 
-// No more Firebase imports? Just kidding, we are adding it back!
 import { FirebaseDB, auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-
-// Helper for API endpoint mapping (Android emulator maps 10.0.2.2 to localhost)
-const API_BASE = window.location.protocol === 'file:' ? 'http://10.0.2.2:3000/api' : '/api';
 
 export const Store = {
     // Keys matching the schema in the implementation plan
@@ -225,19 +218,6 @@ export const Store = {
         logs.unshift(entry); // Add to beginning (newest first)
         await this._set(key, logs);
         
-        // Map local keys to Firebase collections
-        const collectionMap: Record<string, string> = {
-            'gg_bp_logs': 'blood_pressure',
-            'gg_vitals_logs': 'vitals',
-            'gg_glucose_logs': 'glucose',
-            'gg_urine_logs': 'urine',
-            'gg_kick_sessions': 'kick_counts',
-            'gg_contractions': 'contractions',
-            'gg_symptoms': 'symptoms'
-        };
-
-        const fbCollection = collectionMap[key] || 'misc_logs';
-
         // 1. Strict LOINC FHIR Generation
         let fhirObservation: any = {
             resourceType: "Observation",
@@ -277,16 +257,16 @@ export const Store = {
             });
         } else {
             // Generic pseudo-FHIR fallback for other types
-            fhirObservation.code = { text: fbCollection };
+            fhirObservation.code = { text: key };
             fhirObservation.component = Object.keys(data || {}).map(k => ({
                 code: { text: k },
                 valueString: String(data[k])
             }));
         }
 
-        // Queue for Firebase sync (collection property is mostly ignored now as processSyncQueue hardcodes telemetry)
+        // Queue for Firebase sync
         const q = this.getSyncQueue();
-        q.push({ type: 'log', collection: 'telemetry', data: fhirObservation, timestamp: Date.now() });
+        q.push({ type: 'log', data: fhirObservation, timestamp: Date.now() });
         this.saveSyncQueue(q);
         
         if (navigator.onLine) this.processSyncQueue();
@@ -336,7 +316,7 @@ export const Store = {
     },
     
     async clearAll() {
-        Object.values(this.KEYS).forEach(key => localStorage.removeItem(key));
+        Object.values(this.KEYS).forEach(key => localStorage.removeItem(key as string));
     }
 };
 
