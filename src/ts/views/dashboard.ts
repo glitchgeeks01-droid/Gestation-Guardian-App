@@ -1,8 +1,11 @@
 // @ts-nocheck
 import { Store } from '../store/store';
 import { Scoring } from '../core/scoring';
+import { Spiderweb } from '../core/spiderweb';
 
 export const DashboardUI = {
+    _spiderwebBound: false,
+    
     async init() {
         console.log('Dashboard initialized');
         const profile = await Store.getProfile();
@@ -75,6 +78,15 @@ export const DashboardUI = {
                     }
                 }
             }
+        }
+        
+        // Spiderweb Integration: Listen for reactive data changes
+        if (!this._spiderwebBound) {
+            Spiderweb.listen('DATA_CHANGED', async () => {
+                console.log('🕸️ Dashboard caught vibration! Refreshing UI...');
+                await this.init(); // Re-render silently
+            });
+            this._spiderwebBound = true;
         }
     }
 };

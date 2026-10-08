@@ -21,6 +21,7 @@ import { HealthRecords } from './health-records';
 import { DashboardUI } from './dashboard';
 import { MedicalHistory } from './medical-history';
 import { Profile } from './profile';
+import { Spiderweb } from '../core/spiderweb';
 
 // Expose modules to global scope for inline HTML event handlers
 window.Auth = Auth;
@@ -37,6 +38,7 @@ window.HealthRecords = HealthRecords;
 window.DashboardUI = DashboardUI;
 window.MedicalHistory = MedicalHistory;
 window.Profile = Profile;
+window.Spiderweb = Spiderweb;
 
 // js/app.js
 

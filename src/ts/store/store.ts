@@ -199,6 +199,10 @@ export const Store = {
         
         // 3. Trigger sync
         if (navigator.onLine) this.processSyncQueue();
+        
+        if ((window as any).Spiderweb) {
+            (window as any).Spiderweb.pluck('DATA_CHANGED', { type: 'profile' });
+        }
     },
 
     // Generic log methods
@@ -270,6 +274,10 @@ export const Store = {
         this.saveSyncQueue(q);
         
         if (navigator.onLine) this.processSyncQueue();
+        
+        if ((window as any).Spiderweb) {
+            (window as any).Spiderweb.pluck('DATA_CHANGED', { key, entry });
+        }
 
         return entry;
     },
