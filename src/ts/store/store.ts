@@ -25,6 +25,7 @@ export const Store = {
 
     userId: '',
     pairingPin: '',
+    pendingRequests: [],
 
     initUserId() {
         // Generate a 4-digit pin for UI purposes only if it doesn't exist

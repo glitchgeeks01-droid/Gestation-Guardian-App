@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth, signInAnonymously } from "firebase/auth";
 
 const firebaseConfig = {
@@ -77,3 +77,25 @@ export const FirebaseDB = {
         }
     }
 };
+
+// Handshake Methods
+export function listenForConnectionRequests(uid: string, onPendingRequest: (request: any) => void) {
+    const q = query(
+        collection(db, 'pairing_requests'),
+        where('patientId', '==', uid),
+        where('status', '==', 'pending')
+    );
+
+    return onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added') {
+                onPendingRequest({ id: change.doc.id, ...change.doc.data() });
+            }
+        });
+    });
+}
+
+export async function respondToConnectionRequest(requestId: string, status: 'approved' | 'denied') {
+    const requestRef = doc(db, 'pairing_requests', requestId);
+    await updateDoc(requestRef, { status });
+}

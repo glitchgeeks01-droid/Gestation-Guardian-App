@@ -64,6 +64,71 @@ export const UI = {
         }, duration);
     },
     
+    // Modal Confirm System
+    showConfirm(options: { title: string, message: string, confirmText?: string, cancelText?: string, onConfirm: () => void, onCancel: () => void }) {
+        const container = document.body;
+        const uid = `modal-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4';
+        
+        const modal = document.createElement('div');
+        modal.className = 'bg-surface w-full max-w-sm rounded-2xl p-6 shadow-xl transform transition-all scale-95 opacity-0';
+        
+        // Build DOM safely — no innerHTML with user-controlled strings (XSS prevention)
+        const heading = document.createElement('h3');
+        heading.className = 'text-xl font-bold text-on-surface mb-2';
+        heading.textContent = options.title;
+        
+        const paragraph = document.createElement('p');
+        paragraph.className = 'text-sm text-outline mb-6';
+        paragraph.textContent = options.message;
+        
+        const btnRow = document.createElement('div');
+        btnRow.className = 'flex gap-3';
+        
+        const cancelBtn = document.createElement('button');
+        cancelBtn.id = `${uid}-cancel`;
+        cancelBtn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors';
+        cancelBtn.textContent = options.cancelText || 'Deny';
+        
+        const confirmBtn = document.createElement('button');
+        confirmBtn.id = `${uid}-confirm`;
+        confirmBtn.className = 'flex-1 py-3 px-4 rounded-xl font-bold text-sm bg-primary text-white hover:opacity-90 transition-opacity shadow-sm';
+        confirmBtn.textContent = options.confirmText || 'Approve';
+        
+        btnRow.appendChild(cancelBtn);
+        btnRow.appendChild(confirmBtn);
+        modal.appendChild(heading);
+        modal.appendChild(paragraph);
+        modal.appendChild(btnRow);
+        
+        overlay.appendChild(modal);
+        container.appendChild(overlay);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+            modal.classList.remove('scale-95', 'opacity-0');
+            modal.classList.add('scale-100', 'opacity-100');
+        });
+        
+        const close = () => {
+            modal.classList.remove('scale-100', 'opacity-100');
+            modal.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => overlay.remove(), 200);
+        };
+        
+        cancelBtn.addEventListener('click', () => {
+            close();
+            options.onCancel();
+        });
+        
+        confirmBtn.addEventListener('click', () => {
+            close();
+            options.onConfirm();
+        });
+    },
+    
     // Bottom Sheet Manager
     initBottomSheet() {
         const overlay = document.getElementById('log-sheet-overlay');

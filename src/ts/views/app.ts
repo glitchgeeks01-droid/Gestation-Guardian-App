@@ -22,6 +22,9 @@ import { DashboardUI } from './dashboard';
 import { MedicalHistory } from './medical-history';
 import { Profile } from './profile';
 import { Spiderweb } from '../core/spiderweb';
+import { listenForConnectionRequests, respondToConnectionRequest, auth as firebaseAuth } from '../store/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { Notifications } from './notifications';
 
 // Expose modules to global scope for inline HTML event handlers
 window.Auth = Auth;
@@ -39,6 +42,7 @@ window.DashboardUI = DashboardUI;
 window.MedicalHistory = MedicalHistory;
 window.Profile = Profile;
 window.Spiderweb = Spiderweb;
+window.Notifications = Notifications;
 
 // js/app.js
 
@@ -64,6 +68,34 @@ export const App = {
         if (Store) {
             Store.initUserId();
             Store.initSyncEngine();
+
+            // Setup Provider Handshake Listener — use onAuthStateChanged to avoid race condition
+            let handshakeListenerMounted = false;
+            onAuthStateChanged(firebaseAuth, (user) => {
+                if (user && !handshakeListenerMounted) {
+                    handshakeListenerMounted = true;
+                    const patientUid = user.uid;
+                    listenForConnectionRequests(patientUid, (request) => {
+                        // Avoid duplicates if listener fires multiple times
+                        if (!Store.pendingRequests.find(r => r.id === request.id)) {
+                            Store.pendingRequests.push(request);
+                            if (UI && typeof UI.haptic === 'function') UI.haptic(50);
+                        }
+                        
+                        // Update the badge on the dashboard if it exists
+                        const bellBadge = document.getElementById('notification-badge');
+                        if (bellBadge) {
+                            bellBadge.style.display = Store.pendingRequests.length > 0 ? 'flex' : 'none';
+                            bellBadge.textContent = Store.pendingRequests.length.toString();
+                        }
+                        
+                        // If we are currently on the notifications page, re-render it
+                        if (App.currentPage === 'notifications' && Notifications) {
+                            Notifications.render();
+                        }
+                    });
+                }
+            });
         }
         
         // Handle hash changes for routing
@@ -254,6 +286,9 @@ export const App = {
                 break;
             case 'kick-counter':
                 if (Kicks) Kicks.init();
+                break;
+            case 'notifications':
+                if (Notifications) Notifications.init();
                 break;
             case 'log-vitals':
                 if (Vitals) Vitals.initVitalsPage();

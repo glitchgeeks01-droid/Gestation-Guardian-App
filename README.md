@@ -147,8 +147,10 @@ The app uses a **write-local-first, sync-later** pattern. All health data (blood
 2. Patient navigates to **Profile** → copies their Clinical ID.
 3. Patient shares the ID with their healthcare provider.
 4. Doctor enters the ID in the **GG Doctor Dashboard** → **Connect Patient** dialog.
-5. The dashboard instantly establishes a real-time WebSocket-like connection to the patient's telemetry subcollection.
-6. All future vitals logged by the patient are streamed live to the doctor's clinical charts.
+5. A real-time **Pairing Request** is securely dispatched to the patient's device via Firestore.
+6. The patient receives a notification badge on their **Notification Center** (bell icon).
+7. The patient explicitly **Approves** or **Denies** the doctor's request.
+8. Upon approval, the dashboard instantly establishes a real-time connection to the patient's telemetry subcollection.
 
 ## 🔒 Privacy & Security
 

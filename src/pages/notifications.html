@@ -1,0 +1,39 @@
+<!-- pages/notifications.html -->
+<div id="page-notifications" class="page" style="padding-bottom: 100px;">
+    <!-- Top App Bar -->
+    <header class="glass-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h1 style="font-size: 20px; color: var(--clr-dark-green);">Notifications</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <div style="padding: 96px 24px 24px; max-width: 512px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px;">
+      
+      <!-- Empty State -->
+      <div id="notifications-empty" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 48px; gap: 16px;">
+          <div style="width: 80px; height: 80px; background: var(--clr-green-10); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+            <i data-lucide="bell-off" style="width: 32px; height: 32px;"></i>
+          </div>
+          <div>
+              <h2 style="font-size: 18px; font-weight: 700; color: var(--clr-text-heading);">You're all caught up!</h2>
+              <p style="font-size: 14px; color: var(--clr-text-muted); margin-top: 4px;">No new alerts or requests right now.</p>
+          </div>
+      </div>
+
+      <!-- Notifications List -->
+      <div id="notifications-list" style="display: none; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <h3 style="font-size: 14px; font-weight: 700; color: var(--clr-text-body-alt); letter-spacing: 1px;">NEW REQUESTS</h3>
+          </div>
+          
+          <div id="notifications-container" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Cards injected here via JS -->
+          </div>
+      </div>
+
+    </div>
+</div>
