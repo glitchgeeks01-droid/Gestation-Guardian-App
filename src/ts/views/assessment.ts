@@ -12,27 +12,27 @@ export const Assessment = {
     },
     async submit() {
         // Collect form data
-        const age = parseInt(document.getElementById('')?.value) || 25;
+        const age = parseInt((document.getElementById('q-age') as HTMLInputElement)?.value) || 25;
         const firstPreg = document.querySelector('input[name="q-first-preg"]:checked')?.value === 'yes';
         const priorPE = document.querySelector('input[name="q-prior-pe"]:checked')?.value === 'yes';
         const chronicHTN = document.querySelector('input[name="q-chronic-htn"]:checked')?.value === 'yes';
-        const diabetes = document.getElementById('')?.value || 'none';
+        const diabetes = (document.getElementById('q-diabetes') as HTMLSelectElement)?.value || 'none';
         const family = document.querySelector('input[name="q-family"]:checked')?.value === 'yes';
         
-        const height = parseInt(document.getElementById('')?.value) || 160;
-        const weight = parseInt(document.getElementById('')?.value) || 65;
+        const height = parseInt((document.getElementById('q-height') as HTMLInputElement)?.value) || 160;
+        const weight = parseInt((document.getElementById('q-weight') as HTMLInputElement)?.value) || 65;
         
-        const bookSys = parseInt(document.getElementById('')?.value) || null;
-        const bookDia = parseInt(document.getElementById('')?.value) || null;
+        const bookSys = parseInt((document.getElementById('q-booking-sys') as HTMLInputElement)?.value) || null;
+        const bookDia = parseInt((document.getElementById('q-booking-dia') as HTMLInputElement)?.value) || null;
         
-        const curSys = parseInt(document.getElementById('')?.value) || null;
-        const curDia = parseInt(document.getElementById('')?.value) || null;
+        const curSys = parseInt((document.getElementById('q-current-sys') as HTMLInputElement)?.value) || null;
+        const curDia = parseInt((document.getElementById('q-current-dia') as HTMLInputElement)?.value) || null;
         
         const symptomsNodes = document.querySelectorAll('input[name="q-symptoms"]:checked');
         const symptoms = Array.from(symptomsNodes).map(node => node.value);
         
         const weightGain = document.querySelector('input[name="q-weight-gain"]:checked')?.value === 'yes';
-        const protein = document.getElementById('')?.value || 'unknown';
+        const protein = (document.getElementById('q-protein') as HTMLSelectElement)?.value || 'unknown';
 
         // 1. Update Profile (Static Factors)
         const profile = (await Store.getProfile()) || {};

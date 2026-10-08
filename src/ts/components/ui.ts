@@ -236,6 +236,10 @@ export const UI = {
                 default:
                     console.warn('Unhandled UI action:', action);
             }
+    },
+
+    haptic() {
+        if (navigator.vibrate) navigator.vibrate([50]);
     }
 };
 

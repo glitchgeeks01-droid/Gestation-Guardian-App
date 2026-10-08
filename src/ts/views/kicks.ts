@@ -92,20 +92,17 @@ export const Kicks = {
     
     logKick() {
         if (!this.kickSessionActive) {
-            // Auto-start session if they tap without starting
             this.toggleSession();
         }
         
         this.kickCount++;
         this.updateKickDisplay();
         
-        // Haptic feedback
         UI.haptic();
         
         if (this.kickCount >= 10) {
             const duration = Math.floor((Date.now() - this.kickStartTime) / 1000);
             UI.showToast(`Great! 10 kicks reached in ${this.formatTime(duration)}.`, 'success');
-            // Don't auto-stop, they might want to keep counting
         }
     },
     
