@@ -36,8 +36,8 @@ export const Bluetooth = {
 
         try {
             this.device = await navigator.bluetooth.requestDevice({
-                filters: [{ services: [this.SERVICES.BLOOD_PRESSURE] }],
-                optionalServices: [this.SERVICES.HEART_RATE]
+                acceptAllDevices: true,
+                optionalServices: [this.SERVICES.BLOOD_PRESSURE, this.SERVICES.HEART_RATE]
             });
 
             this.device.addEventListener('gattserverdisconnected', this.onDisconnected);
