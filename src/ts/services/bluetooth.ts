@@ -16,6 +16,16 @@ export const Bluetooth = {
     device: null as BluetoothDevice | null,
     server: null as BluetoothRemoteGATTServer | null,
 
+    init() {
+        const connectBtns = document.querySelectorAll('[data-action="bt-connect"]');
+        connectBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const deviceType = (e.currentTarget as HTMLElement).dataset.device || 'bp-monitor';
+                this.connect(deviceType);
+            });
+        });
+    },
+
     async connect(deviceType) {
         if (!navigator.bluetooth) {
             UI.showToast("Web Bluetooth API is not supported in this browser.", 'error');
