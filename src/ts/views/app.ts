@@ -111,7 +111,8 @@ export const App = {
         }, 1000);
 
         // Initial route handling
-        if (!window.location.hash || window.location.hash === '#/') {
+        const rawInitial = (window.location.hash || '').replace(/^#\/?/, '').trim();
+        if (!rawInitial) {
             // Determine initial route based on auth state
             // If they have a profile, go to dashboard, else onboarding
             const hasProfile = (await Store.getProfile()) !== null;
@@ -123,14 +124,21 @@ export const App = {
     
     // Router logic
     async handleRoute() {
-        const hash = window.location.hash || '#/';
-        const route = hash.replace('#/', '') || 'onboarding';
+        const rawHash = window.location.hash || '';
+        const cleanRoute = rawHash.replace(/^#\/?/, '').trim();
+        const hasProfile = (await Store.getProfile()) !== null;
         
+        // Handle empty/root hash ('#' or '#/') cleanly without crashing template loader
+        if (!cleanRoute) {
+            window.location.hash = hasProfile ? '#/dashboard' : '#/onboarding';
+            return;
+        }
+
+        const route = cleanRoute;
         console.log(`Routing to: ${route}`);
         
         // Auth guard (redirect to onboarding if not signed in and trying to access protected route)
-        const isAuthRoute = ['onboarding', 'signin', 'signup'].includes(route);
-        const hasProfile = (await Store.getProfile()) !== null;
+        const isAuthRoute = ['onboarding', 'signin', 'signup', 'forgot-password'].includes(route);
         
         // Hide AI FAB on auth routes to prevent overlap
         const fab = document.getElementById('ai-bot-fab');
@@ -223,6 +231,7 @@ export const App = {
                 'assessment-report': 'report-body',
                 'signin': 'signin-body',
                 'signup': 'signup-body',
+                'forgot-password': 'forgot-password-body',
                 'reminders': 'reminders-body',
                 'bluetooth': 'bluetooth-body',
                 'onboarding': 'onboarding-body'
@@ -269,6 +278,7 @@ export const App = {
                 break;
             case 'signin':
             case 'signup':
+            case 'forgot-password':
                 if (Auth) Auth.init(route);
                 break;
             case 'bluetooth':

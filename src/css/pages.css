@@ -96,7 +96,8 @@
    Sign In Page
    ========================================================================== */
 
-#page-signin {
+#page-signin,
+#page-forgot-password {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;

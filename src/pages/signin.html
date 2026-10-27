@@ -39,7 +39,7 @@
                     <div class="input-group">
                         <div class="label-row" style="padding: 0;">
                             <label class="label">Password</label>
-                            <a href="#" class="btn-text-link">Forgot?</a>
+                            <a href="#/forgot-password" class="btn-text-link">Forgot?</a>
                         </div>
                         <div style="position: relative;">
                             <i data-lucide="lock" class="input-icon-left"></i>
@@ -63,11 +63,11 @@
 
             <!-- Social Sign-in -->
             <div style="display: flex; flex-direction: column; gap: 16px;">
-                <button type="button" class="btn btn-google">
+                <button type="button" class="btn btn-google" data-action="social-login-notice">
                     <i data-lucide="chrome" style="color: #4285F4;"></i> <!-- Fallback for Google logo -->
                     Continue with Google
                 </button>
-                <button type="button" class="btn btn-apple">
+                <button type="button" class="btn btn-apple" data-action="social-login-notice">
                     <i data-lucide="apple"></i>
                     Continue with Apple
                 </button>

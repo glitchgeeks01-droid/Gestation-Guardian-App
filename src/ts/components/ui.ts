@@ -13,7 +13,7 @@ export const UI = {
         if (!bottomNav) return;
         
         // Hide nav on auth and full-screen flow pages
-        const hideOnRoutes = ['onboarding', 'signin', 'signup', 'bluetooth'];
+        const hideOnRoutes = ['onboarding', 'signin', 'signup', 'forgot-password', 'bluetooth'];
         if (hideOnRoutes.includes(currentRoute)) {
             bottomNav.classList.add('hidden');
             return;
@@ -233,6 +233,15 @@ export const UI = {
                     break;
                 case 'signin-submit':
                     if (window['Auth'] && typeof window['Auth'].handleSignIn === 'function') window['Auth'].handleSignIn();
+                    break;
+                case 'forgot-submit':
+                    if (window['Auth'] && typeof window['Auth'].handleResetPassword === 'function') window['Auth'].handleResetPassword();
+                    break;
+                case 'send-reset-code':
+                    if (window['Auth'] && typeof window['Auth'].sendResetCode === 'function') window['Auth'].sendResetCode();
+                    break;
+                case 'social-login-notice':
+                    UI.showToast('Federated login syncs through your connected provider.', 'success');
                     break;
                 case 'calculate-edd':
                     if (window['Auth'] && typeof window['Auth'].calculateEDD === 'function') window['Auth'].calculateEDD();
