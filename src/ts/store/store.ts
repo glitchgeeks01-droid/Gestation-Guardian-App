@@ -186,6 +186,7 @@ export const Store = {
             ...profileData, 
             pairingPin: this.pairingPin,
             weeks: weeks,
+            lastActiveAt: new Date().toISOString(),
             medicalHistory: {
                 conditions: conditions.join(', '),
                 medications: profileData.medications || "",

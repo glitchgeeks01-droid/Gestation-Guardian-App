@@ -139,4 +139,17 @@ export function listenForConnectionRequests(uid: string, onPendingRequest: (requ
 export async function respondToConnectionRequest(requestId: string, status: 'approved' | 'denied') {
     const requestRef = doc(db, 'pairing_requests', requestId);
     await updateDoc(requestRef, { status });
+
+    if (status === 'approved' && auth.currentUser) {
+        try {
+            const userRef = doc(db, 'users', auth.currentUser.uid);
+            await updateDoc(userRef, {
+                connected: true,
+                connectedAt: new Date().toISOString(),
+                lastActiveAt: new Date().toISOString()
+            });
+        } catch (e) {
+            console.warn("Could not update user connection status:", e);
+        }
+    }
 }

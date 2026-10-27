@@ -93,6 +93,49 @@ export const App = {
                         if (App.currentPage === 'notifications' && Notifications) {
                             Notifications.render();
                         }
+
+                        // Display prominent in-app confirmation modal so patient can approve immediately
+                        if (UI && typeof UI.showConfirm === 'function') {
+                            UI.showConfirm({
+                                title: 'Doctor Connection Request',
+                                message: `${request.providerName || 'Healthcare Provider'} wants to connect with your Gestation Guardian profile. Allow access?`,
+                                confirmText: 'Approve',
+                                cancelText: 'Deny',
+                                onConfirm: async () => {
+                                    try {
+                                        await respondToConnectionRequest(request.id, 'approved');
+                                        Store.pendingRequests = Store.pendingRequests.filter(r => r.id !== request.id);
+                                        if (bellBadge) {
+                                            bellBadge.style.display = Store.pendingRequests.length > 0 ? 'flex' : 'none';
+                                            bellBadge.textContent = Store.pendingRequests.length.toString();
+                                        }
+                                        if (App.currentPage === 'notifications' && Notifications) {
+                                            Notifications.render();
+                                        }
+                                        UI.showToast('Provider connected successfully', 'success');
+                                    } catch (err) {
+                                        console.error('Failed to approve request:', err);
+                                        UI.showToast('Failed to approve request', 'error');
+                                    }
+                                },
+                                onCancel: async () => {
+                                    try {
+                                        await respondToConnectionRequest(request.id, 'denied');
+                                        Store.pendingRequests = Store.pendingRequests.filter(r => r.id !== request.id);
+                                        if (bellBadge) {
+                                            bellBadge.style.display = Store.pendingRequests.length > 0 ? 'flex' : 'none';
+                                            bellBadge.textContent = Store.pendingRequests.length.toString();
+                                        }
+                                        if (App.currentPage === 'notifications' && Notifications) {
+                                            Notifications.render();
+                                        }
+                                        UI.showToast('Connection request denied', 'info');
+                                    } catch (err) {
+                                        console.error('Failed to deny request:', err);
+                                    }
+                                }
+                            });
+                        }
                     });
                 }
             });
