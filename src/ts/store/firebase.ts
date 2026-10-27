@@ -75,6 +75,47 @@ export const FirebaseDB = {
             console.error("Error getting user logs: ", e);
             return [];
         }
+    },
+
+    async getUserByEmail(email: string) {
+        try {
+            const normalizedEmail = (email || '').toLowerCase().trim();
+            if (!normalizedEmail) return null;
+            const q = query(
+                collection(db, 'users'), 
+                where('email', '==', normalizedEmail)
+            );
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const docSnap = querySnapshot.docs[0];
+                return { id: docSnap.id, ...docSnap.data() };
+            }
+            return null;
+        } catch (e) {
+            console.error("Error querying user by email: ", e);
+            return null;
+        }
+    },
+
+    async getUserTelemetry(userId: string) {
+        try {
+            if (!userId) return [];
+            const querySnapshot = await getDocs(collection(db, `users/${userId}/telemetry`));
+            const logs: any[] = [];
+            querySnapshot.forEach((doc) => {
+                logs.push({ id: doc.id, ...doc.data() });
+            });
+            // Sort client-side by timestamp / effectiveDateTime desc
+            logs.sort((a, b) => {
+                const timeA = new Date(a.effectiveDateTime || a.serverTimestamp || 0).getTime();
+                const timeB = new Date(b.effectiveDateTime || b.serverTimestamp || 0).getTime();
+                return timeB - timeA;
+            });
+            return logs;
+        } catch (e) {
+            console.error("Error fetching user telemetry: ", e);
+            return [];
+        }
     }
 };
 

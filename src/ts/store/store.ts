@@ -324,6 +324,77 @@ export const Store = {
         return 3;
     },
     
+    async restoreTelemetryFromFHIR(fhirList: any[]) {
+        if (!Array.isArray(fhirList) || fhirList.length === 0) return;
+
+        const bpLogs: any[] = [];
+        const vitalsLogs: any[] = [];
+        const genericLogs: { [key: string]: any[] } = {};
+
+        for (const obs of fhirList) {
+            const code = obs.code?.coding?.[0]?.code;
+            const textCode = obs.code?.text;
+            const timestamp = obs.effectiveDateTime || obs.serverTimestamp || new Date().toISOString();
+
+            if (code === '85354-9') {
+                // Blood pressure panel
+                let bpSys = null;
+                let bpDia = null;
+                let maternalHR = null;
+                if (Array.isArray(obs.component)) {
+                    obs.component.forEach((c: any) => {
+                        const cCode = c.code?.coding?.[0]?.code;
+                        if (cCode === '8480-6') bpSys = c.valueQuantity?.value;
+                        if (cCode === '8462-4') bpDia = c.valueQuantity?.value;
+                        if (cCode === '8867-4') maternalHR = c.valueQuantity?.value;
+                    });
+                }
+                if (bpSys && bpDia) {
+                    bpLogs.push({
+                        id: obs.id || this._generateId(),
+                        timestamp,
+                        bpSys: Number(bpSys),
+                        bpDia: Number(bpDia),
+                        maternalHR: maternalHR ? Number(maternalHR) : undefined
+                    });
+                }
+            } else if (code === '8716-3') {
+                // Vitals
+                const vitalEntry: any = { id: obs.id || this._generateId(), timestamp };
+                if (Array.isArray(obs.component)) {
+                    obs.component.forEach((c: any) => {
+                        const cCode = c.code?.coding?.[0]?.code;
+                        if (cCode === '29463-7') vitalEntry.weight = c.valueQuantity?.value;
+                        else if (cCode === '8310-5') vitalEntry.temperature = c.valueQuantity?.value;
+                        else if (cCode === '2339-0') vitalEntry.glucose = c.valueQuantity?.value;
+                        else if (c.code?.text) vitalEntry[c.code.text] = c.valueString;
+                    });
+                }
+                vitalsLogs.push(vitalEntry);
+            } else if (textCode) {
+                // Generic pseudo-FHIR (kicks, contractions, symptoms)
+                const entry: any = { id: obs.id || this._generateId(), timestamp };
+                if (Array.isArray(obs.component)) {
+                    obs.component.forEach((c: any) => {
+                        if (c.code?.text) entry[c.code.text] = c.valueString;
+                    });
+                }
+                if (!genericLogs[textCode]) genericLogs[textCode] = [];
+                genericLogs[textCode].push(entry);
+            }
+        }
+
+        if (bpLogs.length > 0) {
+            await this._set(this.KEYS.BP_LOGS, bpLogs);
+        }
+        if (vitalsLogs.length > 0) {
+            await this._set(this.KEYS.VITALS_LOGS, vitalsLogs);
+        }
+        for (const [k, list] of Object.entries(genericLogs)) {
+            await this._set(k, list);
+        }
+    },
+
     async clearAll() {
         Object.values(this.KEYS).forEach(key => localStorage.removeItem(key as string));
     }

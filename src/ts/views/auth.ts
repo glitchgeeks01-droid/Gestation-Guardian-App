@@ -2,6 +2,7 @@
 import { Assessment } from './assessment';
 import { Store } from '../store/store';
 import { UI } from '../components/ui';
+import { FirebaseDB, auth } from '../store/firebase';
 
 // js/auth.js
 
@@ -246,49 +247,97 @@ export const Auth = {
             return;
         }
 
-        const profile = await Store.getProfile();
+        // 1. Check local profile first
+        const localProfile = await Store.getProfile();
         
-        if (profile) {
-            const registeredEmail = (profile.email || '').toLowerCase().trim();
-            
-            // If email doesn't match the active account on device
-            if (registeredEmail && registeredEmail !== email) {
-                UI.showToast('No local account matches this email. Check spelling or sign up.', 'error');
-                return;
-            }
-
-            // If account has a password saved, strictly verify it
-            if (profile.password && profile.password !== password) {
+        if (localProfile && (localProfile.email || '').toLowerCase().trim() === email) {
+            // Local profile matches email
+            if (localProfile.password && localProfile.password !== password) {
                 UI.showToast('Incorrect password. Please try again or tap Forgot?.', 'error');
                 return;
             }
-        } else {
-            // No profile found
-            // In DEV environment allow quick synthetic profile for demo testing
-            // @ts-ignore
-            if (import.meta.env && import.meta.env.DEV) {
-                const dummyLmp = new Date();
-                dummyLmp.setDate(dummyLmp.getDate() - (20 * 7)); // ~20 weeks pregnant
-                
-                await Store.saveProfile({
-                    name: 'Demo User',
-                    email: email,
-                    password: password,
-                    lmp: dummyLmp.toISOString().split('T')[0],
-                    age: 28,
-                    bloodGroup: 'O+'
-                });
-            } else {
-                UI.showToast('Account not found. Please sign up first.', 'error');
+
+            UI.showToast(`Signed in successfully. Welcome back, ${localProfile.name || 'User'}!`, 'success');
+            setTimeout(() => {
+                window.location.hash = '#/dashboard';
+            }, 800);
+            return;
+        }
+
+        // 2. Query Cloud Firestore for existing account
+        UI.showToast('Checking credentials with cloud database...', 'info');
+
+        try {
+            const cloudUser = await FirebaseDB.getUserByEmail(email);
+            
+            if (cloudUser) {
+                // Verify password against cloud record
+                if (cloudUser.password && cloudUser.password !== password) {
+                    UI.showToast('Incorrect password. Please try again or tap Forgot?.', 'error');
+                    return;
+                }
+
+                // Restore clinical pairing PIN to device
+                if (cloudUser.pairingPin) {
+                    Store.pairingPin = cloudUser.pairingPin;
+                    localStorage.setItem('gg_pairing_pin', cloudUser.pairingPin);
+                }
+
+                // Preserve or link current device's authenticated Firebase user ID
+                const currentUid = Store.userId || auth.currentUser?.uid;
+                if (currentUid && currentUid !== cloudUser.id) {
+                    // Update active user doc so Firestore security rules allow telemetry writes
+                    await FirebaseDB.saveDocument('users', currentUid, cloudUser);
+                    Store.userId = currentUid;
+                } else {
+                    Store.userId = cloudUser.id;
+                }
+
+                // Save profile locally
+                await Store._set(Store.KEYS.PROFILE, cloudUser);
+
+                // Restore historical telemetry (blood pressure, vitals, kicks) from Firestore
+                try {
+                    const telemetryList = await FirebaseDB.getUserTelemetry(cloudUser.id);
+                    if (telemetryList && telemetryList.length > 0) {
+                        await Store.restoreTelemetryFromFHIR(telemetryList);
+                    }
+                } catch (tErr) {
+                    console.warn("Could not restore past telemetry:", tErr);
+                }
+
+                UI.showToast(`Welcome back, ${cloudUser.name || 'User'}!`, 'success');
+                setTimeout(() => {
+                    window.location.hash = '#/dashboard';
+                }, 800);
                 return;
             }
+        } catch (cloudErr) {
+            console.error("Cloud sign-in error:", cloudErr);
         }
-        
-        UI.showToast('Signed in successfully', 'success');
-        
-        setTimeout(() => {
-            window.location.hash = '#/dashboard';
-        }, 800);
+
+        // 3. Fallback for DEV if enabled
+        // @ts-ignore
+        if (import.meta.env && import.meta.env.DEV) {
+            const dummyLmp = new Date();
+            dummyLmp.setDate(dummyLmp.getDate() - (20 * 7)); // ~20 weeks pregnant
+            
+            await Store.saveProfile({
+                name: 'Demo User',
+                email: email,
+                password: password,
+                lmp: dummyLmp.toISOString().split('T')[0],
+                age: 28,
+                bloodGroup: 'O+'
+            });
+            UI.showToast('Signed in successfully (Demo)', 'success');
+            setTimeout(() => {
+                window.location.hash = '#/dashboard';
+            }, 800);
+            return;
+        }
+
+        UI.showToast('Account not found. Please sign up first.', 'error');
     },
 
     // Forgot Password Flow
@@ -353,18 +402,25 @@ export const Auth = {
         }
 
         let profile = await Store.getProfile();
-        if (profile) {
+        if (profile && (profile.email || '').toLowerCase().trim() === email) {
             profile.password = newPassword;
-            if (!profile.email) profile.email = email;
             await Store.saveProfile(profile);
         } else {
-            profile = {
-                name: 'User',
-                email: email,
-                password: newPassword,
-                bloodGroup: 'O+'
-            };
-            await Store.saveProfile(profile);
+            // Check Cloud Firestore for existing account
+            const cloudUser = await FirebaseDB.getUserByEmail(email);
+            if (cloudUser) {
+                cloudUser.password = newPassword;
+                await Store.saveProfile(cloudUser);
+                await FirebaseDB.saveDocument('users', cloudUser.id, { password: newPassword });
+            } else {
+                profile = {
+                    name: 'User',
+                    email: email,
+                    password: newPassword,
+                    bloodGroup: 'O+'
+                };
+                await Store.saveProfile(profile);
+            }
         }
 
         UI.showToast('Password updated successfully! Please sign in.', 'success');
