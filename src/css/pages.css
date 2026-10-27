@@ -34,8 +34,9 @@
 }
 
 .onboarding-bg {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
   z-index: 0;
   background-size: cover;
   background-position: center top;
@@ -44,8 +45,9 @@
 }
 
 .onboarding-overlay {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 0%,
@@ -62,14 +64,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80px 32px 32px;
+  padding: 32px 24px 24px;
   height: 100%;
   justify-content: space-between;
 }
 
 .onboarding-logo {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   border-radius: 20px;
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
@@ -79,16 +81,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 16px;
 }
 
 .onboarding-actions {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 16px;
+  gap: 12px;
   margin-top: auto;
 }
 
@@ -105,9 +107,9 @@
 }
 
 .signin-bg {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  width: 100%; min-height: 100%;
+  width: 100%; height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -122,23 +124,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 52px 24px;
+  justify-content: flex-start;
+  padding: 24px 20px 24px;
   min-height: 100%;
+  box-sizing: border-box;
 }
 
 .brand-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .brand-header img {
-  width: 96px;
-  height: 96px;
-  margin-bottom: 24px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
 }
 
 /* ==========================================================================
@@ -150,13 +153,14 @@
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
-  padding: 40px 16px;
+  padding: 20px 16px 28px;
+  box-sizing: border-box;
 }
 
 .signup-bg {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  width: 100%; min-height: 100%;
+  width: 100%; height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -177,14 +181,14 @@
 }
 
 .signup-logo {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 12px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
 }
 
 .signup-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .signup-form {

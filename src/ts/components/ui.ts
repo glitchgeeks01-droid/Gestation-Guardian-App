@@ -199,6 +199,15 @@ export const UI = {
             e.preventDefault();
             this.executeAction(action, actionEl);
         });
+
+        // Handle change events for inputs/selects with data-action
+        document.addEventListener('change', (e) => {
+            const target = e.target as HTMLElement;
+            if (target && target.hasAttribute('data-action')) {
+                const action = target.getAttribute('data-action');
+                if (action) this.executeAction(action, target);
+            }
+        });
     },
 
     executeAction(action: string, actionEl: HTMLElement) {

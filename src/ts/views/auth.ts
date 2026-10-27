@@ -31,6 +31,12 @@ export const Auth = {
                 }
             });
         });
+
+        const lmpInput = document.getElementById('su-lmp') as HTMLInputElement;
+        if (lmpInput) {
+            lmpInput.addEventListener('change', () => this.calculateEDD());
+            lmpInput.addEventListener('input', () => this.calculateEDD());
+        }
     },
     
     togglePassword(inputId) {

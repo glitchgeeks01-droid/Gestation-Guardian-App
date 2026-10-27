@@ -6,25 +6,25 @@
         <!-- Branding Header -->
         <div class="brand-header">
             <!-- Use a placeholder div for logo if image not available -->
-            <div style="width: 96px; height: 96px; background: var(--clr-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 24px;">
-                <i data-lucide="shield" style="color: white; width: 48px; height: 48px;"></i>
+            <div style="width: 72px; height: 72px; background: var(--clr-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px;">
+                <i data-lucide="shield" style="color: white; width: 36px; height: 36px;"></i>
             </div>
-            <h1 style="color: #123326; font-weight: 800;">Gestation Guardian</h1>
-            <p style="font-weight: 600; font-size: 16px; color: #234E3B;">Monitor. Protect. Nurture.</p>
+            <h1 style="color: #123326; font-weight: 800; font-size: 24px;">Gestation Guardian</h1>
+            <p style="font-weight: 600; font-size: 14px; color: #234E3B; margin-top: 4px;">Monitor. Protect. Nurture.</p>
         </div>
 
         <!-- Glass Card for Auth -->
-        <div class="card-glass w-full">
+        <div class="card-glass w-full" style="padding: 24px 20px;">
             
             <!-- Tab Switcher (Simulated links for SPA) -->
-            <div class="tab-switcher mb-6" style="margin-bottom: 32px;">
+            <div class="tab-switcher mb-4" style="margin-bottom: 20px;">
                 <a href="#/signin" class="tab-btn active">Sign In</a>
                 <a href="#/signup" class="tab-btn">Sign Up</a>
             </div>
 
             <form id="form-signin" data-action="signin-submit">
                 <!-- Form Fields Container -->
-                <div style="display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px;">
+                <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">
                     
                     <!-- Email Field -->
                     <div class="input-group">
@@ -57,14 +57,14 @@
                 </button>
             </form>
 
-            <div class="divider-with-text mt-6 mb-6" style="margin: 32px 0;">
+            <div class="divider-with-text mt-4 mb-4" style="margin: 18px 0;">
                 <span>OR</span>
             </div>
 
             <!-- Social Sign-in -->
-            <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button type="button" class="btn btn-google" data-action="social-login-notice">
-                    <i data-lucide="chrome" style="color: #4285F4;"></i> <!-- Fallback for Google logo -->
+                    <i data-lucide="chrome" style="color: #4285F4;"></i>
                     Continue with Google
                 </button>
                 <button type="button" class="btn btn-apple" data-action="social-login-notice">
@@ -74,8 +74,8 @@
             </div>
         </div>
         
-        <div style="text-align: center; margin-top: 32px;">
-            <p style="font-weight: 700; font-size: 16px; color: var(--clr-text-primary);">
+        <div style="text-align: center; margin-top: 18px;">
+            <p style="font-weight: 700; font-size: 15px; color: var(--clr-text-primary);">
                 Don't have an account? <br>
                 <a href="#/signup" style="color: var(--clr-primary);">Create one</a>
             </p>
