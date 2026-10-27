@@ -1,23 +1,23 @@
-# 🤰 Gestation Guardian 
+# 🛡️ Gestation Guardian
 
 <div align="center">
   <img src="https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF&radius=20" alt="Gestation Guardian Logo" width="120"/>
   <br>
   <i>Your trusted companion for a safer, healthier pregnancy journey.</i>
   <br><br>
-  <a href="GestationGuardian.apk">📥 Download APK</a>
+  <a href="GestationGuardian.apk">📥 Download Fresh APK</a>
 </div>
 
 ---
 
 **Gestation Guardian** is a premium, offline-first mobile application designed to empower expecting mothers. It focuses specifically on tracking vital health metrics, assessing pre-eclampsia and gestational hypertension risks, and providing actionable care advice—all wrapped in a stunning, native-feeling UI.
 
-## ✨ Features
+## 🌟 Features
 
 ### Core Health Tracking
 * 📊 **Gestosis Risk Assessment Engine:** A built-in mathematical model that calculates cumulative clinical risk scores from static risk factors (age, parity, BMI, chronic conditions) and dynamic physiological signals (blood pressure, proteinuria, glucose, symptoms) — producing a real-time RAG-triaged score with Low / Moderate / High / Critical bands.
-* 🩸 **Blood Pressure Logging:** Systolic, diastolic, and pulse (maternal heart rate) capture with position and arm selection for clinical accuracy.
-* 🏥 **Vitals Dashboard:** Weight, sleep, temperature, blood glucose, urine protein, and stress level tracking in a single unified form.
+* 🩺 **Blood Pressure Logging:** Systolic, diastolic, and pulse (maternal heart rate) capture with position and arm selection for clinical accuracy.
+* 📈 **Vitals Dashboard:** Weight, sleep, temperature, blood glucose, urine protein, and stress level tracking in a single unified form.
 * 👶 **Fetal Kick Counter:** Interactive session-based kick counting with timer and threshold alerts.
 * ⏱️ **Contraction Timer:** Real-time labour contraction tracking with frequency and duration calculations.
 * 📋 **Medical History:** Comprehensive recording of chronic conditions, medications, and symptom logs.
@@ -27,20 +27,20 @@
 * 🎙️ **Voice-to-Text & Text-to-Speech:** Complete hands-free experience. Features robust Web Speech API integration, seamless fallback to OpenAI Whisper for Apple Safari compatibility, and a stabilized TTS queue that guarantees smooth, cancelable voice playback without robotic fallback voices.
 * 🚨 **Automated Alerting:** When the Gestosis score escalates to High or Critical, the app immediately triggers persistent high-priority alerts prompting the patient to seek medical attention.
 
-### Clinical Integration (Phase 2)
-* 🔐 **Anonymous Firebase Auth:** On launch, the app silently authenticates users via Firebase Anonymous Auth, ensuring all medical telemetry is bound to a secure, cryptographically generated UID rather than a public identifier.
-* 🔗 **Doctor Dashboard Bridge:** Each patient is assigned a temporary 4-digit Clinical PIN (`GG-XXXX`) displayed on their profile. Sharing this PIN with a doctor enables real-time remote monitoring via the [GG Doctor Dashboard](https://github.com/glitchgeeks01-droid/Gestation-Guardian-Web).
-* 📡 **Strict HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding and UCUM units (`unitsofmeasure.org`) before syncing to the cloud:
-  * Blood Pressure → LOINC `85354-9` (panel), `8480-6` (systolic, `mm[Hg]`), `8462-4` (diastolic, `mm[Hg]`)
-  * Heart Rate → LOINC `8867-4` (`beats/minute`, `/min`)
-* 🗄️ **Polyglot Persistence:** Telemetry data is routed to `users/{secureUid}/telemetry` subcollections, enabling high-frequency time-series queries for the clinical dashboard's real-time charts.
-* 🔥 **Shared Firebase Backend:** Both the mobile app and doctor dashboard connect to the same `gg-doctor-dashboard` Firebase project, ensuring a unified data ecosystem.
+### Clinical Integration & Cloud Sync
+* 🔐 **Anonymous Firebase Auth:** On launch, the app silently authenticates users via Firebase Anonymous Auth, ensuring all medical telemetry is bound to a secure, cryptographically generated UID (`user.uid`) rather than a public identifier.
+* 🏥 **Doctor Dashboard Bridge:** Each patient is assigned a temporary 4-digit Clinical PIN (`GG-XXXX`) displayed on their profile. Sharing this PIN with a doctor enables real-time remote monitoring via the [GG Doctor Dashboard](https://github.com/glitchgeeks01-droid/Gestation-Guardian-Web).
+* 🩺 **Strict HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding and UCUM units (`unitsofmeasure.org`) before syncing to the cloud:
+  * Blood Pressure ➔ LOINC `85354-9` (panel), `8480-6` (systolic, `mm[Hg]`), `8462-4` (diastolic, `mm[Hg]`)
+  * Heart Rate ➔ LOINC `8867-4` (`beats/minute`, `/min`)
+* 🌐 **Polyglot Persistence:** Telemetry data is routed to `users/{secureUid}/telemetry` subcollections, enabling high-frequency time-series queries for the clinical dashboard's real-time charts.
+* ☁️ **Shared Firebase Backend:** Both the mobile app and doctor dashboard connect to the same `gg-doctor-dashboard` Firebase project, ensuring a unified data ecosystem.
 
 ### Platform, Hardware & Safety
 * 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including glassmorphic alert banners, dynamic pregnancy progress timelines, and interactive Bento Grid layouts.
-* 🛡️ **Offline-First & Thread-Safe:** The app works fully offline via `localStorage`. When connectivity is available, data syncs automatically to Firebase Firestore via a robust, background sync queue featuring a Mutex lock (`isSyncing`) to prevent race conditions during rapid data entry.
-* 🧮 **Clinical Math Integrity:** All telemetry ingest points feature strict NaN-prevention safeguards to ensure bad data (empty inputs, missing decimals) never pollutes the FHIR payloads or breaks clinical scoring algorithms.
-* 🩸 **Web Bluetooth API Interoperability:** Features a production-grade Web Bluetooth GATT client that actively pairs with external smart blood pressure cuffs. It parses raw IEEE 11073 SFloat byte buffers to extract Systolic, Diastolic, and Heart Rate values, auto-filling the UI in real-time.
+* 💾 **Dual-Layer Offline-First Architecture:** The app works fully offline via local storage. When connectivity is available, data syncs automatically to Firebase Firestore via a robust background sync queue featuring atomic non-destructive polling to prevent race conditions during rapid data entry.
+* 🔢 **Clinical Math Integrity:** All telemetry ingest points feature strict NaN-prevention safeguards to ensure bad data (empty inputs, missing decimals) never pollutes the FHIR payloads or breaks clinical scoring algorithms.
+* 📶 **Web Bluetooth API Interoperability:** Features a production-grade Web Bluetooth GATT client that actively pairs with external smart blood pressure cuffs. It parses raw IEEE 11073 SFloat byte buffers to extract Systolic, Diastolic, and Heart Rate values, auto-filling the UI in real-time.
 
 ## 🛠️ Tech Stack
 
@@ -49,17 +49,17 @@
 * **Data Standard:** HL7 FHIR R4 Observations with strict LOINC coding for clinical interoperability.
 * **Styling:** Custom Vanilla CSS featuring Skeuomorphic shadows, Glassmorphism, and a strict CSS Container constraint for mobile-first rendering.
 * **Build System:** Vite ⚡ for lightning-fast HMR and optimized bundling.
-* **Data Persistence:** Dual-layer — `localStorage` for instant local reads + Firebase Firestore for cloud backup and sync.
+* **Data Persistence:** Dual-layer — local storage for instant local reads + Firebase Firestore for cloud backup and sync.
 * **Android Wrapper:** Native Android WebView app (Kotlin + Gradle).
 * **Assets:** Lucide Icons & Lexend Typography.
 
-## 📥 Download
+## 📱 Download
 
 You can download the pre-built Android APK directly:
 
 | File | Size | Description |
 |------|------|-------------|
-| [`GestationGuardian.apk`](GestationGuardian.apk) | ~12.8 MB | Debug build, installable on any Android 7.0+ device |
+| [`GestationGuardian.apk`](GestationGuardian.apk) | ~16.8 MB | Fresh Debug build, installable on any Android 7.0+ device |
 
 > **Note:** You may need to enable "Install from Unknown Sources" on your Android device.
 
@@ -132,49 +132,40 @@ src/
 
 ### Data Flow
 ```
-User Input → localStorage (instant) → FHIR LOINC Transform → Sync Queue → Firebase Firestore
-                                                                              ↓
-                                                              users/{patientId}/telemetry
-                                                                              ↓
-                                                              Doctor Dashboard (real-time)
+User Input ➔ Local Storage (instant) ➔ FHIR LOINC Transform ➔ Sync Queue ➔ Firebase Firestore
+                                                                               │
+                                                               users/{patientId}/telemetry
+                                                                               │
+                                                               Doctor Dashboard (real-time)
 ```
 
 The app uses a **write-local-first, sync-later** pattern. All health data (blood pressure, vitals, glucose, urine, kick counts, contractions, symptoms) is persisted locally, transformed into HL7 FHIR Observations, and queued for Firebase sync when online. The doctor dashboard receives these updates in real-time via Firestore `onSnapshot` listeners.
 
-## 🔗 Clinical Integration Flow
+## 🤝 Clinical Integration Flow
 
-1. Patient signs up in the mobile app → a unique Clinical ID (`GG-XXXX`) is generated.
-2. Patient navigates to **Profile** → copies their Clinical ID.
-3. Patient shares the ID with their healthcare provider.
-4. Doctor enters the ID in the **GG Doctor Dashboard** → **Connect Patient** dialog.
+1. Patient signs up in the mobile app ➔ a unique Clinical PIN (`GG-XXXX`) is generated and synced.
+2. Patient navigates to **Profile** ➔ copies their Clinical PIN.
+3. Patient shares the PIN with their healthcare provider.
+4. Doctor enters the PIN in the **GG Doctor Dashboard** ➔ **Connect Patient** dialog.
 5. A real-time **Pairing Request** is securely dispatched to the patient's device via Firestore.
 6. The patient receives a notification badge on their **Notification Center** (bell icon).
 7. The patient explicitly **Approves** or **Denies** the doctor's request.
 8. Upon approval, the dashboard instantly establishes a real-time connection to the patient's telemetry subcollection.
 
-## 🔒 Privacy & Security
-
-This repository underwent a massive architectural audit to guarantee stability and security. Key architectural highlights include:
+## 🔒 Privacy, Security & Hardening Updates
 
 * **Strict Content Security Policy (CSP):** All inline JavaScript event handlers (`onclick`, `onsubmit`, etc.) have been completely eradicated from HTML templates. Event management is centralized through declarative `data-action` delegation, dramatically reducing XSS vulnerabilities.
 * **Modular Refactor:** The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict TypeScript module system (`store`, `views`, `services`, `core`).
-* **Robust Voice AI:** The Voice Assistant seamlessly degrades gracefully and provides visual feedback to the user on browsers where `SpeechRecognition` or `MediaRecorder` access is unavailable. 
-* **Accessibility (a11y):** All primary interactive UI elements are annotated with `aria-label` tags for screen reader compatibility.
-
-Your sensitive medical data stays on your device first, with optional cloud backup via Firebase.
-
----
-
-## ??? Security & Architecture Updates
-Following a comprehensive system audit, the Gestation Guardian architecture has been heavily hardened:
-* **Account Recovery & Password Reset:** Added a dedicated, glassmorphic Forgot Password recovery view (#/forgot-password) supporting multi-step security verification, password confirmation matching, and offline-first credential updating.
-* **Authentication Hardening & Validation:** Completely remediated sign-in bypass vulnerabilities by enforcing strict password and email matching on login. Fixed signup logic to securely persist password credentials into user profiles, and added clinical date boundaries for maternal age (12�65) and LMP duration (= 42 weeks).
+* **Icon-Placeholder Collision Hardening:** Overcame CSS specificity collisions between `.input-group input` and `.input-auth` with a high-specificity `padding: 0 48px 0 54px !important;` rule. This guarantees 16px clearance between relative icons and placeholder text, completely eliminating visual overlap.
+* **Layout Isolation & Clean Spacing:** 
+  * Enforced `.page:not(.active) { display: none !important; }` and `#app-root { overflow: hidden; }` to eliminate phantom white blocks and overlapping sheets on the dashboard.
+  * Added 24px tab switcher margins, standardized `.label-row` indentation, and added frosted glass contrast backings to footer navigation.
+  * Applied `box-sizing: border-box !important` across all auth cards to prevent input pill overflow past rounded boundaries.
+* **Account Recovery & Password Reset:** Dedicated glassmorphic Forgot Password recovery view (`#/forgot-password`) supporting multi-step security verification, password confirmation matching, and offline-first credential updating.
+* **Authentication Hardening & Validation:** Enforced strict password and email matching on login. Fixed signup logic to securely persist password credentials into user profiles, and added clinical date boundaries for maternal age (12–65) and LMP duration (≤ 42 weeks).
 * **Instant Gestational EDD Engine:** Dynamic change and input event listeners bind to the LMP datepicker, executing Naegele's rule (+280 days) immediately to display the Estimated Due Date in real-time.
-* **Layout & Blank Space Elimination:** Fixed vertical padding bloat and converted background illustrations across auth pages to position: fixed; inset: 0;, completely eliminating blank white spaces above and below cards during scroll.
-* **Router Normalization Patch:** Resolved empty root hash (# and #/) routing crashes, ensuring seamless fallback to dashboard or onboarding without template lookup exceptions.
-* **Race-Condition-Free Sync Engine:** The offline SyncEngine utilizes an atomic, non-destructive polling flag (processing), guaranteeing zero data loss during high-frequency Bluetooth telemetry ingestions.
-* **Strict HL7 FHIR Typing:** Telemetry mappers prevent data loss by encoding Blood Pressure Panels (LOINC 85354-9) with nested Heart Rate (8867-4) components, ensuring the Doctor Dashboard graphs plot accurately.
-* **Schema Integrity:** Local medical history boolean flags are dynamically mapped and reduced to exact string schemas (e.g., medicalHistory.conditions) required by the Doctor Dashboard payload contract on the fly.
+* **Race-Condition-Free Sync Engine:** The offline SyncEngine utilizes an atomic, non-destructive polling flag (`processing`), guaranteeing zero data loss during high-frequency Bluetooth telemetry ingestions.
+* **Strict HL7 FHIR Typing:** Telemetry mappers prevent data loss by encoding Blood Pressure Panels (LOINC `85354-9`) with nested Heart Rate (`8867-4`) components, ensuring the Doctor Dashboard graphs plot accurately.
 
 ---
 <div align="center">
