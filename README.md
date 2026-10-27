@@ -141,19 +141,23 @@ User Input ➔ Local Storage (instant) ➔ FHIR LOINC Transform ➔ Sync Queue �
 
 The app uses a **write-local-first, sync-later** pattern. All health data (blood pressure, vitals, glucose, urine, kick counts, contractions, symptoms) is persisted locally, transformed into HL7 FHIR Observations, and queued for Firebase sync when online. The doctor dashboard receives these updates in real-time via Firestore `onSnapshot` listeners.
 
-## 🤝 Clinical Integration Flow
+## 🤝 Clinical Integration & Three-Way Handshake Flow
 
-1. Patient signs up in the mobile app ➔ a unique Clinical PIN (`GG-XXXX`) is generated and synced.
-2. Patient navigates to **Profile** ➔ copies their Clinical PIN.
-3. Patient shares the PIN with their healthcare provider.
-4. Doctor enters the PIN in the **GG Doctor Dashboard** ➔ **Connect Patient** dialog.
-5. A real-time **Pairing Request** is securely dispatched to the patient's device via Firestore.
-6. The patient receives a notification badge on their **Notification Center** (bell icon).
-7. The patient explicitly **Approves** or **Denies** the doctor's request.
-8. Upon approval, the dashboard instantly establishes a real-time connection to the patient's telemetry subcollection.
+1. **Patient Registration & PIN Generation:** Patient signs up in the mobile app ➔ a unique Clinical PIN (`GG-XXXX`) is generated and securely synced to their Firestore document with `lastActiveAt` session tracking.
+2. **Provider Sharing:** Patient navigates to **Profile** ➔ copies their Clinical PIN and shares it with their healthcare provider.
+3. **Multi-Session Candidate Resolution (SYN):** Doctor enters the Clinical PIN in the **GG Doctor Dashboard** ➔ **Connect Patient** dialog. The system queries all candidate session UIDs for that PIN (supporting device reinstalls and session transitions) and dispatches pending pairing requests to all associated device sessions.
+4. **Interactive In-App Prompt (SYN-ACK):** The patient's mobile app immediately detects the incoming connection request via a real-time Firestore listener and surfaces a prominent, modal confirmation dialog (`UI.showConfirm`):
+   > *"Dr. Julian Vance wants to connect with your Gestation Guardian profile. Allow access?"*
+   > **[Deny]** &nbsp;&nbsp;&nbsp; **[Approve]**
+5. **Patient Consent & State Persistence (ACK):** 
+   - Tapping **Approve** updates the pairing request to `approved` and permanently stamps the patient's own user record with `connected: true` and `connectedAt`.
+   - The Doctor Dashboard detects the approval in real-time, deletes lingering pending requests, marks the patient as connected, and seamlessly transitions to the active telemetry view.
+   - Unconnected patients are never listed prematurely on the clinical dashboard until explicit consent is granted.
 
 ## 🔒 Privacy, Security & Hardening Updates
 
+* **Three-Way Handshake & In-App Modal:** Direct PIN access has been replaced by a cryptographic Three-Way Handshake State Machine (`pairing_requests`) with real-time in-app approval modals (`UI.showConfirm`), preventing unauthorized provider telemetry access.
+* **Multi-Session UID Resiliency:** Supports seamless device reinstalls and account restorations without breaking provider pairing or telemetry history.
 * **Strict Content Security Policy (CSP):** All inline JavaScript event handlers (`onclick`, `onsubmit`, etc.) have been completely eradicated from HTML templates. Event management is centralized through declarative `data-action` delegation, dramatically reducing XSS vulnerabilities.
 * **Modular Refactor:** The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict TypeScript module system (`store`, `views`, `services`, `core`).
 * **Icon-Placeholder Collision Hardening:** Overcame CSS specificity collisions between `.input-group input` and `.input-auth` with a high-specificity `padding: 0 48px 0 54px !important;` rule. This guarantees 16px clearance between relative icons and placeholder text, completely eliminating visual overlap.
