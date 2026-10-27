@@ -1,4 +1,4 @@
-import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)throw Error("import.meta.resolve not supported")';export function __vite_legacy_guard(){import.meta.url,import(`_`).catch(()=>1),(async function*(){})().next()}(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var t=`<!-- pages/bluetooth.html -->
+import'data:text/javascript,"assets/index-BfliQ2br.js";if(!import.meta.resolve)throw Error("import.meta.resolve not supported")';export function __vite_legacy_guard(){import.meta.url,import(`_`).catch(()=>1),(async function*(){})().next()}(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var t=`<!-- pages/bluetooth.html -->
 <div id="page-bluetooth" class="page">
     
     <!-- Top Glass Header -->
@@ -500,10 +500,12 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
                     
                     <!-- Email Field -->
                     <div class="input-group">
-                        <label class="label">Registered Email</label>
-                        <div style="position: relative;">
-                            <i data-lucide="mail" class="input-icon-left" style="color: var(--clr-text-muted);"></i>
-                            <input type="email" id="fp-email" class="input-auth" placeholder="name@example.com" required style="padding-left: 44px;">
+                        <div class="label-row">
+                            <label class="label">Registered Email</label>
+                        </div>
+                        <div style="position: relative; width: 100%;">
+                            <i data-lucide="mail" class="input-icon-left"></i>
+                            <input type="email" id="fp-email" class="input-auth" placeholder="name@example.com" required>
                         </div>
                     </div>
 
@@ -518,20 +520,24 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
                     <div id="fp-reset-fields" class="hidden" style="display: none; flex-direction: column; gap: 18px;">
                         
                         <div class="input-group">
-                            <label class="label">4-Digit Security Code</label>
-                            <div style="position: relative;">
-                                <i data-lucide="shield-check" class="input-icon-left" style="color: var(--clr-text-muted);"></i>
-                                <input type="text" id="fp-code" class="input-auth" placeholder="Enter 4-digit code" maxlength="4" style="padding-left: 44px; letter-spacing: 2px; font-weight: 700;">
+                            <div class="label-row">
+                                <label class="label">4-Digit Security Code</label>
                             </div>
-                            <span style="font-size: 11px; color: var(--clr-text-muted); margin-top: 4px;">Hint: Check the on-screen alert notification or use the demo code.</span>
+                            <div style="position: relative; width: 100%;">
+                                <i data-lucide="shield-check" class="input-icon-left"></i>
+                                <input type="text" id="fp-code" class="input-auth" placeholder="Enter 4-digit code" maxlength="4" style="letter-spacing: 2px; font-weight: 700;">
+                            </div>
+                            <span style="font-size: 11px; color: var(--clr-text-muted); margin-top: 4px; padding-left: 16px;">Hint: Check the on-screen alert notification or use the demo code.</span>
                         </div>
 
                         <!-- New Password -->
                         <div class="input-group">
-                            <label class="label">New Password</label>
-                            <div style="position: relative;">
-                                <i data-lucide="lock" class="input-icon-left" style="color: var(--clr-text-muted);"></i>
-                                <input type="password" id="fp-new-password" class="input-auth" placeholder="At least 6 characters" minlength="6" style="padding-left: 44px; padding-right: 44px;">
+                            <div class="label-row">
+                                <label class="label">New Password</label>
+                            </div>
+                            <div style="position: relative; width: 100%;">
+                                <i data-lucide="lock" class="input-icon-left"></i>
+                                <input type="password" id="fp-new-password" class="input-auth" placeholder="At least 6 characters" minlength="6">
                                 <button type="button" class="input-icon-right" data-action="toggle-password" data-target="fp-new-password" aria-label="Toggle password visibility">
                                     <i data-lucide="eye"></i>
                                 </button>
@@ -540,10 +546,12 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
 
                         <!-- Confirm New Password -->
                         <div class="input-group">
-                            <label class="label">Confirm New Password</label>
-                            <div style="position: relative;">
-                                <i data-lucide="lock" class="input-icon-left" style="color: var(--clr-text-muted);"></i>
-                                <input type="password" id="fp-confirm-password" class="input-auth" placeholder="Re-enter new password" minlength="6" style="padding-left: 44px; padding-right: 44px;">
+                            <div class="label-row">
+                                <label class="label">Confirm New Password</label>
+                            </div>
+                            <div style="position: relative; width: 100%;">
+                                <i data-lucide="lock" class="input-icon-left"></i>
+                                <input type="password" id="fp-confirm-password" class="input-auth" placeholder="Re-enter new password" minlength="6">
                                 <button type="button" class="input-icon-right" data-action="toggle-password" data-target="fp-confirm-password" aria-label="Toggle password visibility">
                                     <i data-lucide="eye"></i>
                                 </button>
@@ -1539,22 +1547,24 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
         </div>\r
 \r
         <!-- Glass Card for Auth -->\r
-        <div class="card-glass w-full" style="padding: 24px 20px;">\r
+        <div class="card-glass w-full" style="padding: 28px 20px;">\r
             \r
             <!-- Tab Switcher (Simulated links for SPA) -->\r
-            <div class="tab-switcher mb-4" style="margin-bottom: 20px;">\r
+            <div class="tab-switcher mb-4" style="margin-bottom: 24px;">\r
                 <a href="#/signin" class="tab-btn active">Sign In</a>\r
                 <a href="#/signup" class="tab-btn">Sign Up</a>\r
             </div>\r
 \r
             <form id="form-signin" data-action="signin-submit">\r
                 <!-- Form Fields Container -->\r
-                <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">\r
+                <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 24px;">\r
                     \r
                     <!-- Email Field -->\r
                     <div class="input-group">\r
-                        <label class="label">Email Address</label>\r
-                        <div style="position: relative;">\r
+                        <div class="label-row">\r
+                            <label class="label">Email Address</label>\r
+                        </div>\r
+                        <div style="position: relative; width: 100%;">\r
                             <i data-lucide="mail" class="input-icon-left"></i>\r
                             <input type="email" id="signin-email" class="input-auth" placeholder="name@example.com" required>\r
                         </div>\r
@@ -1562,13 +1572,13 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
 \r
                     <!-- Password Field -->\r
                     <div class="input-group">\r
-                        <div class="label-row" style="padding: 0;">\r
+                        <div class="label-row">\r
                             <label class="label">Password</label>\r
                             <a href="#/forgot-password" class="btn-text-link">Forgot?</a>\r
                         </div>\r
-                        <div style="position: relative;">\r
+                        <div style="position: relative; width: 100%;">\r
                             <i data-lucide="lock" class="input-icon-left"></i>\r
-                            <input type="password" id="signin-password" class="input-auth" placeholder="••••••••" style="padding-right: 48px;" required>\r
+                            <input type="password" id="signin-password" class="input-auth" placeholder="••••••••" required>\r
                             <button type="button" class="input-icon-right" data-action="toggle-password" data-target="signin-password" aria-label="Toggle password visibility">\r
                                 <i data-lucide="eye"></i>\r
                             </button>\r
@@ -1577,12 +1587,12 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
                 </div>\r
 \r
                 <!-- Action Button -->\r
-                <button type="submit" class="btn btn-action">\r
+                <button type="submit" class="btn btn-action" style="margin-top: 8px;">\r
                     Sign In\r
                 </button>\r
             </form>\r
 \r
-            <div class="divider-with-text mt-4 mb-4" style="margin: 18px 0;">\r
+            <div class="divider-with-text mt-4 mb-4" style="margin: 22px 0;">\r
                 <span>OR</span>\r
             </div>\r
 \r
@@ -1599,10 +1609,9 @@ import'data:text/javascript,"assets/index-mlVqQOm6.js";if(!import.meta.resolve)t
             </div>\r
         </div>\r
         \r
-        <div style="text-align: center; margin-top: 18px;">\r
-            <p style="font-weight: 700; font-size: 15px; color: var(--clr-text-primary);">\r
-                Don't have an account? <br>\r
-                <a href="#/signup" style="color: var(--clr-primary);">Create one</a>\r
+        <div style="text-align: center; margin-top: 18px; background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(8px); border-radius: 16px; padding: 10px 16px;">\r
+            <p style="font-weight: 700; font-size: 14px; color: var(--clr-text-primary); margin: 0;">\r
+                Don't have an account? <a href="#/signup" style="color: var(--clr-primary); font-weight: 800; text-decoration: underline;">Create one</a>\r
             </p>\r
         </div>\r
     </div>\r
