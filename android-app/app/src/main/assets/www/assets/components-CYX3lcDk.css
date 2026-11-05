@@ -369,25 +369,36 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 /* Headers and Footers (Glass) */
 .glass-header {
   position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 72px;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  min-height: 72px;
+  height: calc(72px + var(--safe-top, 0px));
   background: var(--clr-bg-glass-footer);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-header);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: calc(16px + var(--safe-top, 0px)) calc(24px + var(--safe-right, 0px)) 16px calc(24px + var(--safe-left, 0px));
+  box-sizing: border-box;
   z-index: 100;
 }
 
 .glass-footer {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
   background: var(--clr-bg-glass-footer);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-footer);
-  padding: 24px 32px 40px;
+  padding: 24px 32px calc(40px + var(--safe-bottom, 0px));
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 16px;

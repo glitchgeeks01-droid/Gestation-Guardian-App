@@ -253,7 +253,7 @@ export const Auth = {
         if (localProfile && (localProfile.email || '').toLowerCase().trim() === email) {
             // Local profile matches email
             if (localProfile.password && localProfile.password !== password) {
-                UI.showToast('Incorrect password. Please try again or tap Forgot?.', 'error');
+                UI.showToast('Problem with email or password, please check again.', 'error');
                 return;
             }
 
@@ -273,7 +273,7 @@ export const Auth = {
             if (cloudUser) {
                 // Verify password against cloud record
                 if (cloudUser.password && cloudUser.password !== password) {
-                    UI.showToast('Incorrect password. Please try again or tap Forgot?.', 'error');
+                    UI.showToast('Problem with email or password, please check again.', 'error');
                     return;
                 }
 
@@ -316,28 +316,7 @@ export const Auth = {
             console.error("Cloud sign-in error:", cloudErr);
         }
 
-        // 3. Fallback for DEV if enabled
-        // @ts-ignore
-        if (import.meta.env && import.meta.env.DEV) {
-            const dummyLmp = new Date();
-            dummyLmp.setDate(dummyLmp.getDate() - (20 * 7)); // ~20 weeks pregnant
-            
-            await Store.saveProfile({
-                name: 'Demo User',
-                email: email,
-                password: password,
-                lmp: dummyLmp.toISOString().split('T')[0],
-                age: 28,
-                bloodGroup: 'O+'
-            });
-            UI.showToast('Signed in successfully (Demo)', 'success');
-            setTimeout(() => {
-                window.location.hash = '#/dashboard';
-            }, 800);
-            return;
-        }
-
-        UI.showToast('Account not found. Please sign up first.', 'error');
+        UI.showToast('Problem with email or password, please check again.', 'error');
     },
 
     // Forgot Password Flow

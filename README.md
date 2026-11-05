@@ -59,7 +59,12 @@ You can download the pre-built Android APK directly:
 
 | File | Size | Description |
 |------|------|-------------|
-| [`GestationGuardian.apk`](GestationGuardian.apk) | ~16.8 MB | Fresh Debug build, installable on any Android 7.0+ device |
+| [`GestationGuardian.apk`](GestationGuardian.apk) | ~17.3 MB | Fresh Debug build with Safe Area insets & auth hardening |
+
+### Latest Release Fixes (v1.1.0)
+* 🖼️ **Bundled APK Background Images:** Converted absolute path references to relative paths (`./onboarding-bg.png`) with defense-in-depth URL normalization in `loadPageTemplate`, ensuring illustrations render in native Android `file:///android_asset/` WebViews as well as Vite dev.
+* 📱 **Edge-to-Edge & Safe Area Inset Handling:** Integrated native Android `WindowInsetsCompat.Type.systemBars() or displayCutout()` listener in `MainActivity.kt` plus CSS safe area variables (`--safe-top`, `--safe-bottom`), completely eliminating system status bar, notch, and navigation bar overlaps on modern Android and iOS devices.
+* 🛡️ **Hardened Authentication Security:** Replaced granular error messages with a single generic error message (`"Problem with email or password, please check again."`) to completely prevent account enumeration attacks.
 
 > **Note:** You may need to enable "Install from Unknown Sources" on your Android device.
 

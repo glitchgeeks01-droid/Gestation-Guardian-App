@@ -15,7 +15,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: var(--clr-bg-white);
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--safe-bottom, 0px);
   box-sizing: border-box;
 }
 
@@ -73,9 +73,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 24px 24px;
+  padding: calc(32px + var(--safe-top, 0px)) 24px calc(24px + var(--safe-bottom, 0px));
   height: 100%;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .onboarding-logo {
@@ -131,7 +132,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 24px 20px 24px;
+  padding: calc(24px + var(--safe-top, 0px)) 20px calc(24px + var(--safe-bottom, 0px));
   min-height: 100%;
   width: 100%;
   max-width: 430px;
@@ -275,7 +276,7 @@
 
 #page-signup {
   /* Inherits position: absolute; width: 100%; height: 100%; from .page */
-  padding: 20px 16px 28px;
+  padding: calc(20px + var(--safe-top, 0px)) 16px calc(28px + var(--safe-bottom, 0px));
   box-sizing: border-box;
 }
 
@@ -329,12 +330,13 @@
 }
 
 .bt-main {
-  padding: 96px 24px 205px; /* Account for header and footer */
+  padding: calc(96px + var(--safe-top, 0px)) 24px calc(205px + var(--safe-bottom, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 672px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .bt-hero {
@@ -354,13 +356,39 @@
 }
 
 /* ==========================================================================
+   Subpage Clearance & Headers Safe Area
+   ========================================================================== */
+
+/* Automatic top clearance for subpage content following fixed glass-header */
+.page > .glass-header + div {
+  padding-top: calc(96px + var(--safe-top, 0px)) !important;
+}
+
+/* Health Profile / Risk Assessment uses sticky header */
+#page-risk-assessment > .glass-header {
+  padding-top: calc(20px + var(--safe-top, 0px)) !important;
+  min-height: calc(64px + var(--safe-top, 0px)) !important;
+}
+#page-risk-assessment > .glass-header + div {
+  padding-top: 32px !important;
+}
+
+/* Dashboard header safe area */
+#page-dashboard > header {
+  padding-top: calc(24px + var(--safe-top, 0px)) !important;
+  padding-left: calc(24px + var(--safe-left, 0px));
+  padding-right: calc(24px + var(--safe-right, 0px));
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
    Global UI: Bottom Nav & Sheets
    ========================================================================== */
 
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  height: 80px;
+  height: calc(80px + var(--safe-bottom, 0px));
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -368,7 +396,8 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: var(--safe-bottom, 0px);
+  box-sizing: border-box;
   z-index: 100;
   transition: transform 0.3s ease;
 }
@@ -440,7 +469,8 @@
   background: var(--clr-bg-white);
   width: 100%;
   border-radius: 24px 24px 0 0;
-  padding: 16px 24px 40px;
+  padding: 16px 24px calc(40px + var(--safe-bottom, 0px));
+  box-sizing: border-box;
   transform: translateY(0);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -497,7 +527,8 @@
 /* Toasts */
 .toast-container {
   position: fixed;
-  top: 16px; left: 16px; right: 16px;
+  top: calc(16px + var(--safe-top, 0px));
+  left: 16px; right: 16px;
   z-index: 1000;
   display: flex;
   flex-direction: column;

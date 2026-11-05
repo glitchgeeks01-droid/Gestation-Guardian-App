@@ -13,6 +13,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : ComponentActivity() {
 
@@ -57,6 +59,15 @@ class MainActivity : ComponentActivity() {
             
             // Load the local HTML file from assets/www
             loadUrl("file:///android_asset/www/index.html")
+        }
+
+        // Apply Window Insets so the WebView never collides with status bar, navigation bar, or camera display cutouts
+        ViewCompat.setOnApplyWindowInsetsListener(webView) { v, windowInsets ->
+            val insets = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            windowInsets
         }
 
         // Set the WebView as the main view

@@ -227,6 +227,9 @@ export const App = {
             
             if (!html) throw new Error(`Page template not found for route: ${route}`);
             
+            // Normalize absolute asset URLs for Android WebView (file:// protocol compatibility)
+            html = html.replace(/url\((['"]?)\/([^/'"]+\.(?:png|jpg|jpeg|svg|webp|gif))(['"]?\))/gi, 'url($1./$2$3)');
+            
             const temp = document.createElement('div');
             temp.innerHTML = html.trim();
             
