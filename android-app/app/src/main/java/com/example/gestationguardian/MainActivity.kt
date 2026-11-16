@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -15,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.webkit.WebViewAssetLoader
 
 class MainActivity : ComponentActivity() {
 
@@ -38,6 +41,11 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        // Initialize WebViewAssetLoader to serve assets under virtual https://appassets.androidplatform.net
+        val assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
+            .build()
+
         // Create WebView programmatically
         val webView = WebView(this).apply {
             settings.apply {
@@ -50,7 +58,14 @@ class MainActivity : ComponentActivity() {
                 mediaPlaybackRequiresUserGesture = false
                 mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
             }
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun shouldInterceptRequest(
+                    view: WebView,
+                    request: WebResourceRequest
+                ): WebResourceResponse? {
+                    return assetLoader.shouldInterceptRequest(request.url)
+                }
+            }
             webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest?) {
                     if (request == null) return
@@ -59,7 +74,8 @@ class MainActivity : ComponentActivity() {
                         origin.startsWith("file://") ||
                         origin.startsWith("https://localhost") ||
                         origin.startsWith("http://localhost") ||
-                        origin.startsWith("capacitor://localhost")
+                        origin.startsWith("capacitor://localhost") ||
+                        origin.startsWith("https://appassets.androidplatform.net")
 
                     val audioRequested = request.resources?.contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE) == true
 
@@ -71,8 +87,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
             
-            // Load the local HTML file from assets/www
-            loadUrl("file:///android_asset/www/index.html")
+            // Load the web app via virtual HTTPS domain served by WebViewAssetLoader
+            loadUrl("https://appassets.androidplatform.net/assets/www/index.html")
         }
 
         // Apply Window Insets so the WebView never collides with status bar, navigation bar, or camera display cutouts
