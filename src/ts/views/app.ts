@@ -11,7 +11,6 @@ import { Auth } from './auth';
 import { Bluetooth } from '../services/bluetooth';
 import { Store } from '../store/store';
 import { UI } from '../components/ui';
-import { Kicks } from './kicks';
 import { Vitals } from './vitals';
 import { Assessment } from './assessment';
 import { Charts } from './charts';
@@ -31,7 +30,6 @@ window.Auth = Auth;
 window.Bluetooth = Bluetooth;
 window.Store = Store;
 window.UI = UI;
-window.Kicks = Kicks;
 window.Vitals = Vitals;
 window.Assessment = Assessment;
 window.Charts = Charts;
@@ -269,7 +267,6 @@ export const App = {
                 'dashboard': 'dashboard-body',
                 'health-hub': 'hub-body',
                 'care-guide': 'guide-body',
-                'kick-counter': 'kick-body',
                 'log-bp': 'log-bp-body',
                 'log-vitals': 'log-vitals-body',
                 'medical-history': 'history-body',
@@ -330,18 +327,12 @@ export const App = {
             case 'bluetooth':
                 if (Bluetooth) Bluetooth.init();
                 break;
-            case 'contractions':
-                if (Kicks) await Kicks.initContractions();
-                break;
             case 'dashboard':
                 if (DashboardUI) await DashboardUI.init();
                 if (Scoring) (window as any).Scoring = Scoring;
                 break;
             case 'health-hub':
                 if (HealthRecords) await HealthRecords.init();
-                break;
-            case 'kick-counter':
-                if (Kicks) Kicks.init();
                 break;
             case 'notifications':
                 if (Notifications) Notifications.init();

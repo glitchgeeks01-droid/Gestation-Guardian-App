@@ -218,66 +218,6 @@ test.describe('Risk Band mapping on assessment-report.html', () => {
 });
 
 // ─────────────────────────────────────────────
-// SUITE 4: Kick Counter persistence on reload
-// ─────────────────────────────────────────────
-test.describe('Kick Counter persistence', () => {
-  test('tap increments count and persists to gg_kicks', async ({ page }) => {
-    await page.goto(url('health-hub.html'));
-    // Clear any stale state
-    await page.evaluate(() => localStorage.removeItem('gg_kicks'));
-    await page.reload();
-
-    const countEl = page.locator('.kick-count');
-    await expect(countEl).toHaveText('0');
-
-    // Tap 3 times
-    for (let i = 0; i < 3; i++) {
-      await page.click('.btn-tap-kick');
-    }
-    await expect(countEl).toHaveText('3');
-
-    // Verify storage
-    const kicks = await page.evaluate(() => GG.get('gg_kicks', {}));
-    expect(kicks.count).toBe(3);
-  });
-
-  test('count persists across page reload', async ({ page }) => {
-    await page.goto(url('health-hub.html'));
-    await page.evaluate(() => GG.set('gg_kicks', { count: 7 }));
-    await page.reload();
-    const countEl = page.locator('.kick-count');
-    await expect(countEl).toHaveText('7');
-  });
-
-  test('kick-counter.html big-number persists from storage', async ({ page }) => {
-    await page.goto(url('kick-counter.html'));
-    await page.evaluate(() => GG.set('gg_kicks', { count: 5, sessionStart: Date.now() }));
-    await page.reload();
-    const big = page.locator('.big-number');
-    await expect(big).toHaveText('5');
-  });
-
-  test('kick-counter.html ADD KICK button increments big-number', async ({ page }) => {
-    await page.goto(url('kick-counter.html'));
-    await page.evaluate(() => GG.set('gg_kicks', { count: 0, sessionStart: Date.now() }));
-    await page.reload();
-    await page.click('.btn-add-kick');
-    await page.click('.btn-add-kick');
-    const big = page.locator('.big-number');
-    await expect(big).toHaveText('2');
-  });
-
-  test('goal progress bar fills to 100% at 10 kicks', async ({ page }) => {
-    await page.goto(url('kick-counter.html'));
-    await page.evaluate(() => GG.set('gg_kicks', { count: 10, sessionStart: Date.now() }));
-    await page.reload();
-    const fill = page.locator('.daily-goal-card .progress-bar-fill');
-    const width = await fill.evaluate(el => el.style.width);
-    expect(width).toBe('100%');
-  });
-});
-
-// ─────────────────────────────────────────────
 // SUITE 5: Dashboard Red Alert state
 // ─────────────────────────────────────────────
 test.describe('Dashboard BP Red Alert', () => {

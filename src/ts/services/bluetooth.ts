@@ -75,14 +75,29 @@ export const Bluetooth = {
     handleBPData(event: Event) {
         const characteristic = event.target as BluetoothRemoteGATTCharacteristic;
         const value = characteristic.value;
-        if (!value) return;
+        if (!value || value.byteLength < 5) return;
 
         const flags = value.getUint8(0);
         
-        const parseSFloat = (byteOffset: number) => {
+        const parseSFloat = (byteOffset: number, isPressure: boolean = (byteOffset < 7)) => {
+            if (byteOffset + 2 > value.byteLength) {
+                return null;
+            }
             const raw = value.getUint16(byteOffset, true);
-            const mantissa = raw & 0x0FFF; 
-            return mantissa; 
+            let mantissa = raw & 0x0FFF;
+            if (mantissa >= 0x0800) {
+                mantissa -= 0x1000;
+            }
+            let exponent = (raw >> 12) & 0x0F;
+            if (exponent >= 0x08) {
+                exponent -= 0x10;
+            }
+            let result = mantissa * Math.pow(10, exponent);
+            if (isPressure && (flags & 0x01) !== 0) {
+                result *= 7.50062;
+            }
+            return Math.round(result);
+
         };
 
         const sys = parseSFloat(1);
@@ -94,11 +109,13 @@ export const Bluetooth = {
         const diaInput = document.getElementById('bp-dia');
         const hrInput = document.getElementById('bp-pulse');
         
-        if (sysInput) sysInput.value = sys;
-        if (diaInput) diaInput.value = dia;
-        if (hrInput && hr) hrInput.value = hr;
+        if (sysInput && sys !== null) sysInput.value = sys;
+        if (diaInput && dia !== null) diaInput.value = dia;
+        if (hrInput && hr !== null) hrInput.value = hr;
         
-        UI.showToast(`Reading synced: ${sys}/${dia} mmHg`, 'success');
+        if (sys !== null && dia !== null) {
+            UI.showToast(`Reading synced: ${sys}/${dia} mmHg`, 'success');
+        }
     }
 };
 

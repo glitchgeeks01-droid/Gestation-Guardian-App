@@ -90,7 +90,7 @@ GUIDELINES FOR YOUR RESPONSE:
         if (apiKey && navigator.onLine) {
             try {
                 // Use the correct gemini-1.5-flash model
-                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
                 
                 // Add user message to temporary history
                 const userMessage: { role: 'user' | 'model', parts: [{ text: string }] } = {
@@ -122,7 +122,8 @@ GUIDELINES FOR YOUR RESPONSE:
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': apiKey
                     },
                     body: JSON.stringify(payload)
                 });

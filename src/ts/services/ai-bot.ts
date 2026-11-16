@@ -323,7 +323,15 @@ export const AIBot = {
             if (indicator) indicator.remove();
 
             // Format markdown headers, bold, bullets
-            const formattedResponse = response
+            // Escape HTML special characters before applying markdown formatting substitutions
+            const escaped = response
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+
+            const formattedResponse = escaped
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n\n/g, '<br><br>')
                 .replace(/\n- /g, '<br>• ');

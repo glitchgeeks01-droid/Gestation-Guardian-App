@@ -33,8 +33,6 @@ export const HealthRecords = {
         
         await addLogs(Store.KEYS.BP_LOGS, 'bp');
         await addLogs(Store.KEYS.VITALS_LOGS, 'vitals');
-        await addLogs(Store.KEYS.KICKS, 'kicks');
-        await addLogs(Store.KEYS.CONTRACTIONS, 'contractions');
         await addLogs(Store.KEYS.SYMPTOMS, 'symptoms');
         
         if (allLogs.length === 0) {
@@ -85,21 +83,11 @@ export const HealthRecords = {
                         title = 'Sleep';
                         details = `<span style="font-size: 18px; font-weight: 700;">${log.sleep}</span> <span style="font-size: 12px; color: var(--clr-text-muted);">hours</span>`;
                     }
-                } else if (log._type === 'kicks') {
-                    icon = 'baby';
-                    iconColor = 'var(--clr-purple)';
-                    title = 'Kick Session';
-                    details = `<span style="font-size: 18px; font-weight: 700;">${log.count}</span> <span style="font-size: 12px; color: var(--clr-text-muted);">kicks in ${Math.round(log.duration / 60)} min</span>`;
                 } else if (log._type === 'symptoms') {
                     icon = 'alert-circle';
                     iconColor = 'var(--clr-danger)';
                     title = 'Symptom Logged';
                     details = `<span style="font-size: 16px; font-weight: 600; text-transform: capitalize;">${log.symptom}</span>`;
-                } else if (log._type === 'contractions') {
-                    icon = 'timer';
-                    iconColor = 'var(--clr-info-brown)';
-                    title = 'Contraction';
-                    details = `Duration: ${Math.round(log.duration)}s &middot; Intensity: ${log.intensity || 'N/A'}`;
                 }
                 
                 html += `

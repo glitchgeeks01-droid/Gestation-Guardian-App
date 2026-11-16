@@ -12,10 +12,12 @@
 body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
   background-color: #1e1e1e; /* Dark background so the white app screen pops out */
+  box-sizing: border-box;
 }
 
 /* Screen Container - matching Figma's 390x884 dimensions */
@@ -201,10 +203,13 @@ button:active {
 .signin-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
-  background-color: #E6E9E6; /* A soft gray to let the white card pop */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #E6E9E6;
   font-family: 'Lexend', sans-serif;
 }
 
@@ -486,10 +491,13 @@ button:active {
 .bluetooth-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
-  background-color: #333; /* Dark outside the app frame */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
 
@@ -809,12 +817,14 @@ button:active {
 .signup-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
-  background-color: #E6E9E6; /* Soft gray for contrast */
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #E6E9E6;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0; /* Margin on top/bottom so we can scroll past the card */
 }
 
 .signup-wrapper {
@@ -1132,9 +1142,12 @@ input[type="date"] {
 .dashboard-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #E6E9E6;
   font-family: 'Lexend', sans-serif;
 }
@@ -1549,10 +1562,13 @@ input[type="date"] {
 .log-vitals-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
-  background-color: #333; /* Dark background so the app stands out */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
 
@@ -1813,9 +1829,12 @@ input[type="date"] {
 .kick-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
@@ -2130,12 +2149,14 @@ input[type="date"] {
 .history-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
-  background-color: #333; /* Dark outer background for contrast */
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .history-screen {
@@ -2569,12 +2590,14 @@ input[type="date"] {
 .reminders-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .reminders-screen {
@@ -2839,12 +2862,14 @@ input[type="date"] {
 .log-bp-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
-  background-color: #333; /* Dark background to highlight the app frame */
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .log-bp-screen {
@@ -3195,12 +3220,14 @@ input[type="date"] {
 .guide-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .guide-screen {
@@ -3632,12 +3659,14 @@ input[type="date"] {
 .profile-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .profile-screen {
@@ -3887,12 +3916,14 @@ input[type="date"] {
 .hub-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .hub-screen {
@@ -4453,9 +4484,12 @@ input[type="date"] {
 .q-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
@@ -4742,10 +4776,13 @@ input[type="date"] {
 .q2-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
-  background-color: #333; /* Dark background to showcase the app frame */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
 
@@ -5043,12 +5080,14 @@ input[type="date"] {
 .q3-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
-  background-color: #333; /* Dark background to showcase the app frame */
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q3-screen {
@@ -5388,12 +5427,14 @@ input[type="date"] {
 .q4-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q4-screen {
@@ -5695,12 +5736,14 @@ input[type="date"] {
 .q5-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q5-screen {
@@ -6062,9 +6105,12 @@ input[type="date"] {
 .q6-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
 }
@@ -6334,12 +6380,14 @@ input[type="date"] {
 .q7-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
-  background-color: #333; /* Dark background to showcase app frame */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
+  background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q7-screen {
@@ -6676,12 +6724,14 @@ input[type="date"] {
 .q8-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q8-screen {
@@ -6963,13 +7013,14 @@ input[type="date"] {
 .q9-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background: #FAF9F6;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
-  overflow-x: hidden;
 }
 
 .q9-screen {
@@ -7285,12 +7336,14 @@ input[type="date"] {
 .q10-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q10-screen {
@@ -7584,13 +7637,14 @@ input[type="date"] {
 .q11-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #FAF9F6;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
-  overflow-x: hidden;
 }
 
 .q11-screen {
@@ -7894,12 +7948,14 @@ input[type="date"] {
 .q12-body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
-  min-height: ;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #333;
   font-family: 'Lexend', sans-serif;
-  padding: 40px 0;
 }
 
 .q12-screen {
@@ -8152,9 +8208,12 @@ input[type="date"] {
 .q-body {
   margin: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: ;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 0;
   background-color: #1e1e1e;
   font-family: 'Lexend', sans-serif;
 }

@@ -3,6 +3,7 @@ import { Assessment } from './assessment';
 import { Store } from '../store/store';
 import { UI } from '../components/ui';
 import { FirebaseDB, auth } from '../store/firebase';
+import { hashPassword } from '../utils/crypto';
 
 // js/auth.js
 
@@ -18,8 +19,64 @@ export const Auth = {
         if (route === 'signup') {
             this.setupOTPInputs();
             this.setupDatePickers();
+            this.setupSynchronizedInputs();
         } else if (route === 'forgot-password') {
             this._resetState = null;
+        }
+    },
+
+    setupSynchronizedInputs() {
+        const dobEl = document.getElementById('su-dob') as HTMLInputElement;
+        const ageEl = document.getElementById('su-age') as HTMLInputElement;
+        const ageDisplay = document.getElementById('su-age-display');
+
+        if (dobEl && ageEl) {
+            dobEl.addEventListener('change', () => {
+                if (dobEl.value) {
+                    const b = new Date(dobEl.value);
+                    if (!isNaN(b.getTime())) {
+                        const calculatedAge = Math.floor((new Date().getTime() - b.getTime()) / (365.25 * 24 * 3600 * 1000));
+                        ageEl.value = String(calculatedAge);
+                        if (ageDisplay) ageDisplay.textContent = `Age: ${calculatedAge} yrs`;
+                    }
+                }
+            });
+            ageEl.addEventListener('input', () => {
+                const a = parseInt(ageEl.value, 10);
+                if (!isNaN(a) && a >= 12 && a <= 65) {
+                    const d = new Date();
+                    d.setFullYear(d.getFullYear() - a);
+                    dobEl.value = d.toISOString().split('T')[0];
+                    if (ageDisplay) ageDisplay.textContent = `Age: ${a} yrs`;
+                }
+            });
+        }
+
+        const lmpEl = document.getElementById('su-lmp') as HTMLInputElement;
+        const weeksEl = document.getElementById('su-weeks') as HTMLInputElement;
+        const weeksDisplay = document.getElementById('su-weeks-display');
+
+        if (lmpEl && weeksEl) {
+            lmpEl.addEventListener('change', () => {
+                if (lmpEl.value) {
+                    const l = new Date(lmpEl.value);
+                    if (!isNaN(l.getTime())) {
+                        const calculatedWeeks = Math.floor(Math.abs(new Date().getTime() - l.getTime()) / (7 * 24 * 3600 * 1000));
+                        weeksEl.value = String(calculatedWeeks);
+                        if (weeksDisplay) weeksDisplay.textContent = `Week ${calculatedWeeks}`;
+                    }
+                }
+            });
+            weeksEl.addEventListener('input', () => {
+                const w = parseInt(weeksEl.value, 10);
+                if (!isNaN(w) && w >= 1 && w <= 42) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - (w * 7));
+                    lmpEl.value = d.toISOString().split('T')[0];
+                    if (weeksDisplay) weeksDisplay.textContent = `Week ${w}`;
+                    this.calculateEDD();
+                }
+            });
         }
     },
     
@@ -60,6 +117,7 @@ export const Auth = {
         
         // Generate mock 4-digit OTP
         this._generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+        console.info('[AUTH DEV] Active OTP:', this._generatedOTP);
         UI.showToast(`OTP sent to ${phone}: ${this._generatedOTP}`, 'success', 5000);
         
         const otpSection = document.getElementById('otp-section');
@@ -68,8 +126,9 @@ export const Auth = {
             otpSection.style.display = 'block';
         }
         
-        // Focus first OTP box
+        // Focus OTP input
         setTimeout(() => {
+            document.getElementById('su-otp')?.focus();
             document.querySelector<HTMLElement>('.input-otp[data-index="1"]')?.focus();
         }, 100);
     },
@@ -125,13 +184,15 @@ export const Auth = {
         const phone = (document.getElementById('su-phone') as HTMLInputElement)?.value?.trim();
         const email = (document.getElementById('su-email') as HTMLInputElement)?.value?.trim();
         const password = (document.getElementById('su-password') as HTMLInputElement)?.value;
-        const dob = (document.getElementById('su-dob') as HTMLInputElement)?.value;
-        const lmp = (document.getElementById('su-lmp') as HTMLInputElement)?.value;
-        const bloodGroup = (document.getElementById('su-blood') as HTMLSelectElement)?.value;
+        let dob = (document.getElementById('su-dob') as HTMLInputElement)?.value;
+        const ageInput = (document.getElementById('su-age') as HTMLInputElement)?.value;
+        let lmp = (document.getElementById('su-lmp') as HTMLInputElement)?.value;
+        const weeksInput = (document.getElementById('su-weeks') as HTMLInputElement)?.value;
+        let bloodGroup = (document.getElementById('su-blood') as HTMLSelectElement)?.value;
         
-        // Validation: Required fields
-        if (!name || !phone || !email || !password || !dob || !lmp || !bloodGroup) {
-            UI.showToast('Please fill in all required registration fields', 'error');
+        // Validation: Required core credentials
+        if (!name || !phone || !email || !password) {
+            UI.showToast('Please fill in your name, phone, email, and password', 'error');
             return;
         }
 
@@ -139,6 +200,40 @@ export const Auth = {
         if (password.length < 6) {
             UI.showToast('Password must be at least 6 characters long', 'error');
             return;
+        }
+
+        // Derive or default DOB if omitted
+        if (!dob && ageInput) {
+            const targetAge = parseInt(ageInput, 10);
+            if (!isNaN(targetAge) && targetAge >= 12 && targetAge <= 65) {
+                const derivedDob = new Date();
+                derivedDob.setFullYear(derivedDob.getFullYear() - targetAge);
+                dob = derivedDob.toISOString().split('T')[0];
+            }
+        }
+        if (!dob) {
+            const defaultDob = new Date();
+            defaultDob.setFullYear(defaultDob.getFullYear() - 28);
+            dob = defaultDob.toISOString().split('T')[0];
+        }
+
+        // Derive or default LMP if omitted
+        if (!lmp && weeksInput) {
+            const targetWeeks = parseInt(weeksInput, 10);
+            if (!isNaN(targetWeeks) && targetWeeks >= 1 && targetWeeks <= 42) {
+                const derivedLmp = new Date();
+                derivedLmp.setDate(derivedLmp.getDate() - (targetWeeks * 7));
+                lmp = derivedLmp.toISOString().split('T')[0];
+            }
+        }
+        if (!lmp) {
+            const defaultLmp = new Date();
+            defaultLmp.setDate(defaultLmp.getDate() - (24 * 7));
+            lmp = defaultLmp.toISOString().split('T')[0];
+        }
+
+        if (!bloodGroup) {
+            bloodGroup = 'O+';
         }
 
         // Validation: OTP Verification
@@ -149,16 +244,21 @@ export const Auth = {
             return;
         }
 
-        const otpInputs = document.querySelectorAll('.input-otp');
-        let otp = '';
-        otpInputs.forEach((input: any) => otp += input.value);
+        let otp = (document.getElementById('su-otp') as HTMLInputElement)?.value?.trim() || '';
+        if (!otp) {
+            const otpInputs = document.querySelectorAll('.input-otp');
+            otpInputs.forEach((input: any) => otp += input.value);
+        }
         
         if (otp.length < 4) {
             UI.showToast('Please enter the 4-digit OTP sent to your phone', 'error');
             return;
         }
 
-        if (this._generatedOTP && otp !== this._generatedOTP && otp !== '1234') {
+        console.info('[AUTH DEV] Active OTP:', this._generatedOTP);
+        const isDev = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isOtpValid = (this._generatedOTP && otp === this._generatedOTP) || (isDev && otp === '1234');
+        if (!isOtpValid) {
             UI.showToast('Incorrect OTP code. Please enter the valid code.', 'error');
             return;
         }
@@ -184,9 +284,9 @@ export const Auth = {
         }
 
         // Calculate age
-        let age = today.getFullYear() - birthDate.getFullYear();
+        let age = ageInput ? parseInt(ageInput, 10) : (today.getFullYear() - birthDate.getFullYear());
         const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        if (!ageInput && (m < 0 || (m === 0 && today.getDate() < birthDate.getDate()))) {
             age--;
         }
 
@@ -200,20 +300,25 @@ export const Auth = {
             UI.showToast('LMP date is over 42 weeks ago. Please verify your last period date.', 'error');
             return;
         }
+
+        const calculatedWeeks = weeksInput ? parseInt(weeksInput, 10) : Math.max(1, Math.min(42, Math.floor(daysSinceLmp / 7)));
         
         // Calculate EDD
         const edd = new Date(lmpDate.getTime());
         edd.setDate(edd.getDate() + 280);
         
-        // Construct complete profile with stored password
+        // Construct complete profile with stored password hash
+        const passwordHash = await hashPassword(password);
         const profile = {
             name,
             phone,
             email: email.toLowerCase().trim(),
-            password, // Securely persisted in user record
+            passwordHash,
             dob,
             age,
             lmp,
+            weeks: calculatedWeeks,
+            gestationalWeeks: calculatedWeeks,
             edd: edd.toISOString().split('T')[0],
             bloodGroup,
             isFirstPregnancy: false,
@@ -247,12 +352,26 @@ export const Auth = {
             return;
         }
 
+        const inputHash = await hashPassword(password);
+
         // 1. Check local profile first
         const localProfile = await Store.getProfile();
         
         if (localProfile && (localProfile.email || '').toLowerCase().trim() === email) {
             // Local profile matches email
-            if (localProfile.password && localProfile.password !== password) {
+            let localValid = false;
+            if (localProfile.passwordHash) {
+                localValid = localProfile.passwordHash === inputHash;
+            } else if (localProfile.password) {
+                if (localProfile.password === password) {
+                    localProfile.passwordHash = inputHash;
+                    delete localProfile.password;
+                    await Store.saveProfile(localProfile);
+                    localValid = true;
+                }
+            }
+
+            if (!localValid) {
                 UI.showToast('Problem with email or password, please check again.', 'error');
                 return;
             }
@@ -272,7 +391,21 @@ export const Auth = {
             
             if (cloudUser) {
                 // Verify password against cloud record
-                if (cloudUser.password && cloudUser.password !== password) {
+                let cloudValid = false;
+                if (cloudUser.passwordHash) {
+                    cloudValid = cloudUser.passwordHash === inputHash;
+                } else if (cloudUser.password) {
+                    // Migration fallback: If user doc only has legacy plaintext password:
+                    if (password === cloudUser.password) {
+                        cloudUser.passwordHash = inputHash;
+                        delete cloudUser.password;
+                        await FirebaseDB.saveDocument('users', cloudUser.id, { passwordHash: inputHash });
+                        await Store.saveProfile(cloudUser);
+                        cloudValid = true;
+                    }
+                }
+
+                if (!cloudValid) {
                     UI.showToast('Problem with email or password, please check again.', 'error');
                     return;
                 }
@@ -335,6 +468,7 @@ export const Auth = {
             code: recoveryCode,
             timestamp: Date.now()
         };
+        console.info('[AUTH DEV] Active OTP:', this._resetState.code);
 
         const resetFields = document.getElementById('fp-reset-fields');
         const sendSection = document.getElementById('fp-send-code-section');
@@ -365,7 +499,10 @@ export const Auth = {
             return;
         }
 
-        if (this._resetState && this._resetState.code !== code && code !== '1234') {
+        console.info('[AUTH DEV] Active OTP:', this._resetState?.code);
+        const isDev = import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isResetValid = (this._resetState && this._resetState.code === code) || (isDev && code === '1234');
+        if (!isResetValid) {
             UI.showToast('Invalid recovery code. Please check and try again.', 'error');
             return;
         }
@@ -380,24 +517,29 @@ export const Auth = {
             return;
         }
 
+        const newHash = await hashPassword(newPassword);
+
         let profile = await Store.getProfile();
         if (profile && (profile.email || '').toLowerCase().trim() === email) {
-            profile.password = newPassword;
+            profile.passwordHash = newHash;
+            delete profile.password;
             await Store.saveProfile(profile);
         } else {
             // Check Cloud Firestore for existing account
             const cloudUser = await FirebaseDB.getUserByEmail(email);
             if (cloudUser) {
-                cloudUser.password = newPassword;
+                cloudUser.passwordHash = newHash;
+                delete cloudUser.password;
                 await Store.saveProfile(cloudUser);
-                await FirebaseDB.saveDocument('users', cloudUser.id, { password: newPassword });
+                await FirebaseDB.saveDocument('users', cloudUser.id, { passwordHash: newHash });
             } else {
                 profile = {
                     name: 'User',
                     email: email,
-                    password: newPassword,
+                    passwordHash: newHash,
                     bloodGroup: 'O+'
                 };
+                delete profile.password;
                 await Store.saveProfile(profile);
             }
         }

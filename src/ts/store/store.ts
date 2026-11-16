@@ -5,6 +5,7 @@
 
 import { FirebaseDB, auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { hashPassword } from '../utils/crypto';
 
 export const Store = {
     // Keys matching the schema in the implementation plan
@@ -15,8 +16,6 @@ export const Store = {
         GLUCOSE_LOGS: 'gg_glucose_logs',
         URINE_LOGS: 'gg_urine_logs',
         HB_LOGS: 'gg_hb_logs',
-        KICKS: 'gg_kick_sessions',
-        CONTRACTIONS: 'gg_contractions',
         SYMPTOMS: 'gg_symptoms',
         HISTORY: 'gg_medical_history',
         REMINDERS: 'gg_reminders',
@@ -31,7 +30,13 @@ export const Store = {
         // Generate a 4-digit pin for UI purposes only if it doesn't exist
         let pin = localStorage.getItem('gg_pairing_pin');
         if (!pin) {
-            const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const randomBytes = new Uint8Array(4);
+            crypto.getRandomValues(randomBytes);
+            let randomPart = '';
+            for (let i = 0; i < 4; i++) {
+                randomPart += alphabet[randomBytes[i] % alphabet.length];
+            }
             pin = `GG-${randomPart}`;
             localStorage.setItem('gg_pairing_pin', pin);
         }
@@ -160,6 +165,10 @@ export const Store = {
     },
 
     async saveProfile(profileData: any) {
+        if (profileData && profileData.password) {
+            profileData.passwordHash = await hashPassword(profileData.password);
+            delete profileData.password;
+        }
         // 1. Save locally for instant UI updates (keep raw booleans for mobile app logic)
         await this._set(this.KEYS.PROFILE, profileData);
         
@@ -401,4 +410,6 @@ export const Store = {
     }
 };
 
-(window as any).Store = Store;
+if (import.meta.env.DEV) {
+    (window as any).Store = Store;
+}

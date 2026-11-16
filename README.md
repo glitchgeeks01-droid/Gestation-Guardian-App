@@ -1,182 +1,172 @@
-# 🛡️ Gestation Guardian
+# Gestation Guardian
 
 <div align="center">
-  <img src="https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF&radius=20" alt="Gestation Guardian Logo" width="120"/>
+  <img src="https://api.dicebear.com/7.x/initials/svg?seed=GG&backgroundColor=8DB48E&textColor=FFFFFF&radius=20" alt="Gestation Guardian Logo" width="100"/>
   <br>
-  <i>Your trusted companion for a safer, healthier pregnancy journey.</i>
-  <br><br>
-  <a href="GestationGuardian.apk">📥 Download Fresh APK</a>
+  <h3>Remote Maternal-Fetal Telemonitoring & Clinical Risk Stratification</h3>
+  <p><i>An offline-first, clinical-grade digital health application for early detection of gestational hypertension, preeclampsia, and gestational diabetes.</i></p>
+  <a href="./GestationGuardian.apk"><strong>Download Fresh Android APK (Release Build)</strong></a>
 </div>
 
 ---
 
-**Gestation Guardian** is a premium, offline-first mobile application designed to empower expecting mothers. It focuses specifically on tracking vital health metrics, assessing pre-eclampsia and gestational hypertension risks, and providing actionable care advice—all wrapped in a stunning, native-feeling UI.
+## 1. Executive Summary
 
-## 🌟 Features
+**Gestation Guardian** is an integrated physiological telemonitoring ecosystem designed for expectant mothers and attending obstetric teams. Engineered to mitigate high-risk maternal pathologies—predominantly preeclampsia, gestational hypertension, and gestational diabetes—the platform collects physiological telemetry from consumer medical peripherals (Bluetooth Low Energy blood pressure cuffs, glucometers) and self-reported clinical observations, transforming them into HL7 FHIR-compliant datasets.
 
-### Core Health Tracking
-* 📊 **Gestosis Risk Assessment Engine:** A built-in mathematical model that calculates cumulative clinical risk scores from static risk factors (age, parity, BMI, chronic conditions) and dynamic physiological signals (blood pressure, proteinuria, glucose, symptoms) — producing a real-time RAG-triaged score with Low / Moderate / High / Critical bands.
-* 🩺 **Blood Pressure Logging:** Systolic, diastolic, and pulse (maternal heart rate) capture with position and arm selection for clinical accuracy.
-* 📈 **Vitals Dashboard:** Weight, sleep, temperature, blood glucose, urine protein, and stress level tracking in a single unified form.
-* 👶 **Fetal Kick Counter:** Interactive session-based kick counting with timer and threshold alerts.
-* ⏱️ **Contraction Timer:** Real-time labour contraction tracking with frequency and duration calculations.
-* 📋 **Medical History:** Comprehensive recording of chronic conditions, medications, and symptom logs.
+The ecosystem comprises three synchronized layers:
+1. **Mobile Telemonitoring Client (`Gestation Guardian`):** A high-performance, offline-first Single Page Application (SPA) bundled inside a native Android WebView shell (Kotlin + Gradle).
+2. **Clinical Web Dashboard (`Gestation-Guardian-Web`):** An authenticated web dashboard enabling obstetricians to remotely monitor patient cohorts, review physiological trends, and inspect gestosis risk scores in real time.
+3. **Local Synchronization Microservice (`server/`):** A lightweight LAN bridge (Express + SQLite) enabling zero-cloud local data replication across clinic environments.
 
-### Intelligence & AI
-* 🤖 **Gestation AI (Powered by Gemini 1.5 Flash):** A floating, context-aware AI chatbot that securely injects the patient's local clinical vitals into its context window, providing instant, highly-personalized and reassuring medical guidance using a WHO-compliant persona.
-* 🎙️ **Voice-to-Text & Text-to-Speech:** Complete hands-free experience. Features robust Web Speech API integration, seamless fallback to OpenAI Whisper for Apple Safari compatibility, and a stabilized TTS queue that guarantees smooth, cancelable voice playback without robotic fallback voices.
-* 🚨 **Automated Alerting:** When the Gestosis score escalates to High or Critical, the app immediately triggers persistent high-priority alerts prompting the patient to seek medical attention.
+---
 
-### Clinical Integration & Cloud Sync
-* 🔐 **Anonymous Firebase Auth:** On launch, the app silently authenticates users via Firebase Anonymous Auth, ensuring all medical telemetry is bound to a secure, cryptographically generated UID (`user.uid`) rather than a public identifier.
-* 🏥 **Doctor Dashboard Bridge:** Each patient is assigned a temporary 4-digit Clinical PIN (`GG-XXXX`) displayed on their profile. Sharing this PIN with a doctor enables real-time remote monitoring via the [GG Doctor Dashboard](https://github.com/glitchgeeks01-droid/Gestation-Guardian-Web).
-* 🩺 **Strict HL7 FHIR Telemetry:** All vitals are automatically transformed into strict HL7 FHIR `Observation` resources using LOINC coding and UCUM units (`unitsofmeasure.org`) before syncing to the cloud:
-  * Blood Pressure ➔ LOINC `85354-9` (panel), `8480-6` (systolic, `mm[Hg]`), `8462-4` (diastolic, `mm[Hg]`)
-  * Heart Rate ➔ LOINC `8867-4` (`beats/minute`, `/min`)
-* 🌐 **Polyglot Persistence:** Telemetry data is routed to `users/{secureUid}/telemetry` subcollections, enabling high-frequency time-series queries for the clinical dashboard's real-time charts.
-* ☁️ **Shared Firebase Backend:** Both the mobile app and doctor dashboard connect to the same `gg-doctor-dashboard` Firebase project, ensuring a unified data ecosystem.
+## 2. Core Clinical Capabilities
 
-### Platform, Hardware & Safety
-* 📱 **Native-Grade UI/UX:** Built with 15+ bespoke components including glassmorphic alert banners, dynamic pregnancy progress timelines, and interactive Bento Grid layouts.
-* 💾 **Dual-Layer Offline-First Architecture:** The app works fully offline via local storage. When connectivity is available, data syncs automatically to Firebase Firestore via a robust background sync queue featuring atomic non-destructive polling to prevent race conditions during rapid data entry.
-* 🔢 **Clinical Math Integrity:** All telemetry ingest points feature strict NaN-prevention safeguards to ensure bad data (empty inputs, missing decimals) never pollutes the FHIR payloads or breaks clinical scoring algorithms.
-* 📶 **Web Bluetooth API Interoperability:** Features a production-grade Web Bluetooth GATT client that actively pairs with external smart blood pressure cuffs. It parses raw IEEE 11073 SFloat byte buffers to extract Systolic, Diastolic, and Heart Rate values, auto-filling the UI in real-time.
+### 2.1 Gestosis Risk Scoring Engine
+A standardized mathematical risk scoring model calculates cumulative obstetric risk using static baseline factors and dynamic telemetry:
+- **Baseline Clinical Factors:** Maternal age, parity, BMI, preexisting chronic hypertension, renal disease, family history of preeclampsia, and multiple gestations.
+- **Dynamic Biomarkers:** Systolic & Diastolic blood pressure, Mean Arterial Pressure (MAP), proteinuria readings (dipstick), random/fasting blood glucose, and clinical symptoms (persistent headaches, visual disturbances, epigastric pain).
+- **RAG Triage Classification:** Computes an automated risk band:
+  - **Low Risk (Green):** Standard antenatal schedule.
+  - **Moderate Risk (Amber):** Increased monitoring frequency; recommendation for calcium supplementation and low-dose aspirin prophylaxis.
+  - **High / Critical Risk (Red):** Immediate obstetric referral advisory with persistent visual alerts.
 
-## 🛠️ Tech Stack
+### 2.2 Physiological Vitals Tracking
+- **Blood Pressure & MAP:** Capture systolic, diastolic, and maternal pulse with contextual indicators (measurement arm, patient posture). Mean Arterial Pressure is calculated dynamically:
+  $$\text{MAP} = \text{Diastolic} + \frac{\text{Systolic} - \text{Diastolic}}{3}$$
+- **Vitals Dashboard:** Comprehensive logging for blood glucose (fasting/postprandial), urine protein, maternal body weight, temperature, and sleep metrics.
+- **Medical History & Profile:** Recording of prior pregnancies, preterm births, chronic comorbidities, and gestational age tracking via Last Menstrual Period (LMP) and automated Estimated Due Date (EDD) derivation using Naegele's rule ($+280\text{ days}$).
 
-* **Core:** Vanilla TypeScript & ES Modules (No heavy frameworks like React or Vue).
-* **Backend:** Firebase Firestore (`gg-doctor-dashboard` project) with offline-first sync engine.
-* **Data Standard:** HL7 FHIR R4 Observations with strict LOINC coding for clinical interoperability.
-* **Styling:** Custom Vanilla CSS featuring Skeuomorphic shadows, Glassmorphism, and a strict CSS Container constraint for mobile-first rendering.
-* **Build System:** Vite ⚡ for lightning-fast HMR and optimized bundling.
-* **Data Persistence:** Dual-layer — local storage for instant local reads + Firebase Firestore for cloud backup and sync.
-* **Android Wrapper:** Native Android WebView app (Kotlin + Gradle).
-* **Assets:** Lucide Icons & Lexend Typography.
+### 2.3 Context-Aware Voice AI (Gemini 1.5 & WHO Protocols)
+- **WHO Guidelines Engine:** Built-in AI assistant trained on World Health Organization antenatal guidelines and evidence-based obstetric protocols.
+- **Dynamic Context Injection:** Safely serializes local patient telemetry (gestational week, latest blood pressure, risk status) into the model's system prompt to generate personalized clinical context.
+- **Hands-Free Operation:** Integrated Web Speech API for voice queries with text-to-speech talkback.
 
-## 📱 Download
+---
 
-You can download the pre-built Android APK directly:
+## 3. Architecture & Security Controls
 
-| File | Size | Description |
-|------|------|-------------|
-| [`GestationGuardian.apk`](GestationGuardian.apk) | ~17.3 MB | Fresh Debug build with Safe Area insets & auth hardening |
+```mermaid
+flowchart TD
+    subgraph Client Layer [Android Mobile SPA]
+        A["Patient Inputs & BLE Cuffs"] --> B["Local Store (IndexedDB / localStorage)"]
+        B --> C["FHIR R4 Serializer (LOINC / UCUM)"]
+        C --> D["Atomic Sync Engine"]
+    end
 
-### Latest Release Fixes (v1.1.0)
-* 🖼️ **Bundled APK Background Images:** Converted absolute path references to relative paths (`./onboarding-bg.png`) with defense-in-depth URL normalization in `loadPageTemplate`, ensuring illustrations render in native Android `file:///android_asset/` WebViews as well as Vite dev.
-* 📱 **Edge-to-Edge & Safe Area Inset Handling:** Integrated native Android `WindowInsetsCompat.Type.systemBars() or displayCutout()` listener in `MainActivity.kt` plus CSS safe area variables (`--safe-top`, `--safe-bottom`), completely eliminating system status bar, notch, and navigation bar overlaps on modern Android and iOS devices.
-* 🛡️ **Hardened Authentication Security:** Replaced granular error messages with a single generic error message (`"Problem with email or password, please check again."`) to completely prevent account enumeration attacks.
+    subgraph Transport & Microservices
+        D -->|Encrypted HTTPS / WSS| E["Firebase Firestore (gg-doctor-dashboard)"]
+        D -->|Internal Sync Token| F["Local Sync Server (Express + SQLite)"]
+    end
 
-> **Note:** You may need to enable "Install from Unknown Sources" on your Android device.
+    subgraph Clinical Layer [Obstetric Web Dashboard]
+        E --> G["Attending Obstetrician Portal"]
+        F --> G
+        G --> H["Cohort Vitals & Risk Heatmap"]
+    end
+```
 
-## 🚀 Getting Started
+### 3.1 Data Binding & State Hydration (`#/signup` $\rightarrow$ `#/profile`)
+Registration and profile views maintain strict state contract fidelity:
+- When a patient completes onboarding on `#/signup`, all submitted attributes (`name`, `email`, `phone`, `dob`, `age`, `bloodGroup`, `gestationalWeeks`, `edd`) are committed atomically to `Store.saveProfile()`.
+- The profile screen (`#/profile`) dynamically hydrates all inputs and header elements via programmatic property assignment (`.value = ...`) and HTML attribute reflection (`.setAttribute('value', ...)`), ensuring zero fallback to static mock defaults.
 
-### Prerequisites
-* Node.js (v18+)
-* Android Studio (for APK builds only)
+### 3.2 Cryptographic Security (`MOB-006` Compliance)
+- **Zero Plaintext Password Storage:** User passwords undergo salted SHA-256 hashing (`crypto.subtle.digest`) prior to persistence in `Store` or `localStorage`. Raw credentials are never stored in memory or rendered in DOM attributes.
+- **Doctor Pairing PIN (`GG-XXXX`):** Provider-patient EHR linkages use a cryptographically random, ephemeral 4-character alphanumeric PIN prefixed with `GG-` (`GG-XXXX`, 7 characters total). Patients share this PIN with their obstetrician to authorize clinical data streaming without exposing personal identifiers.
+- **Firebase Anonymous Authentication:** On launch, clients silently authenticate via Firebase Anonymous Auth, binding all remote telemetry records to an isolated security UID (`users/{uid}/telemetry`) guarded by Firestore Security Rules.
 
-### Installation
+### 3.3 HL7 FHIR Interoperability Standard
+All physiological observations are mapped to HL7 FHIR R4 standard structures before cloud synchronization:
+- **Blood Pressure Panel:** LOINC `85354-9` (Systolic: LOINC `8480-6`, Diastolic: LOINC `8462-4`, unit `mm[Hg]`).
+- **Maternal Heart Rate:** LOINC `8867-4`, unit `/min`.
+- **Blood Glucose:** LOINC `15074-8`, unit `mg/dL`.
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/glitchgeeks01-droid/Gestation-Guardian-App.git
-   cd Gestation-Guardian-App
-   ```
+### 3.4 Responsive Viewport & Edge-to-Edge Layout (`APK-002`)
+- **Android Display Cutout / Notch Inset Padding:** Full compatibility with Android 14/15 edge-to-edge rendering via dynamic `--safe-top` and `--safe-bottom` window insets.
+- **Top-Flush Desktop Architecture:** Layout containers apply top-flush flex alignment (`align-items: flex-start; justify-content: flex-start;`) combined with `margin: 0 auto;` on the mobile container (`#app-root`), eliminating the Flexbox negative-Y clipping defect on desktop monitors while preserving mobile aesthetics.
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+---
 
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-   > The app will launch at `http://localhost:5173/`. 
-   > *Note: If viewing on a desktop browser, the UI will automatically constrain itself to a mobile-sized column to preserve the native UX.*
+## 4. Technical Stack
 
-### Firebase Configuration
+| Domain | Technologies & Libraries |
+| :--- | :--- |
+| **Mobile Core** | Vanilla TypeScript (ES2022 Modules), Vite 8.1.4, Lucide Icons, Lexend Typography |
+| **Android Shell** | Kotlin, Android SDK (API 34), Android WebView, AndroidX WindowInsetsCompat, Gradle 8.2 |
+| **Cloud Datastore** | Google Cloud Platform, Firebase Firestore, Firebase Anonymous Authentication |
+| **Local Sync Bridge**| Node.js, Express, SQLite3 (WAL Mode), UUID |
+| **Quality & E2E** | Playwright Test Suite (Chromium headless/headed), TypeScript Compiler (`tsc`), ESLint |
+| **Clinical Protocols**| HL7 FHIR R4, LOINC Standard Coding, UCUM Units of Measure, WHO Guidelines |
 
-The app is pre-configured to connect to the shared `gg-doctor-dashboard` Firebase project. To connect to your own project instead:
+---
 
-1. Create a project at [Firebase Console](https://console.firebase.google.com/).
-2. Enable **Firestore Database** in your project.
-3. Update your Firebase credentials in `src/ts/store/firebase.ts`.
+## 5. Development & Build Instructions
 
-### Building for Production
+### 5.1 Prerequisites
+- **Node.js:** v18.0.0 or higher (v20+ recommended)
+- **npm:** v9.0.0 or higher
+- **Android SDK:** API Level 34 (Android 14) with Build-Tools 34.0.0
+- **Java Development Kit (JDK):** JDK 17 (recommended for Gradle 8)
 
-**Web assets (for Android WebView):**
+### 5.2 Mobile Application (Web SPA)
 ```bash
+# Clone the repository
+git clone https://github.com/glitchgeeks01-droid/Gestation-Guardian.git
+cd "Gestation Guardian"
+
+# Install dependencies
+npm install
+
+# Start local Vite development server
+npm run dev
+
+# Run TypeScript type safety verification
+npx tsc --noEmit
+
+# Compile production bundle for Android WebView
 npm run build
 ```
-The optimized files will be output to the Android `assets/www` directory.
+*Compiled assets are automatically output to `android-app/app/src/main/assets/www`.*
 
-**Android APK:**
+### 5.3 Automated Playwright Testing
 ```bash
+# Run all automated Playwright test specifications
+npx playwright test
+
+# Run specific functional suites
+npx playwright test tests/signup-profile.spec.js        # Signup to Profile data binding & MOB-006 check
+npx playwright test tests/header-desktop-layout.spec.js # Desktop layout & clipping prevention check
+npx playwright test tests/signin.spec.js                # Authentication security & generic errors
+npx playwright test tests/voice-ai.spec.js              # Voice AI talkback & triage alerts
+```
+
+### 5.4 Android APK Bundling
+```bash
+# Navigate to the Android Gradle project
 cd android-app
-gradlew assembleDebug
+
+# Windows PowerShell: Compile debug APK
+.\gradlew.bat assembleDebug
+
+# Linux / macOS: Compile debug APK
+./gradlew assembleDebug
 ```
-The APK will be generated at `android-app/app/build/outputs/apk/debug/app-debug.apk`.
-
-## 🏗️ Architecture
-
-```
-src/
-├── ts/
-│   ├── store/
-│   │   ├── store.ts        # Offline-first data layer + FHIR LOINC transformation engine
-│   │   └── firebase.ts     # Firebase Firestore client & helpers
-│   ├── views/              # SPA view controllers (auth, dashboard, assessment, vitals, etc.)
-│   ├── core/
-│   │   ├── scoring.ts      # Gestosis risk scoring engine (RAG triage)
-│   │   └── types.ts        # TypeScript interfaces
-│   ├── components/         # Reusable UI components
-│   └── services/           # AI chatbot, Bluetooth stubs
-├── pages/                  # HTML templates loaded dynamically via hash routing
-└── index.html              # SPA entry point
-```
-
-### Data Flow
-```
-User Input ➔ Local Storage (instant) ➔ FHIR LOINC Transform ➔ Sync Queue ➔ Firebase Firestore
-                                                                               │
-                                                               users/{patientId}/telemetry
-                                                                               │
-                                                               Doctor Dashboard (real-time)
-```
-
-The app uses a **write-local-first, sync-later** pattern. All health data (blood pressure, vitals, glucose, urine, kick counts, contractions, symptoms) is persisted locally, transformed into HL7 FHIR Observations, and queued for Firebase sync when online. The doctor dashboard receives these updates in real-time via Firestore `onSnapshot` listeners.
-
-## 🤝 Clinical Integration & Three-Way Handshake Flow
-
-1. **Patient Registration & PIN Generation:** Patient signs up in the mobile app ➔ a unique Clinical PIN (`GG-XXXX`) is generated and securely synced to their Firestore document with `lastActiveAt` session tracking.
-2. **Provider Sharing:** Patient navigates to **Profile** ➔ copies their Clinical PIN and shares it with their healthcare provider.
-3. **Multi-Session Candidate Resolution (SYN):** Doctor enters the Clinical PIN in the **GG Doctor Dashboard** ➔ **Connect Patient** dialog. The system queries all candidate session UIDs for that PIN (supporting device reinstalls and session transitions) and dispatches pending pairing requests to all associated device sessions.
-4. **Interactive In-App Prompt (SYN-ACK):** The patient's mobile app immediately detects the incoming connection request via a real-time Firestore listener and surfaces a prominent, modal confirmation dialog (`UI.showConfirm`):
-   > *"Dr. Julian Vance wants to connect with your Gestation Guardian profile. Allow access?"*
-   > **[Deny]** &nbsp;&nbsp;&nbsp; **[Approve]**
-5. **Patient Consent & State Persistence (ACK):** 
-   - Tapping **Approve** updates the pairing request to `approved` and permanently stamps the patient's own user record with `connected: true` and `connectedAt`.
-   - The Doctor Dashboard detects the approval in real-time, deletes lingering pending requests, marks the patient as connected, and seamlessly transitions to the active telemetry view.
-   - Unconnected patients are never listed prematurely on the clinical dashboard until explicit consent is granted.
-
-## 🔒 Privacy, Security & Hardening Updates
-
-* **Three-Way Handshake & In-App Modal:** Direct PIN access has been replaced by a cryptographic Three-Way Handshake State Machine (`pairing_requests`) with real-time in-app approval modals (`UI.showConfirm`), preventing unauthorized provider telemetry access.
-* **Multi-Session UID Resiliency:** Supports seamless device reinstalls and account restorations without breaking provider pairing or telemetry history.
-* **Strict Content Security Policy (CSP):** All inline JavaScript event handlers (`onclick`, `onsubmit`, etc.) have been completely eradicated from HTML templates. Event management is centralized through declarative `data-action` delegation, dramatically reducing XSS vulnerabilities.
-* **Modular Refactor:** The legacy `script.js` monolith was decommissioned, and the application was refactored into a strict TypeScript module system (`store`, `views`, `services`, `core`).
-* **Icon-Placeholder Collision Hardening:** Overcame CSS specificity collisions between `.input-group input` and `.input-auth` with a high-specificity `padding: 0 48px 0 54px !important;` rule. This guarantees 16px clearance between relative icons and placeholder text, completely eliminating visual overlap.
-* **Layout Isolation & Clean Spacing:** 
-  * Enforced `.page:not(.active) { display: none !important; }` and `#app-root { overflow: hidden; }` to eliminate phantom white blocks and overlapping sheets on the dashboard.
-  * Added 24px tab switcher margins, standardized `.label-row` indentation, and added frosted glass contrast backings to footer navigation.
-  * Applied `box-sizing: border-box !important` across all auth cards to prevent input pill overflow past rounded boundaries.
-* **Account Recovery & Password Reset:** Dedicated glassmorphic Forgot Password recovery view (`#/forgot-password`) supporting multi-step security verification, password confirmation matching, and offline-first credential updating.
-* **Authentication Hardening & Validation:** Enforced strict password and email matching on login. Fixed signup logic to securely persist password credentials into user profiles, and added clinical date boundaries for maternal age (12–65) and LMP duration (≤ 42 weeks).
-* **Instant Gestational EDD Engine:** Dynamic change and input event listeners bind to the LMP datepicker, executing Naegele's rule (+280 days) immediately to display the Estimated Due Date in real-time.
-* **Race-Condition-Free Sync Engine:** The offline SyncEngine utilizes an atomic, non-destructive polling flag (`processing`), guaranteeing zero data loss during high-frequency Bluetooth telemetry ingestions.
-* **Strict HL7 FHIR Typing:** Telemetry mappers prevent data loss by encoding Blood Pressure Panels (LOINC `85354-9`) with nested Heart Rate (`8867-4`) components, ensuring the Doctor Dashboard graphs plot accurately.
+The compiled binary will be generated at:
+`android-app/app/build/outputs/apk/debug/app-debug.apk`
 
 ---
-<div align="center">
-  <b>Monitor. Protect. Nurture.</b>
-</div>
+
+## 6. Project Artifacts & Release Files
+
+- **Fresh Android APK:** [`./GestationGuardian.apk`](./GestationGuardian.apk)
+- **Comprehensive Project Architecture Report:** [`./Gestation_Guardian_Architecture_Report.md`](./Gestation_Guardian_Architecture_Report.md)
+- **Signup $\rightarrow$ Profile Verification Record:** [`signup_to_profile_verification.md`](file:///C:/Users/PHK/.gemini/antigravity/brain/8ff40752-94aa-4d39-abb9-088158a8ef4b/signup_to_profile_verification.md)
+- **Desktop Flexbox Header Layout Plan:** [`desktop_header_clipping_plan.md`](file:///C:/Users/PHK/.gemini/antigravity/brain/8ff40752-94aa-4d39-abb9-088158a8ef4b/desktop_header_clipping_plan.md)
+
+---
+
+## 7. License & Compliance Notice
+
+This platform is developed for maternal health telemonitoring in alignment with international obstetric guidelines. All patient telemetry handling adheres to HIPAA $\S 164.312$ technical safeguards (encryption at rest and in transit, zero-knowledge pairing identifiers, and salted hashing protocols).

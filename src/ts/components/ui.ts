@@ -210,7 +210,7 @@ export const UI = {
         });
     },
 
-    executeAction(action: string, actionEl: HTMLElement) {
+    async executeAction(action: string, actionEl: HTMLElement) {
         switch (action) {
                 case 'log-vital':
                     // Trigger FAB log button click
@@ -266,21 +266,12 @@ export const UI = {
                 case 'back-link':
                     if (window['App'] && typeof window['App'].goBack === 'function') window['App'].goBack();
                     break;
-                case 'toggle-contraction':
-                    if (window['Kicks'] && typeof window['Kicks'].toggleContraction === 'function') window['Kicks'].toggleContraction();
-                    break;
                 case 'open-ai-chat':
                     if (window['AIBot'] && typeof window['AIBot'].openChat === 'function') window['AIBot'].openChat();
                     break;
                 case 'log-symptom':
                     const symptom = actionEl.getAttribute('data-symptom');
                     if (symptom && window['Vitals'] && typeof window['Vitals'].logSymptom === 'function') window['Vitals'].logSymptom(symptom, actionEl);
-                    break;
-                case 'log-kick':
-                    if (window['Kicks'] && typeof window['Kicks'].logKick === 'function') window['Kicks'].logKick();
-                    break;
-                case 'toggle-kick-session':
-                    if (window['Kicks'] && typeof window['Kicks'].toggleSession === 'function') window['Kicks'].toggleSession();
                     break;
                 case 'save-bp':
                     if (window['Vitals'] && typeof window['Vitals'].saveBP === 'function') window['Vitals'].saveBP();
@@ -304,7 +295,11 @@ export const UI = {
                     }
                     break;
                 case 'save-profile':
-                    UI.showToast('Profile Saved');
+                    if (window['Profile'] && typeof window['Profile'].save === 'function') {
+                        await window['Profile'].save();
+                    } else {
+                        UI.showToast('Profile Saved');
+                    }
                     if (window['App'] && typeof window['App'].goBack === 'function') window['App'].goBack();
                     break;
                 case 'save-reminder':

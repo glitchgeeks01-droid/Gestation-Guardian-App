@@ -15,7 +15,18 @@
     <!-- Inline Critical CSS for Splash Screen (Instant LCP) -->
     <style>
         /* CRITICAL CSS ONLY */
-        body { margin: 0; font-family: sans-serif; background-color: #6DA171; }
+        body { 
+            margin: 0; 
+            font-family: sans-serif; 
+            background-color: #6DA171; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-height: 100vh;
+            min-height: 100dvh;
+            box-sizing: border-box;
+        }
         #splash-screen {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #6DA171;
@@ -34,15 +45,23 @@
             position: relative; 
             background: #FAF9F6;
             box-shadow: 0 0 40px rgba(0,0,0,0.1); /* Desktop shadow */
+            box-sizing: border-box;
         }
         #ui-container {
             position: fixed; top: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 430px; height: 100dvh;
             pointer-events: none; z-index: 1000;
+            box-sizing: border-box;
         }
         #ui-container > * { pointer-events: auto; }
         @media (min-width: 768px) {
-            body { background: #E8EAE6; } /* Darker background on desktop behind the app */
+            body { 
+                background: #E8EAE6; 
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
         }
     </style>
 
@@ -118,14 +137,6 @@
                     <a href="#/log-bp" class="sheet-btn">
                         <div class="icon-wrapper bg-green-tint"><i data-lucide="heart-pulse"></i></div>
                         <span>Blood Pressure</span>
-                    </a>
-                    <a href="#/kick-counter" class="sheet-btn">
-                        <div class="icon-wrapper bg-green-tint"><i data-lucide="baby"></i></div>
-                        <span>Kick Counter</span>
-                    </a>
-                    <a href="#/contractions" class="sheet-btn">
-                        <div class="icon-wrapper bg-green-tint"><i data-lucide="timer"></i></div>
-                        <span>Contractions</span>
                     </a>
                     <a href="#/log-vitals" class="sheet-btn">
                         <div class="icon-wrapper bg-green-tint"><i data-lucide="activity"></i></div>

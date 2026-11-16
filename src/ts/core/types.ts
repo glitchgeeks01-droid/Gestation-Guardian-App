@@ -24,13 +24,3 @@ export interface GlucoseLog extends VitalLog {
 export interface UrineLog extends VitalLog {
   protein: string;
 }
-
-export interface KickSession extends VitalLog {
-  count: number;
-  duration: number;
-}
-
-export interface ContractionSession extends VitalLog {
-  duration: number;
-  frequency: number;
-}

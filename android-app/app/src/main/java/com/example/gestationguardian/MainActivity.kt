@@ -43,17 +43,31 @@ class MainActivity : ComponentActivity() {
             settings.apply {
                 javaScriptEnabled = true
                 domStorageEnabled = true
-                allowFileAccess = true
-                allowFileAccessFromFileURLs = true
-                allowUniversalAccessFromFileURLs = true
+                allowFileAccess = false
+                allowFileAccessFromFileURLs = false
+                allowUniversalAccessFromFileURLs = false
+                allowContentAccess = true
                 mediaPlaybackRequiresUserGesture = false
-                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
             }
             webViewClient = WebViewClient()
             webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest?) {
-                    // Grant microphone and media permissions directly to the WebView app
-                    request?.grant(request.resources)
+                    if (request == null) return
+                    val origin = request.origin?.toString() ?: ""
+                    val isOriginAllowed = origin.isEmpty() ||
+                        origin.startsWith("file://") ||
+                        origin.startsWith("https://localhost") ||
+                        origin.startsWith("http://localhost") ||
+                        origin.startsWith("capacitor://localhost")
+
+                    val audioRequested = request.resources?.contains(PermissionRequest.RESOURCE_AUDIO_CAPTURE) == true
+
+                    if (isOriginAllowed && audioRequested) {
+                        request.grant(arrayOf(PermissionRequest.RESOURCE_AUDIO_CAPTURE))
+                    } else {
+                        request.deny()
+                    }
                 }
             }
             

@@ -5,6 +5,8 @@ const config = require('../config/db');
 const db = new sqlite3.Database(config.dbPath, (err) => {
     if (err) console.error('Error opening database', err);
     else {
+        db.run('PRAGMA journal_mode = WAL;');
+        db.run('PRAGMA busy_timeout = 5000;');
         db.run(`
             CREATE TABLE IF NOT EXISTS UserCollections (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
