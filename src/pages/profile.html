@@ -104,13 +104,38 @@
         </div>
       </div>
 
+      <!-- System Preferences & Privacy Navigation -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 8px; padding: 12px 18px;">
+        <a href="#/settings" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading); border-bottom: 1px solid var(--clr-divider);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="settings" style="width: 18px; height: 18px; color: var(--clr-primary);"></i>
+            <span style="font-size: 14px; font-weight: 600;">Settings & Controls</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+        <a href="#/privacy" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading); border-bottom: 1px solid var(--clr-divider);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="shield" style="width: 18px; height: 18px; color: var(--clr-primary);"></i>
+            <span style="font-size: 14px; font-weight: 600;">Privacy Centre & Consent</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+        <a href="#/documents" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--clr-primary);"></i>
+            <span style="font-size: 14px; font-weight: 600;">Diagnostic Scans & Reports</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+      </div>
+
       <!-- Action Buttons -->
       <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
         <button class="btn btn-primary" data-action="save-profile" aria-label="Save Profile">Save Changes</button>
-        <button class="btn btn-secondary" data-action="toast-msg" data-msg="" aria-label="Toast ">
+        <a href="#/privacy" class="btn btn-secondary" style="text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;">
           <i data-lucide="download" style="width: 18px; height: 18px;"></i> Export Health Data (JSON)
-        </button>
-        <button class="btn btn-text" data-action="nav-onboarding" aria-label="Go to onboarding" style="color: var(--clr-danger); margin-top: 8px;">
+        </a>
+        <button class="btn btn-text" data-action="sign-out" aria-label="Sign Out" style="color: var(--clr-danger); margin-top: 8px;">
           <i data-lucide="log-out" style="width: 18px; height: 18px;"></i> Sign Out
         </button>
       </div>

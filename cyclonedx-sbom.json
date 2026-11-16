@@ -1,0 +1,193 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:563fa62f-02f1-48a5-a7b9-2e18f70f1966",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-16T17:46:45.671Z",
+    "tools": [
+      {
+        "vendor": "Gestation Guardian SecOps",
+        "name": "CycloneDX-SBOM-Engine",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "gestation-guardian",
+      "version": "1.0.0",
+      "description": "Security-First Maternal Health & Telemonitoring Platform"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "firebase",
+      "version": "12.17.1",
+      "purl": "pkg:npm/firebase@12.17.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "87c5853a1c7235ab66ff52319070c7b7a1fcaea14a1ef423356caeb43cc8c11a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lucide",
+      "version": "1.48.0",
+      "purl": "pkg:npm/lucide@1.48.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ca3a8adc7795858cfaf196b99ea95da8ec8e69750d2a26033c52e0e6c4edd80"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@eslint/js",
+      "version": "10.0.1",
+      "purl": "pkg:npm/@eslint/js@10.0.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4eb560c0557e5532edf8ff698ef1c29afb781bf54052a841ed3c1013ca19a652"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@playwright/test",
+      "version": "1.44.0",
+      "purl": "pkg:npm/@playwright/test@1.44.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ddb3de371ba8fcd6ab9549ecf31ec53ecad3b1bed52cb273bdb2ade7d3573f6d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "@vitejs/plugin-legacy",
+      "version": "8.2.0",
+      "purl": "pkg:npm/@vitejs/plugin-legacy@8.2.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ff5605d058126b9be2012ac99610f2eaa03487c19cb696755dacbae821da2863"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "eslint",
+      "version": "10.11.0",
+      "purl": "pkg:npm/eslint@10.11.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7e4603bed5a16c86c86e5b6dea894b5a2662085efd41c933065c5ced517b3dc5"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "terser",
+      "version": "5.49.0",
+      "purl": "pkg:npm/terser@5.49.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "01351d43a4ca16bd66e7841abe77f5fe0bf08dced55f03d78a70f33641a8ae77"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "7.0.2",
+      "purl": "pkg:npm/typescript@7.0.2",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7cefd323dc70f1eadc11418522ea36cdd7597e200001b4cf981cc017b029d9d"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "typescript-eslint",
+      "version": "8.71.0",
+      "purl": "pkg:npm/typescript-eslint@8.71.0",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1c8e06c8b6fddb4e94084fb04f0841e0726bc34c77586bfc7005b5ae864d9517"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "vite",
+      "version": "8.1.4",
+      "purl": "pkg:npm/vite@8.1.4",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9eff96937e948a9a8cdf3a7c6d861505d64afea0b2176171cb3cce4712934ba3"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "cors",
+      "version": "2.8.6",
+      "purl": "pkg:npm/cors@2.8.6",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c7435d8f709189a6dd718e06182e43bf84f82abdfd62364b6da9884fdac0dd18"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "express",
+      "version": "5.2.1",
+      "purl": "pkg:npm/express@5.2.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "853506c29d44b710e3fdd837e1d337b744ada1b6e49f05f2597c08a5ba9c1b5a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "sqlite3",
+      "version": "6.0.1",
+      "purl": "pkg:npm/sqlite3@6.0.1",
+      "scope": "required",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ed9159d2b5f30f19bca5e17cc4f8fbb5637e48d09e16ba1bfd55f865f581da5d"
+        }
+      ]
+    }
+  ]
+}

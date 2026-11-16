@@ -560,3 +560,16 @@
 
 .toast.error { border-left: 4px solid var(--clr-danger); }
 .toast.success { border-left: 4px solid var(--clr-primary); }
+
+/* Discreet Mode (F9, S9) */
+body.discreet-mode #splash-screen h1::after {
+  content: 'Daily Journal';
+  visibility: visible;
+}
+body.discreet-mode #dash-trimester-label,
+body.discreet-mode #dash-week,
+body.discreet-mode #dash-baby-size,
+body.discreet-mode #profile-gestation-week {
+  display: none !important;
+}
+

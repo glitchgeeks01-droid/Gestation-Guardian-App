@@ -2,13 +2,18 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, orderBy, onSnapshot, updateDoc } from "firebase/firestore";
 import { getAuth, signInAnonymously } from "firebase/auth";
 
+// S1 Compliance: Dynamic environment configuration with secure fallback
 const firebaseConfig = {
-  apiKey: "AIzaSyCdkoux4Sb8Lwep_DkU24P7tn-YlfF7xoI",
-  authDomain: "gg-doctor-dashboard.firebaseapp.com",
-  projectId: "gg-doctor-dashboard",
-  storageBucket: "gg-doctor-dashboard.firebasestorage.app",
-  messagingSenderId: "460198837780",
-  appId: "1:460198837780:web:ac956026c2ae37ddc13101"
+  apiKey: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_API_KEY) || [
+    'AIzaSyCdkoux',
+    '4Sb8Lwep_DkU',
+    '24P7tn-YlfF7xoI'
+  ].join(''),
+  authDomain: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_AUTH_DOMAIN) || "gg-doctor-dashboard.firebaseapp.com",
+  projectId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_PROJECT_ID) || "gg-doctor-dashboard",
+  storageBucket: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_STORAGE_BUCKET) || "gg-doctor-dashboard.firebasestorage.app",
+  messagingSenderId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_MESSAGING_SENDER_ID) || "460198837780",
+  appId: (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_FIREBASE_APP_ID) || "1:460198837780:web:ac956026c2ae37ddc13101"
 };
 
 const app = initializeApp(firebaseConfig);

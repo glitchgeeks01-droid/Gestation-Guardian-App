@@ -1,0 +1,63 @@
+name: gestation-guardian-infra
+
+services:
+  # ============================================================================
+  # PostgreSQL 16 Database
+  # Hardened relational storage for profiles, audit logs, and encrypted records
+  # ============================================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: gestation-guardian-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gestation_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gestation_secure_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-gestation_guardian}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-gestation_user} -d $${POSTGRES_DB:-gestation_guardian}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - gestation-network
+
+  # ============================================================================
+  # Local KMS & S3 (LocalStack)
+  # Emulates AWS KMS for envelope encryption (S14) & S3 document storage (S17)
+  # ============================================================================
+  localstack:
+    image: localstack/localstack:3.4
+    container_name: gestation-guardian-kms
+    restart: unless-stopped
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=kms,s3
+      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+      - PERSISTENCE=1
+    volumes:
+      - localstack_data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - gestation-network
+
+volumes:
+  postgres_data:
+    driver: local
+  localstack_data:
+    driver: local
+
+networks:
+  gestation-network:
+    driver: bridge

@@ -24,6 +24,12 @@ import { Spiderweb } from '../core/spiderweb';
 import { listenForConnectionRequests, respondToConnectionRequest, auth as firebaseAuth } from '../store/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Notifications } from './notifications';
+import { ConsentView } from './consent';
+import { DocumentsView } from './documents';
+import { WarningSignsView } from './warning-signs';
+import { PrivacyView } from './privacy';
+import { SettingsView } from './settings';
+import { SecureStore } from '../core/secure_store';
 
 // Expose modules to global scope for inline HTML event handlers
 window.Auth = Auth;
@@ -41,6 +47,12 @@ window.MedicalHistory = MedicalHistory;
 window.Profile = Profile;
 window.Spiderweb = Spiderweb;
 window.Notifications = Notifications;
+window.ConsentView = ConsentView;
+window.DocumentsView = DocumentsView;
+window.WarningSignsView = WarningSignsView;
+window.PrivacyView = PrivacyView;
+window.SettingsView = SettingsView;
+window.SecureStore = SecureStore;
 
 // js/app.js
 
@@ -277,7 +289,12 @@ export const App = {
                 'forgot-password': 'forgot-password-body',
                 'reminders': 'reminders-body',
                 'bluetooth': 'bluetooth-body',
-                'onboarding': 'onboarding-body'
+                'onboarding': 'onboarding-body',
+                'consent': 'consent-body',
+                'documents': 'documents-body',
+                'warning-signs': 'warning-signs-body',
+                'privacy': 'privacy-body',
+                'settings': 'settings-body'
             };
             if (r && r.includes('-risk-score')) {
                 return r.replace('-risk-score', '-body');
@@ -354,6 +371,21 @@ export const App = {
                 break;
             case 'risk-assessment':
                 if (Assessment) Assessment.init();
+                break;
+            case 'consent':
+                if (ConsentView) await ConsentView.init();
+                break;
+            case 'documents':
+                if (DocumentsView) await DocumentsView.init();
+                break;
+            case 'warning-signs':
+                if (WarningSignsView) WarningSignsView.init();
+                break;
+            case 'privacy':
+                if (PrivacyView) await PrivacyView.init();
+                break;
+            case 'settings':
+                if (SettingsView) await SettingsView.init();
                 break;
         }
         

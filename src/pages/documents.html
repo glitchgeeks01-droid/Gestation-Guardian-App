@@ -1,0 +1,79 @@
+<!-- pages/documents.html (F6, S17) -->
+<div id="page-documents" class="page" style="padding-bottom: 100px;">
+    <!-- Top App Bar -->
+    <header class="glass-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h1 style="font-size: 20px; color: var(--clr-dark-green);">Diagnostic Scans & Reports</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <div style="padding: 96px 24px 24px; max-width: 512px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+
+      <!-- Upload Header Card -->
+      <div class="card-info" style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; z-index: 1;">
+          <span style="background: var(--clr-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">ENCRYPTED VAULT</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--clr-dark-green);">AES-256-GCM (S17)</span>
+        </div>
+        <h2 style="font-size: 20px; color: var(--clr-text-heading); font-weight: 700; z-index: 1;">Upload Ultrasound & Lab Scans</h2>
+        <p style="font-size: 13px; color: var(--clr-text-muted); line-height: 1.5; z-index: 1;">
+          Upload clinical lab results, anomaly scans, and fetal Doppler reports. All files are client-side validated and encrypted at rest.
+        </p>
+        <i data-lucide="file-text" class="card-info-bg-icon"></i>
+      </div>
+
+      <!-- Upload Dropzone / Picker -->
+      <div class="card-white" style="border: 2px dashed var(--clr-primary); background: rgba(109, 161, 113, 0.04); text-align: center; padding: 28px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer;" id="document-dropzone">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: var(--clr-green-10); display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+          <i data-lucide="upload-cloud" style="width: 28px; height: 28px;"></i>
+        </div>
+        <div>
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--clr-text-heading); margin-bottom: 4px;">Choose file or drag & drop</h3>
+          <p style="font-size: 12px; color: var(--clr-text-muted); margin: 0;">PDF, PNG, or JPEG (Max 10 MB)</p>
+        </div>
+        <input type="file" id="document-file-input" accept=".pdf,image/png,image/jpeg" style="display: none;">
+        <button type="button" class="btn btn-primary" id="btn-browse-files" style="padding: 10px 20px; font-size: 14px;">
+          <i data-lucide="paperclip" style="width: 16px; height: 16px;"></i> Browse Files
+        </button>
+      </div>
+
+      <!-- Upload Status / Validation Banner -->
+      <div id="upload-status-banner" style="display: none; padding: 12px 16px; border-radius: 12px; font-size: 13px; align-items: center; gap: 10px;"></div>
+
+      <!-- Document Metadata Selection (Category) -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 12px; padding: 18px;">
+        <label class="label" style="font-weight: 600;">Document Category</label>
+        <select id="doc-category-select" class="input-form">
+          <option value="Ultrasound Scan">Ultrasound / Anomaly Scan</option>
+          <option value="Blood Work / Lab Report">Blood Work / CBC / Glucose Challenge</option>
+          <option value="Urine Analysis">Urine Analysis / Proteinuria Report</option>
+          <option value="Cardiotocography (CTG)">Cardiotocography (CTG) / NST</option>
+          <option value="Doctor Prescription">Doctor Prescription / Clinical Note</option>
+        </select>
+
+        <label class="label" style="font-weight: 600;">Optional Title / Note</label>
+        <input type="text" id="doc-title-input" class="input-form" placeholder="e.g. 20-week Anomaly Scan">
+      </div>
+
+      <!-- Uploaded Documents List Section -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 13px; font-weight: 700; color: var(--clr-text-body-alt); letter-spacing: 0.5px;">SECURE VAULT DOCUMENTS (<span id="documents-count">0</span>)</h3>
+        </div>
+
+        <div id="documents-list-container" style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Empty State -->
+          <div id="documents-empty-state" class="card-white" style="text-align: center; padding: 32px 20px; color: var(--clr-text-muted);">
+            <i data-lucide="folder-lock" style="width: 40px; height: 40px; margin: 0 auto 12px; opacity: 0.5;"></i>
+            <p style="font-size: 14px; margin: 0;">No diagnostic reports uploaded yet.</p>
+            <p style="font-size: 12px; margin-top: 4px;">Upload scan results to share securely with your obstetrician.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>

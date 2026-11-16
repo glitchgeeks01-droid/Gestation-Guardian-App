@@ -286,6 +286,13 @@ export const UI = {
                 case 'nav-onboarding':
                     window.location.hash='#/onboarding';
                     break;
+                case 'sign-out':
+                    if (window['SecureStore']) {
+                        await window['SecureStore'].clearSecureStore();
+                    }
+                    UI.showToast('Signed out. Tokens and keys erased.', 'info');
+                    window.location.hash = '#/onboarding';
+                    break;
                 case 'toggle-modal':
                     const modalId = actionEl.getAttribute('data-modal');
                     const display = actionEl.getAttribute('data-display');

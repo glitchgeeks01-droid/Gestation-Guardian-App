@@ -1,0 +1,149 @@
+<!-- pages/settings.html (F10) -->
+<div id="page-settings" class="page" style="padding-bottom: 100px;">
+    <!-- Top App Bar -->
+    <header class="glass-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button data-action="back-link" aria-label="Go back" style="width: 24px; height: 24px; color: var(--clr-dark-green); background: none; border: none; padding: 0;">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h1 style="font-size: 20px; color: var(--clr-dark-green);">Settings</h1>
+      </div>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <div style="padding: 96px 24px 24px; max-width: 512px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+
+      <!-- Preferences Hero -->
+      <div class="card-info" style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; z-index: 1;">
+          <span style="background: var(--clr-primary); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">SYSTEM PREFERENCES</span>
+        </div>
+        <h2 style="font-size: 20px; color: var(--clr-text-heading); font-weight: 700; z-index: 1;">App Controls & Security</h2>
+        <p style="font-size: 13px; color: var(--clr-text-muted); line-height: 1.5; z-index: 1;">
+          Customize languages, biometric app-lock rules, quiet hours, and interface behaviors.
+        </p>
+        <i data-lucide="settings" class="card-info-bg-icon"></i>
+      </div>
+
+      <!-- Language Selector Section -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--clr-green-10); display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+            <i data-lucide="globe" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--clr-text-heading); margin: 0;">Language Preference</h3>
+            <p style="font-size: 12px; color: var(--clr-text-muted); margin: 2px 0 0;">Localization & voice AI dialect</p>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin: 0;">
+          <select id="settings-language-select" class="input-form" style="font-size: 14px; font-weight: 600;">
+            <option value="en">English (Default)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="es">Español (Spanish)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Notification Quiet Hours Schedule -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--clr-green-10); display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+              <i data-lucide="moon" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--clr-text-heading); margin: 0;">Quiet Hours Schedule</h3>
+              <p style="font-size: 12px; color: var(--clr-text-muted); margin: 2px 0 0;">Silence non-urgent alerts during sleep</p>
+            </div>
+          </div>
+
+          <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+            <input type="checkbox" id="settings-quiet-toggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--clr-primary); transition: .3s; border-radius: 24px;" id="quiet-slider">
+              <span style="position: absolute; content: ''; height: 18px; width: 18px; right: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;" id="quiet-thumb"></span>
+            </span>
+          </label>
+        </div>
+
+        <div id="quiet-hours-inputs" style="display: flex; gap: 12px; align-items: center;">
+          <div class="input-group" style="flex: 1; margin: 0;">
+            <label class="label" style="font-size: 11px; margin-bottom: 4px;">Start Time</label>
+            <input type="time" id="settings-quiet-start" class="input-form" value="22:00">
+          </div>
+          <div class="input-group" style="flex: 1; margin: 0;">
+            <label class="label" style="font-size: 11px; margin-bottom: 4px;">End Time</label>
+            <input type="time" id="settings-quiet-end" class="input-form" value="07:00">
+          </div>
+        </div>
+        <p style="font-size: 11px; color: var(--clr-text-muted); margin: 0;">
+          Note: WHO Critical Obstetric Alerts bypass quiet hours automatically for maternal safety.
+        </p>
+      </div>
+
+      <!-- Biometric Lock & Auto-Lock Timeout -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--clr-green-10); display: flex; justify-content: center; align-items: center; color: var(--clr-primary);">
+              <i data-lucide="fingerprint" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--clr-text-heading); margin: 0;">Biometric App Lock</h3>
+              <p style="font-size: 12px; color: var(--clr-text-muted); margin: 2px 0 0;">Require fingerprint / Face Unlock</p>
+            </div>
+          </div>
+
+          <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+            <input type="checkbox" id="settings-biometric-toggle" checked style="opacity: 0; width: 0; height: 0;">
+            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--clr-primary); transition: .3s; border-radius: 24px;" id="bio-slider">
+              <span style="position: absolute; content: ''; height: 18px; width: 18px; right: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;" id="bio-thumb"></span>
+            </span>
+          </label>
+        </div>
+
+        <div class="input-group" style="margin: 0;">
+          <label class="label" style="font-weight: 600;">Auto-Lock Timeout</label>
+          <select id="settings-autolock-select" class="input-form">
+            <option value="immediate">Immediate on background</option>
+            <option value="1" selected>After 1 minute</option>
+            <option value="5">After 5 minutes</option>
+            <option value="15">After 15 minutes</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Links Card -->
+      <div class="card-white" style="display: flex; flex-direction: column; gap: 8px; padding: 12px 18px;">
+        <a href="#/privacy" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading); border-bottom: 1px solid var(--clr-divider);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="shield" style="width: 18px; height: 18px; color: var(--clr-primary);"></i>
+            <span style="font-size: 14px; font-weight: 600;">Privacy Centre & Consent</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+        <a href="#/warning-signs" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading); border-bottom: 1px solid var(--clr-divider);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="alert-triangle" style="width: 18px; height: 18px; color: #DC2626;"></i>
+            <span style="font-size: 14px; font-weight: 600;">WHO Obstetric Warning Signs</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+        <a href="#/documents" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; text-decoration: none; color: var(--clr-text-heading);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--clr-primary);"></i>
+            <span style="font-size: 14px; font-weight: 600;">Diagnostic Scans & Reports</span>
+          </div>
+          <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--clr-text-muted);"></i>
+        </a>
+      </div>
+
+      <!-- Save Button -->
+      <button id="btn-save-settings" class="btn btn-primary" style="width: 100%; margin-top: 4px;">
+        <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+        Save Settings
+      </button>
+
+    </div>
+</div>

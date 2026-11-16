@@ -18,8 +18,8 @@
                 <i data-lucide="bell"></i>
                 <span id="notification-badge" style="display: none; justify-content: center; align-items: center; position: absolute; top: -4px; right: -4px; width: 14px; height: 14px; background: var(--clr-danger); border-radius: 50%; font-size: 9px; font-weight: bold; color: white;"></span>
             </a>
-            <a href="#" style="color: var(--clr-text-body-alt2);">
-                <i data-lucide="menu"></i>
+            <a href="#/settings" style="color: var(--clr-text-body-alt2);" aria-label="Settings">
+                <i data-lucide="settings"></i>
             </a>
         </div>
     </header>
@@ -145,6 +145,18 @@
                 </div>
                 <i data-lucide="chevron-right" style="color: var(--clr-text-muted);"></i>
             </a>
+
+            <!-- Quick Access: Obstetric Warning Signs & Document Vault -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                <a href="#/warning-signs" style="display: flex; align-items: center; gap: 10px; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 20px; padding: 14px 16px; text-decoration: none;">
+                    <i data-lucide="alert-triangle" style="color: #DC2626; width: 20px; height: 20px; flex-shrink: 0;"></i>
+                    <span style="font-size: 13px; font-weight: 700; color: #991B1B;">Warning Signs</span>
+                </a>
+                <a href="#/documents" style="display: flex; align-items: center; gap: 10px; background: var(--clr-bg-card); border-radius: 20px; padding: 14px 16px; text-decoration: none;">
+                    <i data-lucide="file-text" style="color: var(--clr-primary); width: 20px; height: 20px; flex-shrink: 0;"></i>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--clr-text-heading);">Scan Vault</span>
+                </a>
+            </div>
         </div>
 
         <!-- Quick Symptoms -->

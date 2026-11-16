@@ -6,6 +6,7 @@
 import { FirebaseDB, auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { hashPassword } from '../utils/crypto';
+import { SecureStore } from '../core/secure_store';
 
 export const Store = {
     // Keys matching the schema in the implementation plan
@@ -157,31 +158,13 @@ export const Store = {
     },
     // ----------------------------
 
-    // Base methods - Asynchronous
+    // Base methods - Asynchronous AES-GCM Encrypted (S2, S13)
     async _get(key: string, defaultValue: any = null) {
-        // Try getting from Firebase first if online, else fallback to local
-        // For simplicity and speed, we read locally and sync in background
-        try {
-            const item = localStorage.getItem(key);
-            if (!item) return defaultValue;
-            try {
-                return JSON.parse(item);
-            } catch (e) {
-                return JSON.parse(atob(item));
-            }
-        } catch (e) {
-            console.error(`Error reading ${key} from storage:`, e);
-            return defaultValue;
-        }
+        return await SecureStore.getSecureItem(key, defaultValue);
     },
 
     async _set(key: string, value: any) {
-        // Save locally
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-        } catch (e) {
-            console.error(`Error saving ${key} to local storage:`, e);
-        }
+        await SecureStore.setSecureItem(key, value);
     },
 
     _generateId() {
@@ -435,7 +418,7 @@ export const Store = {
     },
 
     async clearAll() {
-        Object.values(this.KEYS).forEach(key => localStorage.removeItem(key as string));
+        await SecureStore.clearSecureStore();
     }
 };
 
