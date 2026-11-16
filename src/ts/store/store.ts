@@ -84,34 +84,63 @@ export const Store = {
             console.log(`Processing sync queue of ${toProcess.length} items...`);
             
             // Mark as processing
-            q = q.map((i: any) => ({ ...i, processing: i.processing || toProcess.includes(i) }));
+            q = q.map((i: any) => ({ ...i, processing: i.processing || toProcess.some((tp: any) => tp.timestamp === i.timestamp) }));
             this.saveSyncQueue(q);
 
             const syncedIds = new Set();
+            const dropItemIds = new Set();
 
             for (const item of toProcess) {
                 let success = false;
                 try {
+                    // Defensive scrub: ensure legacy plaintext passwords never trigger BAK-002 rule violations
+                    if (item.data && typeof item.data === 'object' && 'password' in item.data) {
+                        delete item.data.password;
+                    }
+
+                    // Verify valid authenticated user ID before issuing Firestore writes
+                    const targetUserId = this.userId || auth.currentUser?.uid;
+                    if (!targetUserId) {
+                        console.warn('[Sync Engine] Deferred sync item: No authenticated user ID available yet');
+                        continue;
+                    }
+
                     if (item.type === 'profile') {
-                        success = await FirebaseDB.saveDocument('users', this.userId, item.data);
+                        success = await FirebaseDB.saveDocument('users', targetUserId, item.data);
                     } else if (item.type === 'log') {
                         // Route all logs into the Polyglot telemetry subcollection
-                        const docId = await FirebaseDB.addLog(`users/${this.userId}/telemetry`, item.data);
+                        const docId = await FirebaseDB.addLog(`users/${targetUserId}/telemetry`, item.data);
                         success = !!docId;
                     }
-                } catch (e) {
-                    console.error("Sync error for item:", item, e);
+                } catch (syncError) {
+                    console.warn('[Sync Engine] Dropping invalid queue item to prevent deadlock:', syncError);
+                    dropItemIds.add(item.timestamp);
                 }
+
                 if (success) {
                     // Use a unique ID or timestamp to track which got synced
                     syncedIds.add(item.timestamp);
+                } else if (!dropItemIds.has(item.timestamp)) {
+                    // Track retry attempts; if it repeatedly fails (e.g. 403 Permission Denied), drop it after 3 attempts
+                    item.retries = (item.retries || 0) + 1;
+                    if (item.retries >= 3) {
+                        console.warn(`[Sync Engine] Dropping permanently failing queue item (${item.type}) after 3 attempts to prevent deadlock:`, item);
+                        dropItemIds.add(item.timestamp);
+                    }
                 }
             }
 
-            // Remove successfully synced items and clear processing flags
+            // Remove successfully synced items AND permanently dropped items, reset processing flags
             const currentQ = this.getSyncQueue();
-            const nextQ = currentQ.filter((i: any) => !syncedIds.has(i.timestamp)).map((i: any) => ({ ...i, processing: false }));
+            const nextQ = currentQ
+                .filter((i: any) => !syncedIds.has(i.timestamp) && !dropItemIds.has(i.timestamp))
+                .map((i: any) => {
+                    const matched = toProcess.find((tp: any) => tp.timestamp === i.timestamp);
+                    return { ...i, processing: false, retries: matched?.retries || i.retries || 0 };
+                });
             this.saveSyncQueue(nextQ);
+        } catch (queueErr) {
+            console.error('[Sync Engine] Caught error during queue processing:', queueErr);
         } finally {
             this.isSyncing = false;
         }

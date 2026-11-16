@@ -24,17 +24,32 @@ signInAnonymously(auth).catch((error) => {
 export const FirebaseDB = {
     async saveDocument(collectionName: string, docId: string, data: any) {
         try {
-            await setDoc(doc(db, collectionName, docId), data, { merge: true });
+            if (!docId || typeof docId !== 'string' || !docId.trim()) {
+                console.warn(`[FirebaseDB] Aborting saveDocument to ${collectionName}: invalid or empty docId`);
+                return false;
+            }
+            // Defensive scrub: Ensure legacy plaintext passwords never trigger BAK-002 rule violations
+            if (data && typeof data === 'object' && 'password' in data) {
+                delete data.password;
+            }
+            await setDoc(doc(db, collectionName, docId.trim()), data, { merge: true });
             return true;
-        } catch (e) {
-            console.error("Error saving document: ", e);
+        } catch (e: any) {
+            if (e?.code === 'permission-denied') {
+                console.warn(`[FirebaseDB] Permission denied writing to ${collectionName}/${docId}. Payload rejected by security rules.`);
+            } else {
+                console.error("Error saving document: ", e);
+            }
             return false;
         }
     },
 
     async getDocument(collectionName: string, docId: string) {
         try {
-            const docSnap = await getDoc(doc(db, collectionName, docId));
+            if (!docId || typeof docId !== 'string' || !docId.trim()) {
+                return null;
+            }
+            const docSnap = await getDoc(doc(db, collectionName, docId.trim()));
             if (docSnap.exists()) {
                 return docSnap.data();
             }
@@ -47,13 +62,25 @@ export const FirebaseDB = {
 
     async addLog(collectionPath: string, data: any) {
         try {
+            if (!collectionPath || typeof collectionPath !== 'string' || collectionPath.includes('//') || collectionPath.endsWith('/')) {
+                console.warn(`[FirebaseDB] Aborting addLog to invalid collection path: ${collectionPath}`);
+                return null;
+            }
+            // Defensive scrub: Ensure passwords never leak into telemetry
+            if (data && typeof data === 'object' && 'password' in data) {
+                delete data.password;
+            }
             const docRef = await addDoc(collection(db, collectionPath), {
                 ...data,
                 serverTimestamp: new Date().toISOString()
             });
             return docRef.id;
-        } catch (e) {
-            console.error("Error adding document: ", e);
+        } catch (e: any) {
+            if (e?.code === 'permission-denied') {
+                console.warn(`[FirebaseDB] Permission denied adding log to ${collectionPath}. Payload rejected by security rules.`);
+            } else {
+                console.error("Error adding document: ", e);
+            }
             return null;
         }
     },

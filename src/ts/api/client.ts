@@ -6,13 +6,19 @@ export const apiClient = {
             ...headers
         }
     }),
-    post: async (endpoint: string, body: any, headers: Record<string, string> = {}) => fetch(API_BASE + endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-GG-Sync-Token': 'gg-sync-internal-token-2026',
-            ...headers
-        },
-        body: JSON.stringify(body)
-    })
+    post: async (endpoint: string, body: any, headers: Record<string, string> = {}) => {
+        // Defensive scrub: Ensure plaintext passwords never leak to synchronization endpoints
+        if (body && typeof body === 'object' && 'password' in body) {
+            delete body.password;
+        }
+        return fetch(API_BASE + endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-GG-Sync-Token': 'gg-sync-internal-token-2026',
+                ...headers
+            },
+            body: JSON.stringify(body)
+        });
+    }
 };
